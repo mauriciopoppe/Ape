@@ -2,13 +2,14 @@
 <html>
 <head>
     <title>Archimedes Physics Engine test</title>
-    <script src="lib/Extend.js"></script>
-    <script src="js/Core.js"></script>
-    <script src="js/Vector3.js"></script>
+    <!--<script src="lib/Extend.js"></script>-->
+    <!--<script src="js/Core.js"></script>-->
+    <!--<script src="js/Vector3.js"></script>-->
 
-    <script src="js/Constants.js"></script>
-    <script src="js/Particle.js"></script>
+    <!--<script src="js/Constants.js"></script>-->
+    <!--<script src="js/Particle.js"></script>-->
 
+    <script src="js/Loader.js"></script>
     <script src="lib/Game.js"></script>
 
 </head>
@@ -16,45 +17,47 @@
     <canvas id="app" width="1000" height="350"></canvas>
     <button onclick="pause()">PAUSE</button>
     <script type="text/javascript">
-        console.log('%c>> APE up and running!', 'color: #6FC3DF');
-        var canvas = document.getElementById('app');
-        var context = canvas.getContext('2d');
-        var width = canvas.width, height = canvas.height;
+        Loader(function () {
+            console.log('%c>> APE up and running!', 'color: #6FC3DF');
+            var canvas = document.getElementById('app');
+            var context = canvas.getContext('2d');
+            var width = canvas.width, height = canvas.height;
 
-        // invert
-        context.translate(0, height);
-        context.scale(1, -1);
+            // invert
+            context.translate(0, height);
+            context.scale(1, -1);
 
-        // particle
-        var particle = new Ape.Particle();
-//        particle.velocity.set(0, 100, 0);
-        particle.acceleration.set(0, -20, 0);       // gravity
-        particle.position.set(100, 300, 0);
-        particle.setMass(1);
-//        particle.setInverseMass(0);
+            // particle
+            var particle = new Ape.Particle();
+    //        particle.velocity.set(0, 100, 0);
+            particle.acceleration.set(0, -20, 0);       // gravity
+            particle.position.set(100, 300, 0);
+            particle.setMass(1);
+    //        particle.setInverseMass(0);
 
 
-        Game = Game || {};
-        Game.setUp({
-            context: context,
-            reset: function () {
-                this.context.clearRect(0, 0, width, height);
-            },
-            update: function (delta) {
-                particle.integrate(delta);
-            },
-            render: function () {
-                this.context.beginPath();
-                this.context.arc(particle.position.x, particle.position.y, 10, 0, 2 * Math.PI, false);
-                this.context.fillStyle = 'green';
-                this.context.fill();
+            Game = Game || {};
+            Game.setUp({
+                context: context,
+                reset: function () {
+                    this.context.clearRect(0, 0, width, height);
+                },
+                update: function (delta) {
+                    particle.integrate(delta);
+                },
+                render: function () {
+                    this.context.beginPath();
+                    this.context.arc(particle.position.x, particle.position.y, 10, 0, 2 * Math.PI, false);
+                    this.context.fillStyle = 'green';
+                    this.context.fill();
+                }
+            });
+            Game.launch();
+
+            function pause() {
+                Game.controls.togglePause();
             }
         });
-        Game.launch();
-
-        function pause() {
-            Game.controls.togglePause();
-        }
     </script>
 </body>
 </html>

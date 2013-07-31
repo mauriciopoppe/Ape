@@ -12,19 +12,46 @@ Ape.World = T3.World.extend({
     },
 
     initWorld: function () {
-        var particle = new Ape.ParticleFactory(
+        this.particles = [];
+        this.particles.push(new Ape.ParticleFactory(
+            Ape.ParticleFactory.PISTOL
+        ));
+        this.particles.push(new Ape.ParticleFactory(
             Ape.ParticleFactory.ARTILLERY
-        );
-        scene.add(particle);
+        ));
+        this.particles.push(new Ape.ParticleFactory(
+            Ape.ParticleFactory.FIREBALL
+        ));
+        this.particles.push(new Ape.ParticleFactory(
+            Ape.ParticleFactory.LASER
+        ));
 
-        this.particle = particle;
+        // additional forces
+        this.particleRegistry = new Ape.ParticleForceRegistry();
+        // adding gravity to the artillery particle
+        this.particleRegistry.add(
+            this.particles[1],
+            new Ape.ParticleGravity(
+                Ape.GRAVITY
+            )
+        );
+        // adding drag to the laser particle
+        this.particleRegistry.add(
+            this.particles[3],
+            new Ape.ParticleDrag(0.5, 0.5)
+        );
+
+        this.particles.forEach(function (item) {
+            scene.add(item);
+        });
     },
 
     update: function (delta) {
         this._super(delta);
 
-        this.particle.integrate(delta);
-//        this.particle.rotation.x += delta;
-//        this.particle.rotation.y += delta;
+        this.particleRegistry.update(delta);
+        this.particles.forEach(function (particle) {
+            particle.integrate(delta);
+        });
     }
 });

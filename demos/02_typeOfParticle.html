@@ -2,14 +2,7 @@
 <html>
 <head>
     <title>Archimedes Physics Engine test</title>
-    <script src="lib/Extend.js"></script>
-    <script src="js/Core.js"></script>
-    <script src="js/Vector3.js"></script>
-
-    <script src="js/Constants.js"></script>
-    <script src="js/Particle.js"></script>
-    <script src="js/ParticleFactory.js"></script>
-
+    <script src="js/Loader.js"></script>
     <script src="lib/Game.js"></script>
 
     <link rel="stylesheet" href="css/master.css"/>
@@ -18,56 +11,59 @@
     <canvas id="app" width="1000" height="600"></canvas> <br />
     <button onclick="pause()">PAUSE</button>
     <script type="text/javascript">
-        console.log('%c>> APE up and running!', 'color: #6FC3DF');
-        var canvas = document.getElementById('app');
-        var context = canvas.getContext('2d');
-        var width = canvas.width, height = canvas.height;
+        Loader(function () {
+            console.log('%c>> APE up and running!', 'color: #6FC3DF');
+            var canvas = document.getElementById('app');
+            var context = canvas.getContext('2d');
+            var width = canvas.width, height = canvas.height;
 
-        // invert
-        var k = 1;
-        context.translate(0, height);
-        context.scale(k, -k);
+            // invert
+            var k = 1;
+            context.translate(0, height);
+            context.scale(k, -k);
 
-        // particle
-        var particles = [];
-        particles.push(
-            Ape.ParticleFactory(Ape.ParticleFactory.PISTOL)
-        );
-        particles.push(
-            Ape.ParticleFactory(Ape.ParticleFactory.ARTILLERY)
-        );
-        particles.push(
-            Ape.ParticleFactory(Ape.ParticleFactory.FIREBALL)
-        );
-        particles.push(
-            Ape.ParticleFactory(Ape.ParticleFactory.LASER)
-        );
+            // particle
+            var particles = [];
+            particles.push(
+                Ape.ParticleFactory(Ape.ParticleFactory.PISTOL)
+            );
+            particles.push(
+                Ape.ParticleFactory(Ape.ParticleFactory.ARTILLERY)
+            );
+            particles.push(
+                Ape.ParticleFactory(Ape.ParticleFactory.FIREBALL)
+            );
+            particles.push(
+                Ape.ParticleFactory(Ape.ParticleFactory.LASER)
+            );
 
-        Game = Game || {};
-        Game.setUp({
-            context: context,
-            reset: function () {
-                this.context.clearRect(0, 0, width, height);
-            },
-            update: function (delta) {
-                particles.forEach(function (particle) {
-                    particle.integrate(delta);
-                });
-            },
-            render: function () {
-                particles.forEach(function (particle) {
-                    this.context.beginPath();
-                    this.context.arc(particle.position.x, particle.position.y, 5, 0, 2 * Math.PI, false);
-                    this.context.fillStyle = particle.color;
-                    this.context.fill();
-                });
+            Game = Game || {};
+            Game.setUp({
+                context: context,
+                reset: function () {
+                    this.context.clearRect(0, 0, width, height);
+                },
+                update: function (delta) {
+                    particles.forEach(function (particle) {
+                        particle.integrate(delta);
+                    });
+                },
+                render: function () {
+                    var me = this;
+                    particles.forEach(function (particle) {
+                        me.context.beginPath();
+                        me.context.arc(particle.position.x, particle.position.y, 5, 0, 2 * Math.PI, false);
+                        me.context.fillStyle = particle.color;
+                        me.context.fill();
+                    });
+                }
+            });
+            Game.launch();
+
+            function pause() {
+                Game.controls.togglePause();
             }
         });
-        Game.launch();
-
-        function pause() {
-            Game.controls.togglePause();
-        }
     </script>
 </body>
 </html>

@@ -80,13 +80,10 @@
 
             // update linear position
             // PHASE 1: Position update
-            console.log("-----------");
-            console.log(delta);
-            console.log(this.position);
             this.position
                 .add(
                     this.velocity.clone()
-                        .multiplyScalar(Ape.SCALE)
+                        .multiplyScalar(delta)
                 )
                 // since delta squared times 0.5 gives a really small number,
                 // the acceleration is commonly ignored
@@ -94,9 +91,6 @@
                     this.acceleration.clone()
                         .multiplyScalar(delta * delta * 0.5)
                 );
-            console.log(this.position);
-            console.log(this.acceleration.clone()
-                .multiplyScalar(delta * delta * 0.5));
 
             // PHASE 2: Velocity update
             var resultingAcceleration =
@@ -106,7 +100,6 @@
                             .multiplyScalar(this.inverseMass)
                     );
 
-            console.log("res acc", resultingAcceleration.y);
             this.velocity = this.velocity.clone()
                 // impose drag
                 .multiplyScalar(
