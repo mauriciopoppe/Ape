@@ -74,7 +74,10 @@ Ape.Particle = Class.extend({
         // update linear position
         // PHASE 1: Position update
         this.position = this.position
-            .addScaledVector(this.velocity, delta)
+            .addScaledVector(
+                this.velocity.multiplyScalar(Ape.SCALE),
+                delta
+            )
             // since delta squared times 0.5 gives a really small number,
             // the acceleration is commonly ignored
             .addScaledVector(this.acceleration, delta * delta * 0.5);
@@ -93,6 +96,10 @@ Ape.Particle = Class.extend({
             .addScaledVector(
                 resultingAcceleration, delta
             );
+
+        // scale
+//        this.position = this.position.multiplyScalar(1.01);
+//        this.velocity = this.velocity.multiplyScalar(Ape.SCALE);
     },
 
     clearAccumulator: function () {

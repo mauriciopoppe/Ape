@@ -12,9 +12,10 @@
 
     <script src="lib/Game.js"></script>
 
+    <link rel="stylesheet" href="css/master.css"/>
 </head>
 <body>
-    <canvas id="app" width="1000" height="350"></canvas> <br />
+    <canvas id="app" width="1000" height="600"></canvas> <br />
     <button onclick="pause()">PAUSE</button>
     <script type="text/javascript">
         console.log('%c>> APE up and running!', 'color: #6FC3DF');
@@ -23,8 +24,9 @@
         var width = canvas.width, height = canvas.height;
 
         // invert
+        var k = 1;
         context.translate(0, height);
-        context.scale(1, -1);
+        context.scale(k, -k);
 
         // particle
         var particles = [];

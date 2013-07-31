@@ -19,7 +19,7 @@ Ape.ParticleFactory = function (type) {
         case 'artillery':
             particle.color = 'blue';
             particle.setMass(200);                  // 200kg
-            particle.velocity.set(30, 40, 0);       // 50m/s
+            particle.velocity.set(30, 40, 0);       // 30 and 40 m/s
             particle.acceleration.set(0, -20, 0);   // high gravity
             particle.setDamping(0.99);              // damping factor
             break;
@@ -27,7 +27,7 @@ Ape.ParticleFactory = function (type) {
         case 'fireball':
             particle.color = 'orange';
             particle.setMass(1);                    // 1kg
-            particle.velocity.set(10, 0, 0);        // 5m/s
+            particle.velocity.set(10, 0, 0);        // 10m/s
             particle.acceleration.set(0, 0.6, 0);   // negative gravity!
             particle.setDamping(0.99);              // damping factor
             break;
@@ -35,7 +35,7 @@ Ape.ParticleFactory = function (type) {
         case 'laser':
             particle.color = 'red';
             particle.setMass(0.1);                  // 2kg
-            particle.velocity.set(100, 0, 0);       // 35m/s
+            particle.velocity.set(100, 0, 0);       // 100m/s
             particle.acceleration.set(0, 0, 0);     // no gravity
             particle.setDamping(0.99);              // damping factor
             break;
