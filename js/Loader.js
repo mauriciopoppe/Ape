@@ -26,7 +26,14 @@ var Loader = function (callback) {
 
         // APE
         'js/Core.js',
-        'js/World.js'
+        'js/World.js',
+        'js/Constants.js',
+        'js/Particle.js',
+        'js/ParticleFactory.js',
+        'js/ParticleForceRegistry.js',
+        'js/ParticleForceGenerator.js',
+        'js/ParticleDrag.js',
+        'js/ParticleGravity.js'
     ];
 
     function load(index) {

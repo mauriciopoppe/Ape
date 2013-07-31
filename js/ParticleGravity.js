@@ -11,7 +11,7 @@ Ape.ParticleGravity = Ape.ParticleForceGenerator.extend({
 
         /**
          * Gravity acceleration
-         * @type {Ape.Vector3}
+         * @type {THREE.Vector3}
          */
         this.gravity = gravity;
     },
@@ -25,7 +25,8 @@ Ape.ParticleGravity = Ape.ParticleForceGenerator.extend({
         // apply the mass-scaled force to the particle
         // f = m * a
         particle.addForce(
-            this.gravity.multiplyScalar(particle.getMass())
+            this.gravity.clone()
+                .multiplyScalar(particle.getMass())
         );
     }
 });

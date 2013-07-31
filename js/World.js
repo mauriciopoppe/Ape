@@ -12,18 +12,19 @@ Ape.World = T3.World.extend({
     },
 
     initWorld: function () {
-        var geometry = new THREE.CubeGeometry(10, 10, 10);
-        var material = new THREE.MeshNormalMaterial();
-        var mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(0, 100, 0);
-        scene.add(mesh);
+        var particle = new Ape.ParticleFactory(
+            Ape.ParticleFactory.ARTILLERY
+        );
+        scene.add(particle);
 
-        this.cube = mesh;
+        this.particle = particle;
     },
 
     update: function (delta) {
         this._super(delta);
-        this.cube.rotation.x += delta;
-        this.cube.rotation.y += delta;
+
+        this.particle.integrate(delta);
+//        this.particle.rotation.x += delta;
+//        this.particle.rotation.y += delta;
     }
 });

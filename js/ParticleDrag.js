@@ -39,7 +39,7 @@ Ape.ParticleDrag = Ape.ParticleForceGenerator.extend({
         var nVelocity = particle.velocity.clone().normalize();
 
         // f_drag = -|v| ( k1 * |v| + k2 * (|v| ^ 2) )
-        var drag = nVelocity.magnitude();
+        var drag = nVelocity.length();
         drag = this.k1 * drag + this.k2 * drag * drag;
 
         // multiply the drag by the negate of the normalized velocity

@@ -6,7 +6,9 @@
  * To change this template use File | Settings | File Templates.
  */
 Ape.ParticleFactory = function (type) {
-    var particle = new Ape.Particle();
+    var geometry = new THREE.SphereGeometry(5, 32, 32);
+    var material = new THREE.MeshNormalMaterial();
+    var particle = new Ape.Particle(geometry, material);
     switch (type) {
         case 'pistol':
             particle.color = 'green';
@@ -20,7 +22,7 @@ Ape.ParticleFactory = function (type) {
             particle.color = 'blue';
             particle.setMass(200);                  // 200kg
             particle.velocity.set(30, 40, 0);       // 30 and 40 m/s
-            particle.acceleration.set(0, 0, 0);     // no gravity
+            particle.acceleration.set(0, -20, 0);   // double gravity
             particle.setDamping(0.99);              // damping factor
             break;
 
