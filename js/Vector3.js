@@ -21,6 +21,13 @@ Ape.Vector3 = Class.extend({
         var me = this;
         return new Ape.Vector3(me.x + v.x, me.y + v.y, me.z + v.z);
     },
+    addSelf: function (v) {
+        var me = this;
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
+        return me;
+    },
     addScaledVector: function (v, s) {
         var me = this;
         return new Ape.Vector3(

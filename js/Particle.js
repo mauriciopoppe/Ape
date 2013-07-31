@@ -41,8 +41,8 @@ Ape.Particle = Class.extend({
         this.inverseMass = 0.0;
 
         /**
-         * Accumulated forces that affect this particle
-         * @type {Ape.Vector3}
+         * Holds the accumulated force to be applied at the next
+         * simulation iteration only. This value is zeroed at each integration step.
          */
         this.accumulatedForce = new Ape.Vector3();
     },
@@ -97,16 +97,18 @@ Ape.Particle = Class.extend({
                 resultingAcceleration, delta
             );
 
-        // scale
-//        this.position = this.position.multiplyScalar(1.01);
-//        this.velocity = this.velocity.multiplyScalar(Ape.SCALE);
+        this.clearAccumulator();
     },
 
+    /**
+     * Clears the forces applied to the particle.
+     * This will be called automatically after each integration step.
+     */
     clearAccumulator: function () {
         this.accumulatedForce.clear();
     },
 
     addForce: function (f) {
-        this.accumulatedForce = this.accumulatedForce.add(f);
+        this.accumulatedForce.addSelf(f);
     }
 });

@@ -20,7 +20,7 @@ Ape.ParticleFactory = function (type) {
             particle.color = 'blue';
             particle.setMass(200);                  // 200kg
             particle.velocity.set(30, 40, 0);       // 30 and 40 m/s
-            particle.acceleration.set(0, -20, 0);   // high gravity
+            particle.acceleration.set(0, 0, 0);     // no gravity
             particle.setDamping(0.99);              // damping factor
             break;
 
