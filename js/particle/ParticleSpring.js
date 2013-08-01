@@ -44,9 +44,11 @@ Ape.ParticleSpring = Ape.ParticleForceGenerator.extend({
 
     updateForce: function (particle, duration) {
         var vector,
+            force,
             magnitude;
+
         vector = particle.position.clone()
-                        .sub(this.other.position);
+                    .sub(this.other.position);
 
         // -k (l - l_rest)
         magnitude = -this.springConstant *
@@ -54,8 +56,15 @@ Ape.ParticleSpring = Ape.ParticleForceGenerator.extend({
 
         // turn the magnitude into a vector
         // f_spring = magnitude * dˆ
+        force = vector.clone().normalize().multiplyScalar(magnitude);
+        particle.addForce(force);
+
+        // add a damping factor since the system is perfect
+        // but there's some lose of energy
+        var dumpingFactor = 0.5;
+        force = particle.velocity.clone();
         particle.addForce(
-            vector.normalize().multiplyScalar(magnitude)
+            force.multiplyScalar(-dumpingFactor)
         );
     }
 });

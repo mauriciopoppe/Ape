@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 Ape.ParticleFactory = function (type) {
-    var geometry = new THREE.SphereGeometry(1, 32, 32);
+    var geometry = new THREE.SphereGeometry(5, 32, 32);
     var material = new THREE.MeshNormalMaterial();
     var particle = new Ape.Particle(geometry, material);
     switch (type) {

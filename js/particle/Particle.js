@@ -78,8 +78,24 @@
             Ape.assert(delta > 0);
             Ape.assert(this.inverseMass >= 0);
 
-            // update linear position
-            // PHASE 1: Position update
+            // PHASE 1: Velocity update
+            var resultingAcceleration =
+                this.acceleration.clone()
+                    .add(
+                        this.accumulatedForce
+                            .multiplyScalar(this.inverseMass)
+                    );
+
+            this.velocity
+                .multiplyScalar(
+                    Math.pow(this.damping, delta)
+                )
+                .add(
+                    resultingAcceleration
+                        .multiplyScalar(delta)
+                );
+
+            // PHASE 2: Position update
             this.position
                 .add(
                     this.velocity.clone()
@@ -90,24 +106,6 @@
                 .add(
                     this.acceleration.clone()
                         .multiplyScalar(delta * delta * 0.5)
-                );
-
-            // PHASE 2: Velocity update
-            var resultingAcceleration =
-                this.acceleration.clone()
-                    .add(
-                        this.accumulatedForce
-                            .multiplyScalar(this.inverseMass)
-                    );
-
-            this.velocity = this.velocity.clone()
-                // impose drag
-                .multiplyScalar(
-                    Math.pow(this.damping, delta)
-                )
-                .add(
-                    resultingAcceleration
-                        .multiplyScalar(delta)
                 );
 
             this.clearAccumulator();
@@ -121,6 +119,10 @@
             this.accumulatedForce.set(0, 0, 0);
         },
 
+        /**
+         * Adds a force to this particle to be applied in the integrate function
+         * @param f
+         */
         addForce: function (f) {
             this.accumulatedForce
                 .add(f);

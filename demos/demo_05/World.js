@@ -18,38 +18,41 @@ Ape.World = T3.World.extend({
             Ape.ParticleFactory.SIMPLE
         );
         staticParticle.position.set(200, 100, 0);
-        staticParticle.setInverseMass(0);       // ∞ mass
+        staticParticle.setMass(1);       // ∞ mass
         scene.add(staticParticle);
 
         var gravityParticle = Ape.ParticleFactory(
             Ape.ParticleFactory.SIMPLE
         );
-        gravityParticle.position.set(205, 100, 0);
-        gravityParticle.setMass(5);
+//        gravityParticle.setDamping(0.5);
+        gravityParticle.position.set(250, 100, 0);
+        gravityParticle.setMass(1);
         scene.add(gravityParticle);
 
         // additional forces
         this.particleRegistry = new Ape.ParticleForceRegistry();
 
-        // adding gravity to the artillery particle
+        // adding gravity to the movable particle
         this.particleRegistry.add(
             gravityParticle,
-            new Ape.ParticleGravity(Ape.GRAVITY)
-        );
-        this.particleRegistry.add(
-            staticParticle,
             new Ape.ParticleGravity(Ape.GRAVITY)
         );
 
-        // adding spring between those particles
+        // adding a spring between those particles
         this.particleRegistry.add(
             gravityParticle,
-            new Ape.ParticleSpring(staticParticle, 5, 5)
+            new Ape.ParticleSpring(staticParticle, 20, 25)
         );
-        this.particleRegistry.add(
-            staticParticle,
-            new Ape.ParticleSpring(gravityParticle, 5, 5)
-        );
+
+        // uncomment to add the force to the other particle too
+//        this.particleRegistry.add(
+//            staticParticle,
+//            new Ape.ParticleSpring(gravityParticle, 20, 25)
+//        );
+//        this.particleRegistry.add(
+//            staticParticle,
+//            new Ape.ParticleGravity(Ape.GRAVITY)
+//        );
 
         this.particles = [staticParticle, gravityParticle];
     },
