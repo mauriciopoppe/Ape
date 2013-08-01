@@ -46,10 +46,10 @@ Loader.list = [
     // APE
     'js/Core.js',
     'js/Constants.js',
-    'js/Particle.js',
-    'js/ParticleFactory.js',
-    'js/ParticleForceRegistry.js',
-    'js/ParticleForceGenerator.js',
-    'js/ParticleDrag.js',
-    'js/ParticleGravity.js'
+    'js/particle/Particle.js',
+    'js/particle/ParticleFactory.js',
+    'js/particle/ParticleForceRegistry.js',
+    'js/particle/ParticleForceGenerator.js',
+    'js/particle/ParticleDrag.js',
+    'js/particle/ParticleGravity.js'
 ];

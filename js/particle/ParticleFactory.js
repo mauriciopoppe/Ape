@@ -6,10 +6,13 @@
  * To change this template use File | Settings | File Templates.
  */
 Ape.ParticleFactory = function (type) {
-    var geometry = new THREE.SphereGeometry(5, 32, 32);
+    var geometry = new THREE.SphereGeometry(1, 32, 32);
     var material = new THREE.MeshNormalMaterial();
     var particle = new Ape.Particle(geometry, material);
     switch (type) {
+        case 'simple':
+            break;
+
         case 'pistol':
             particle.color = 'green';
             particle.setMass(2);                    // 2kg
@@ -45,6 +48,7 @@ Ape.ParticleFactory = function (type) {
     particle.position.set(100, 100, 0);
     return particle;
 };
+Ape.ParticleFactory.SIMPLE = 'simple';
 Ape.ParticleFactory.PISTOL = 'pistol';
 Ape.ParticleFactory.ARTILLERY = 'artillery';
 Ape.ParticleFactory.FIREBALL = 'fireball';
