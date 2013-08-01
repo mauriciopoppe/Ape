@@ -13,6 +13,9 @@
 <body>
     <div id="webgl-container"></div>
     <script type="text/javascript">
+        Loader.list = Loader.list.concat([
+            'world/World_04.js'
+        ]);
         Loader(function () {
             T3.Application.launch(Ape.World);
         });

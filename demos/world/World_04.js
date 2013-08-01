@@ -31,9 +31,7 @@ Ape.World = T3.World.extend({
         // adding gravity to the artillery particle
         this.particleRegistry.add(
             this.particles[1],
-            new Ape.ParticleGravity(
-                Ape.GRAVITY
-            )
+            new Ape.ParticleGravity(Ape.GRAVITY)
         );
         // adding drag to the laser particle
         this.particleRegistry.add(
