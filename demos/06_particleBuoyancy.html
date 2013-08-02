@@ -14,11 +14,19 @@
     <div id="webgl-container"></div>
     <script type="text/javascript">
         Loader.list = Loader.list.concat([
-            'js/particle/ParticleSpring.js',
-            'demoAssets/demo_05/World.js'
+            'js/particle/ParticleBuoyancy.js',
+            'demoAssets/demo_06/World.js'
         ]);
         Loader(function () {
             T3.Application.launch(Ape.World);
+
+            // hide the ground
+            var searchedValue = 'ground';
+            var folder = T3.Application.datGUI.__folders['World helpers'];
+            var controller = folder.__controllers.filter(function (item) {
+                return item.property === searchedValue;
+            });
+            controller[0].setValue(false);
         });
     </script>
 </body>

@@ -32,7 +32,7 @@
          * motion. Damping is required to remove energy added
          * through numerical instability in the integrator.
          */
-        this.damping = 1.0;
+        this.damping = 0.9;
         /**
          * Inverse of the mass:
          * f = m * a (force equals mass times acceleration)
@@ -42,7 +42,7 @@
          * Objects of zero mass have an undefined inverse mass
          * @type {*}
          */
-        this.inverseMass = 0.0;
+        this.inverseMass = 1.0;
         /**
          * Holds the accumulated force to be applied at the next
          * simulation iteration only. This value is zeroed at each integration step.
@@ -82,9 +82,15 @@
             var resultingAcceleration =
                 this.acceleration.clone()
                     .add(
-                        this.accumulatedForce
+                        this.accumulatedForce.clone()
                             .multiplyScalar(this.inverseMass)
                     );
+
+//            console.log(JSON.stringify(resultingAcceleration));
+//            console.log(this.accumulatedForce);
+//            console.log(this.inverseMass);
+//            console.log(JSON.stringify(this.accumulatedForce
+//                .multiplyScalar(this.inverseMass)));
 
             this.velocity
                 .multiplyScalar(
