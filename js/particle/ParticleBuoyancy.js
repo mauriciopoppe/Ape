@@ -27,7 +27,7 @@
  *      // else if objectY + height < liquidHeight
  *      //      push with vp
  *      // else
- *      //      push with vp * submersion depth
+ *      //      push with vp * submersion depth percentage
  *
  * @class Ape.ParticleBuoyancy
  */
