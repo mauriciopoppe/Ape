@@ -6,7 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 Ape.ParticleFactory = function (type) {
-    var geometry = new THREE.SphereGeometry(5, 32, 32);
+    var radius = 5;
+    var geometry = new THREE.SphereGeometry(radius, 32, 32);
     var material = new THREE.MeshNormalMaterial();
     var particle = new Ape.Particle(geometry, material);
     switch (type) {
@@ -45,6 +46,7 @@ Ape.ParticleFactory = function (type) {
             particle.acceleration.set(0, 0, 0);     // no gravity
             break;
     }
+    particle.radius = radius;
     particle.position.set(100, 100, 0);
     particle.setDamping(0.99);              // damping factor
     return particle;

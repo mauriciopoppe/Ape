@@ -49,7 +49,7 @@ Ape.ParticleContact = Class.extend({
      */
     resolve: function (duration) {
         this.resolveVelocity(duration);
-//        this.resolveInterpenetration(duration);
+        this.resolveInterpenetration(duration);
     },
 
     /**
@@ -81,6 +81,25 @@ Ape.ParticleContact = Class.extend({
         // calculate the new separating velocity
         // vs' = -c * vs
         var newSeparatingVelocity = -this.restitution * separatingVelocity;
+
+        // check the velocity build-up due to acceleration only
+        var accCausedVelocity = this.particle[0].acceleration.clone();
+        if (this.particle[1]) {
+            accCausedVelocity.sub(this.particle[1].acceleration);
+        }
+        var accCausedSepVelocity = accCausedVelocity.dot(this.contactNormal) * duration;
+
+        // if we get a closing velocity (i.e. vs < 0) due to acceleration build-up
+        // then remove it from the new separating velocity
+        if (accCausedSepVelocity < 0) {
+            // vs' = -c * vs + c * vs_accCaused
+            newSeparatingVelocity += this.restitution * accCausedSepVelocity;
+            // ensure that it's still greater or equal than zero
+            if (newSeparatingVelocity < 0) {
+                newSeparatingVelocity = 0;
+            }
+        }
+
         var deltaVelocity = newSeparatingVelocity - separatingVelocity;
 
         // apply the change in velocity to each object in proportion to
