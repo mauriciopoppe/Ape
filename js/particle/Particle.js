@@ -70,6 +70,10 @@
             return 1 / this.inverseMass;
         },
 
+        getInverseMass: function () {
+            return this.inverseMass;
+        },
+
         setDamping: function (v) {
             this.damping = v;
         },

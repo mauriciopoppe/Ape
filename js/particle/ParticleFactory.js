@@ -13,12 +13,15 @@ Ape.ParticleFactory = function (type) {
         case 'simple':
             break;
 
+        case 'gravity':
+            particle.acceleration = Ape.GRAVITY.clone();
+            break;
+
         case 'pistol':
             particle.color = 'green';
             particle.setMass(2);                    // 2kg
             particle.velocity.set(35, 0, 0);        // 35m/s
             particle.acceleration.set(0, -1, 0);    // little gravity
-            particle.setDamping(0.99);              // damping factor
             break;
 
         case 'artillery':
@@ -26,7 +29,6 @@ Ape.ParticleFactory = function (type) {
             particle.setMass(200);                  // 200kg
             particle.velocity.set(30, 40, 0);       // 30 and 40 m/s
             particle.acceleration.set(0, -20, 0);   // double gravity
-            particle.setDamping(0.99);              // damping factor
             break;
 
         case 'fireball':
@@ -34,7 +36,6 @@ Ape.ParticleFactory = function (type) {
             particle.setMass(1);                    // 1kg
             particle.velocity.set(10, 0, 0);        // 10m/s
             particle.acceleration.set(0, 0.6, 0);   // negative gravity!
-            particle.setDamping(0.99);              // damping factor
             break;
 
         case 'laser':
@@ -42,13 +43,14 @@ Ape.ParticleFactory = function (type) {
             particle.setMass(0.1);                  // 2kg
             particle.velocity.set(100, 0, 0);       // 100m/s
             particle.acceleration.set(0, 0, 0);     // no gravity
-            particle.setDamping(0.99);              // damping factor
             break;
     }
     particle.position.set(100, 100, 0);
+    particle.setDamping(0.99);              // damping factor
     return particle;
 };
 Ape.ParticleFactory.SIMPLE = 'simple';
+Ape.ParticleFactory.AFFECTED_BY_GRAVITY = 'gravity';
 Ape.ParticleFactory.PISTOL = 'pistol';
 Ape.ParticleFactory.ARTILLERY = 'artillery';
 Ape.ParticleFactory.FIREBALL = 'fireball';

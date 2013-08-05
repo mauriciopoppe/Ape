@@ -15,6 +15,7 @@ Ape.World = T3.World.extend({
         var me = this;
 
         this.particles = [];
+        this.restLength = 25;
 
         var staticParticle = Ape.ParticleFactory(
             Ape.ParticleFactory.SIMPLE
@@ -43,7 +44,7 @@ Ape.World = T3.World.extend({
         // adding a spring between those particles
         this.particleRegistry.add(
             gravityParticle,
-            new Ape.ParticleSpring(staticParticle, 20, 25)
+            new Ape.ParticleSpring(staticParticle, 20, this.restLength)
         );
 
         // uncomment to add the force to the other particle too
@@ -88,27 +89,48 @@ Ape.World = T3.World.extend({
             var ve = this.particles[1].position;
 
             function drawCylinder(vstart, vend){
-                var HALF_PI = Math.PI * .5;
                 var distance = vstart.distanceTo(vend);
                 var position  = vend.clone().add(vstart).divideScalar(2);
 
-                var material = new THREE.MeshNormalMaterial({color:0x0000ff});
-                var cylinder = new THREE.CylinderGeometry(1,1,distance,10,10,false);
+                var material = new THREE.MeshBasicMaterial({
+                    color: me.interpolate(
+                        new THREE.Color(0xAAAAAA),
+                        new THREE.Color(0xFF0000),
+                        Math.abs(me.restLength - distance),
+                        me.restLength
+                    )
+                });
+                var cylinder = new THREE.CylinderGeometry(1, 1, distance, 10, 10, false);
 
                 var orientation = new THREE.Matrix4();
                 var offsetRotation = new THREE.Matrix4();
-                orientation.lookAt(vstart, vend, new THREE.Vector3(0,1,0));
-                offsetRotation.makeRotationX(HALF_PI);
+                orientation.lookAt(vstart, vend, new THREE.Vector3(0, 1, 0));
+                offsetRotation.makeRotationX(Math.PI * 0.5);
                 orientation.multiply(offsetRotation);
                 cylinder.applyMatrix(orientation);
 
                 me.mesh && scene.remove(me.mesh);
                 me.mesh = new THREE.Mesh(cylinder,material);
-                me.mesh.position=position;
+                me.mesh.position = position;
                 scene.add(me.mesh);
             }
 
             drawCylinder(vs, ve);
         }
+    },
+
+    interpolate: function (A, B, distance, total) {
+        // function to interpolate
+        // (y - A) / distance = (B - A) / total
+        // y = (B - A) * distance / total + A
+        var properties = ['r', 'g', 'b'],
+            newColor = new THREE.Color('rgb(0, 0, 0)'),
+            i;
+        for (i = 0; i < properties.length; i += 1) {
+            var current = properties[i];
+            newColor[current] = (B[current] - A[current]) * distance / total + A[current];
+            Ape.assert(newColor[current] < 1 && newColor[current] >= 0);
+        }
+        return newColor;
     }
 });
