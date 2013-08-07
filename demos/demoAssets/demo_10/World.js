@@ -15,8 +15,7 @@ Ape.World = T3.World.extend({
         var me = this;
 
         this.particles = [];
-
-        // link
+        this.mesh = [];
         this.links = [];
 
         for (var i = 0; i < 1; i += 1) {
@@ -31,6 +30,7 @@ Ape.World = T3.World.extend({
 
     update: function (delta) {
         var me = this,
+            p1, p2,
             contact;
 
         this.accumulatedTime += delta;
@@ -75,19 +75,24 @@ Ape.World = T3.World.extend({
         // generate link contact
         for (i = 0; i < this.links.length; i += 1) {
             contact = new Ape.ParticleContact();
+            p1 = this.links[i].particles[0];
+            p2 = this.links[i].particles[1];
             if (this.links[i].fillContact(contact)) {
                 contact.resolve(delta);
             }
 
-            if (this.links[i].particles[0].position.y < 0 &&
-                this.links[i].particles[1].position.y < 0) {
+            if (p1.position.y < 0 && p2.position.y < 0) {
                 this.links.splice(i, 1);
                 i -= 1;
             }
         }
 
-
-
+        // draw the cable
+        for (i = 0; i < this.particles.length; i += 2) {
+            p1 = this.particles[i];
+            p2 = this.particles[i + 1];
+            this.drawCylinder(p1.position, p2.position, i / 2);
+        }
     },
 
     generatePair: function () {
@@ -98,7 +103,7 @@ Ape.World = T3.World.extend({
         this.links.push(new Ape.ParticleCable({
             particles: [p1, p2],
             maxLength: 50,
-            restitution: 0.1
+            restitution: 0.3
         }));
 
         this.particles.push(p1, p2);
@@ -109,9 +114,10 @@ Ape.World = T3.World.extend({
             Ape.ParticleFactory.AFFECTED_BY_GRAVITY
         );
 
-        var max = 400;
+        var max = 400,
+            zDiff = 0;
         var position = new THREE.Vector3(
-            Math.random() * max, 0, 0// Math.random() * max - max * 0.5
+            Math.random() * max, 0, Math.random() * zDiff - zDiff * 0.5
         );
         var center = new THREE.Vector3(max / 2, 0, 0);
         var velocity = center.clone().sub(position).normalize().multiplyScalar(60);
@@ -122,5 +128,46 @@ Ape.World = T3.World.extend({
         scene.add(particle);
 
         return particle;
+    },
+
+    drawCylinder: function (vstart, vend, index) {
+        var me = this,
+            orientation,
+            position,
+            offsetRotation,
+            distance,
+            texture,
+            material, geometry, mesh;
+
+        mesh = me.mesh[index];
+        position = vend.clone().add(vstart).divideScalar(2);
+        distance = vstart.distanceTo(vend);
+
+        if (!mesh) {
+
+            texture = THREE.ImageUtils.loadTexture('demoAssets/demo_10/rope.jpg');
+            material = new THREE.MeshBasicMaterial({
+                map: texture
+            });
+            geometry = new THREE.CylinderGeometry(1, 1, distance, 10, 10, false);
+            me.mesh[index] = mesh = new THREE.Mesh(geometry, material);
+            me.mesh[index].originalDistance = distance;
+            scene.add(mesh);
+        }
+        // inverse the internal matrix to revert the previous changes
+        var matrix = mesh.matrix.clone();
+        mesh.applyMatrix(new THREE.Matrix4().getInverse(matrix));
+
+        // reapply a new rotation
+        orientation = new THREE.Matrix4();
+        offsetRotation = new THREE.Matrix4();
+        orientation.lookAt(vstart, vend, new THREE.Vector3(0, 1, 0));
+        offsetRotation.makeRotationX(Math.PI * 0.5);
+        orientation.multiply(offsetRotation);
+        mesh.applyMatrix(orientation);
+
+        mesh.scale.set(1, distance / mesh.originalDistance, 1);
+        mesh.position = position;
+
     }
 });
