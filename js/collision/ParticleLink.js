@@ -27,7 +27,9 @@ Ape.ParticleLink = Class.extend({
      * Returns the current length of the cable
      */
     currentLength: function () {
-
+        var relativePosition = this.particles[0].position.clone()
+            .sub(this.particles[1].position);
+        return relativePosition.length();
     },
 
     /**
@@ -35,6 +37,8 @@ Ape.ParticleLink = Class.extend({
      * Fills the contact given with the contact needed to keep this link
      * from violating its constraint (the link cannot stretch more than the
      * length of the link)
+     *
+     * Returns true if there's a contact to be resolved, false otherwise
      *
      * @param contact
      * @param limit

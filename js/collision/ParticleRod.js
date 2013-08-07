@@ -8,27 +8,21 @@
 
 /**
  * Links a pair of particles, generating a force if they
- * stray too far apart
+ * stray too far apart or too near apart (like a stick)
  *
- * @class Ape.ParticleCable
+ * @class Ape.ParticleRod
  */
-Ape.ParticleCable = Ape.ParticleLink.extend({
+Ape.ParticleRod = Ape.ParticleLink.extend({
     init: function (config) {
         config = config || {};
 
         this._super(config);
 
         /**
-         * Holds the maximum length of the cable
+         * Holds the maximum length of the rod
          * @type {number}
          */
         this.maxLength = config.maxLength || 0;
-
-        /**
-         * Holds the restitution (bounciness) of the cable
-         * @type {number}
-         */
-        this.restitution = config.restitution || 1;
     },
 
     /**
@@ -41,7 +35,7 @@ Ape.ParticleCable = Ape.ParticleLink.extend({
         var length = this.currentLength();
 
         // only generate a contact if the cable is overextended
-        if (length < this.maxLength) {
+        if (Math.abs(length - this.maxLength) < 1e-7) {
             return false;
         }
 
@@ -55,9 +49,14 @@ Ape.ParticleCable = Ape.ParticleLink.extend({
             .sub(this.particles[0].position);
         normal.normalize();
 
-        contact.contactNormal = normal;
-        contact.penetration = length - this.maxLength;
-        contact.restitution = this.restitution;
+        if (length > this.maxLength) {
+            contact.contactNormal = normal;
+            contact.penetration = length - this.maxLength;
+        } else {
+            contact.contactNormal = normal.multiplyScalar(-1);
+            contact.penetration = this.maxLength - length;
+        }
+        contact.restitution = 0;
 
         return true;
     }
