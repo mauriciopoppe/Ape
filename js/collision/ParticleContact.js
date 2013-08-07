@@ -22,7 +22,7 @@ Ape.ParticleContact = Class.extend({
          * the second particle can be null if it can't be moved
          * @type {Array}
          */
-        this.particle = config.particles || [];
+        this.particles = config.particles || [];
 
         /**
          * Holds the normal restitution coefficient at the contact
@@ -60,9 +60,9 @@ Ape.ParticleContact = Class.extend({
      *      v_separating = (va - vb) dot (contactNormal)
      */
     calculateSeparatingVelocity: function () {
-        var relativeVelocity = this.particle[0].velocity.clone();
-        if (this.particle[1]) {
-            relativeVelocity.sub(this.particle[1].velocity.clone());
+        var relativeVelocity = this.particles[0].velocity.clone();
+        if (this.particles[1]) {
+            relativeVelocity.sub(this.particles[1].velocity.clone());
         }
         return relativeVelocity.dot(this.contactNormal);
     },
@@ -85,9 +85,9 @@ Ape.ParticleContact = Class.extend({
         var newSeparatingVelocity = -this.restitution * separatingVelocity;
 
         // check the velocity build-up due to acceleration only
-        var accCausedVelocity = this.particle[0].acceleration.clone();
-        if (this.particle[1]) {
-            accCausedVelocity.sub(this.particle[1].acceleration);
+        var accCausedVelocity = this.particles[0].acceleration.clone();
+        if (this.particles[1]) {
+            accCausedVelocity.sub(this.particles[1].acceleration);
         }
         var accCausedSepVelocity = accCausedVelocity.dot(this.contactNormal) * duration;
 
@@ -108,9 +108,9 @@ Ape.ParticleContact = Class.extend({
 
         // apply the change in velocity to each object in proportion to
         // their inverse mass
-        var totalInverseMass = this.particle[0].getInverseMass();
-        if (this.particle[1]) {
-            totalInverseMass += this.particle[1].getInverseMass();
+        var totalInverseMass = this.particles[0].getInverseMass();
+        if (this.particles[1]) {
+            totalInverseMass += this.particles[1].getInverseMass();
         }
 
         // if all particles have infinite mass then the impulses
@@ -152,14 +152,14 @@ Ape.ParticleContact = Class.extend({
         // v = (1 / m) * g
         // applying this new velocity to the velocity of the particle yields:
         // newVelocity = oldVelocity + (1 / m) * g
-        this.particle[0].velocity
+        this.particles[0].velocity
             .add(impulsePerIMass.clone()
-                .multiplyScalar(this.particle[0].getInverseMass()));
+                .multiplyScalar(this.particles[0].getInverseMass()));
 
-        if (this.particle[1]) {
-            this.particle[1].velocity
+        if (this.particles[1]) {
+            this.particles[1].velocity
                 .add(impulsePerIMass.clone()
-                    .multiplyScalar(-this.particle[1].getInverseMass()));
+                    .multiplyScalar(-this.particles[1].getInverseMass()));
         }
 
     },
@@ -179,9 +179,9 @@ Ape.ParticleContact = Class.extend({
         // the movement is based on the inverse mass of each object
         // so the strategy is to calculate the movement for the sum of the
         // masses and then distribute the movement between the particles
-        var totalInverseMass = this.particle[0].getInverseMass();
-        if (this.particle[1]) {
-            totalInverseMass += this.particle[1].getInverseMass();
+        var totalInverseMass = this.particles[0].getInverseMass();
+        if (this.particles[1]) {
+            totalInverseMass += this.particles[1].getInverseMass();
         }
 
         // if all particles have infinite mass then the impulses
@@ -195,13 +195,14 @@ Ape.ParticleContact = Class.extend({
         var movePerIMass = this.contactNormal.clone()
             .multiplyScalar(this.penetration / totalInverseMass);
 
-        this.particle[0].position
+        this.particles[0].position
             .add(movePerIMass.clone()
-                .multiplyScalar(this.particle[0].getInverseMass()));
+                .multiplyScalar(this.particles[0].getInverseMass()));
 
-        if (this.particle[1]) {
-            this.particle[1].position
+        if (this.particles[1]) {
+            this.particles[1].position
                 .add(movePerIMass.clone()
-                    .multiplyScalar(-this.particle[1].getInverseMass()));
-        }    }
+                    .multiplyScalar(-this.particles[1].getInverseMass()));
+        }
+    }
 });

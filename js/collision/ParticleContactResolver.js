@@ -46,9 +46,9 @@ Ape.ParticleContactResolver = Class.extend({
 
             // TEST:
             var contact = contactArray[maxIndex],
-                posI = contact.particle[0].position,
-                posJ = contact.particle[1].position;
-            contact.penetration = contact.particle[0].radius * 2 -
+                posI = contact.particles[0].position,
+                posJ = contact.particles[1].position;
+            contact.penetration = contact.particles[0].radius * 2 -
                 posI.distanceTo(posJ);
             contact.contactNormal = posI.clone()
                 .sub(posJ).normalize();
