@@ -15,32 +15,34 @@
  * @class Ape.ParticleContact
  */
 Ape.ParticleContact = Class.extend({
-    init: function () {
+    init: function (config) {
+        config = config || {};
         /**
          * Holds the particles that are involved in the contact,
          * the second particle can be null if it can't be moved
          * @type {Array}
          */
-        this.particle = [];
+        this.particle = config.particles || [];
 
         /**
          * Holds the normal restitution coefficient at the contact
          * @type {number}
          */
-        this.restitution = 1;
+        this.restitution = config.restitution !== undefined ?
+            config.restitution : 1;
 
         /**
          * Holds the direction of the contact (from the first
          * particle perspective)
          * @type {THREE.Vector3}
          */
-        this.contactNormal = new THREE.Vector3();
+        this.contactNormal = config.contactNormal || new THREE.Vector3();
 
         /**
          * Holds the depth of penetration at the contact
          * @type {number}
          */
-        this.penetration = null;
+        this.penetration = config.penetration || null;
     },
 
     /**
@@ -74,7 +76,7 @@ Ape.ParticleContact = Class.extend({
 
         // check if the contact needs to be resolved
         if (separatingVelocity > 0) {
-            // the particles are separating so there'll be no contact
+            // the particles are separating so there's no contact
             return;
         }
 
@@ -94,7 +96,9 @@ Ape.ParticleContact = Class.extend({
         if (accCausedSepVelocity < 0) {
             // vs' = -c * vs + c * vs_accCaused
             newSeparatingVelocity += this.restitution * accCausedSepVelocity;
-            // ensure that it's still greater or equal than zero
+            // the new separating velocity must be strictly greater than zero
+            // otherwise we would be forcing the particle to get closer that what
+            // it's allowed
             if (newSeparatingVelocity < 0) {
                 newSeparatingVelocity = 0;
             }
@@ -116,6 +120,11 @@ Ape.ParticleContact = Class.extend({
         }
 
         // calculate the impulse to apply
+        // let:
+        //      g be the impulse
+        //      v the velocity of the particle
+        //      m the mass of the particle
+        //
         // g = v * m
         // if we have the inverseMass instead then
         // g = v * 1 / (1 / m)
@@ -125,9 +134,24 @@ Ape.ParticleContact = Class.extend({
         var impulse = deltaVelocity / totalInverseMass;
 
         // amount of impulse per unit of inverse mass
+        // this is the total impulse that will be distributed between the particles,
+        // for particleA it will be applied in the same direction as the contact
+        // normal and for particleB (if possible) it will be pushed in the opposite
+        // direction (-contactNormal)
         var impulsePerIMass = this.contactNormal.clone()
             .multiplyScalar(impulse);
 
+        // apply the impulse immediately to the particles (it'll be distributed)
+        // between them based on their mass
+        // let:
+        //      g be the impulse
+        //      v the velocity of the particle
+        //      m the mass of the particle
+        //
+        // g = v * m
+        // v = (1 / m) * g
+        // applying this new velocity to the velocity of the particle yields:
+        // newVelocity = oldVelocity + (1 / m) * g
         this.particle[0].velocity
             .add(impulsePerIMass.clone()
                 .multiplyScalar(this.particle[0].getInverseMass()));
@@ -147,10 +171,14 @@ Ape.ParticleContact = Class.extend({
      */
     resolveInterpenetration: function (duration) {
         if (this.penetration <= 0) {
+            // resolve only penetrations that are greater than zero (meaning
+            // that there's penetration)
             return;
         }
 
         // the movement is based on the inverse mass of each object
+        // so the strategy is to calculate the movement for the sum of the
+        // masses and then distribute the movement between the particles
         var totalInverseMass = this.particle[0].getInverseMass();
         if (this.particle[1]) {
             totalInverseMass += this.particle[1].getInverseMass();
@@ -163,10 +191,10 @@ Ape.ParticleContact = Class.extend({
         }
 
         // find the amount of penetration resolution per unit of inverse mass
+        // applied in the direction of the contact normal
         var movePerIMass = this.contactNormal.clone()
-            .multiplyScalar(-this.penetration / totalInverseMass);
+            .multiplyScalar(this.penetration / totalInverseMass);
 
-        // apply the penetration resolution
         this.particle[0].position
             .add(movePerIMass.clone()
                 .multiplyScalar(this.particle[0].getInverseMass()));

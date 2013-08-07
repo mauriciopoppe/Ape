@@ -21,6 +21,8 @@ Ape.World = T3.World.extend({
         }
 
         this.accumulatedTime = 0;
+
+        // force registry
         this.particleRegistry = new Ape.ParticleForceRegistry();
     },
 
@@ -32,11 +34,10 @@ Ape.World = T3.World.extend({
             this.accumulatedTime = 0;
         }
 
-
         this._super(delta);
 
         this.particleRegistry.update(delta);
-        this.particles.forEach(function (particle, index) {
+        this.particles.forEach(function (particle) {
             particle.integrate(delta);
 
             // remove from the scene if it's not present anymore
@@ -47,24 +48,29 @@ Ape.World = T3.World.extend({
             }
         });
 
+        // contact resolution
+        var contacts = [];
         for (var i = 0; i < this.particles.length; i += 1) {
             for (var j = i + 1; j < this.particles.length; j += 1) {
                 var posI = this.particles[i].position,
                     posJ = this.particles[j].position;
 
                 if (posI.distanceTo(posJ) <= this.particles[i].radius * 2) {
-                    var contact = new Ape.ParticleContact();
-                    contact.particle = [
-                        this.particles[i], this.particles[j]
-                    ];
-                    contact.restitution = 0;
-                    contact.contactNormal = posI.clone()
-                        .sub(posJ).normalize();
-                    contact.penetration = this.particles[i].radius * 2 - posI.distanceTo(posJ);
-                    contact.resolve(delta);
+                    var contact = new Ape.ParticleContact({
+                        particles: [this.particles[i], this.particles[j]],
+                        restitution: 0,
+                        contactNormal: posI.clone()
+                            .sub(posJ).normalize(),
+                        penetration: this.particles[i].radius * 2 - posI.distanceTo(posJ)
+                    });
+                    contacts.push(contact);
                 }
             }
         }
+
+        // set the max iterations to twice the length of contacts
+        var resolver = new Ape.ParticleContactResolver(contacts.length * 2);
+        resolver.resolveContacts(contacts, delta);
     },
 
     randomParticle: function () {
