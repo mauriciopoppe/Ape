@@ -6,6 +6,11 @@
  * To change this template use File | Settings | File Templates.
  */
 Ape = Ape || {};
+
+/**
+ *
+ * @class Ape.Vector3
+ */
 Ape.Vector3 = Class.extend({
     
     // basic methods

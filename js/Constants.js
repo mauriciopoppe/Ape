@@ -18,3 +18,9 @@ Ape.GRAVITY = new THREE.Vector3(0, -15, 0);
 // scale: 1u / 0.1px
 //Ape.SCALE = 1 / 0.1;
 Ape.SCALE = 1;
+
+/********** EPSILON **********/
+// 0.01px ====== 1u
+// scale: 1u / 0.1px
+//Ape.SCALE = 1 / 0.1;
+Ape.EPS = 1e-7;
