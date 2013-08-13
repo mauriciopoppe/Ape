@@ -9,8 +9,8 @@
 (function () {
     var RigidBody;
 
-    RigidBody = function (config) {
-        THREE.Mesh.call(this, config);
+    RigidBody = function () {
+        THREE.Mesh.apply(this, arguments);
         // ************** DATA AND STATE **************
         /**
          * Inverse of the mass:
@@ -55,12 +55,12 @@
          * Holds the linear velocity of the rigid body in
          * world space.
          */
-        this.velocity = new THREE.Vector3();
+        this.linearVelocity = new THREE.Vector3();
         /**
          * Holds the angular velocity or rotation of the rigid body in world space
          * @type {THREE.Vector3}
          */
-        this.rotation = this.rotation || new THREE.Vector3();
+        this.angularVelocity = new THREE.Vector3();
 
         // ************** DERIVED DATA **************
         // information that's derived from the other data in the class
@@ -134,7 +134,7 @@
             //      a = f * (1 / m)
             // so:
             // a' = old_a + f * m^(-1)
-            var lastFrameAcceleration =
+            var linearAcceleration =
                 this.acceleration.clone()
                     .add(
                         this.accumulatedForce.clone()
@@ -156,25 +156,27 @@
             // PHASE 1: Velocities adjustment
             // linear velocity update
             // v' = v + linear_acceleration * delta
-            this.velocity
+            this.linearVelocity
                 .add(
-                    lastFrameAcceleration
+                    linearAcceleration
                         .multiplyScalar(delta)
                 );
             // angular velocity update
-            // alpha' = alpha + angular_acceleration * delta
-            this.rotation
+            // let:
+            //      w be the angular velocity of the rigid body
+            // w' = w + angular_acceleration * delta
+            this.angularVelocity
                 .add(
                     angularAcceleration
                         .multiplyScalar(delta)
                 );
 
             // impose drag
-            this.velocity
+            this.linearVelocity
                 .multiplyScalar(
                     Math.pow(this.linearDamping, delta)
                 );
-            this.rotation
+            this.angularVelocity
                 .multiplyScalar(
                     Math.pow(this.angularDamping, delta)
                 );
@@ -184,7 +186,7 @@
             // position' = position + v * t + 0.5 * a * t * t
             this.position
                 .add(
-                    this.velocity.clone()
+                    this.linearVelocity.clone()
                         .multiplyScalar(delta)
                 )
                 // since delta squared times 0.5 gives a really small number,
@@ -193,6 +195,7 @@
                     this.acceleration.clone()
                         .multiplyScalar(delta * delta * 0.5)
                 );
+
             // angular position (orientation) update
             // let:
             //      p be the angular displacement
@@ -203,7 +206,16 @@
             // so
             // p' = p + w * t
             this.orientation
-                .addScaledVector(this.rotation, delta);
+                .addScaledVector(this.angularVelocity, delta);
+
+            // TEST IN THREE JS:
+            // the rotation of an object uses euler angles, since we have
+            // a quaternion we have to update the rotation converting
+            // the quaternion to euler angles
+            this.rotation.setFromQuaternion(
+                this.orientation,
+                THREE.Euler.DefaultOrder
+            );
 
             // normalize the orientation, update the transformMatrix and
             // inverseInertiaTensor matrices to reflect the new changes
@@ -216,7 +228,7 @@
 
         /**
          * Updates the information of the body like its transform matrix and
-         * inertial tensor
+         * its inverse inertial tensor
          */
         calculateDerivedData: function () {
             // the orientation might have suffered some changes during the
@@ -270,8 +282,8 @@
         /**
          * Adds a `force` in a specific `point`, the point is specified in
          * WORLD coordinates
-         * @param f
-         * @param point
+         * @param {THREE.Vector3} f
+         * @param {THREE.Vector3} point
          */
         addForceAtPoint: function (f, point) {
             // vector from the center of mass to the point
@@ -294,14 +306,19 @@
          * Adds the given force to the given point on the rigid body, the direction
          * of the point is given in world space coordinates but the application point
          * is given in object space coordinates
-         * @param force
-         * @param point
+         * @param {THREE.Vector3} force
+         * @param {THREE.Vector3} point
          */
         addForceAtBodyPoint: function (force, point) {
             var pt = this.getPointInWorldSpace(point);
             this.addForceAtPoint(force, pt);
         },
 
+        /**
+         * Sets the inertia tensor of this rigid body (internally the inverseInertiaTensor
+         * is set to make easier calculations)
+         * @param {Ape.Matrix3} inertiaTensor
+         */
         setInertiaTensor: function (inertiaTensor) {
             this.inverseInertiaTensor.setInverse(inertiaTensor);
             this.checkInverseInertiaTensor(this.inverseInertiaTensor);
@@ -312,9 +329,9 @@
          * Each frame the transformation matrix (Matrix4) must be updated,
          * it's updated using a vector3 which represents the position
          * and a quaternion which represents the orientation
-         * @param transformMatrix
-         * @param position
-         * @param q
+         * @param {Ape.Matrix4} transformMatrix
+         * @param {THREE.Vector3} position
+         * @param {Ape.Quaternion} q
          */
         calculateTransformMatrix: function (transformMatrix, position, q) {
             transformMatrix.set(
@@ -372,6 +389,7 @@
             var t62 = tm.data[8] * iitBody.data[2]+
                 tm.data[9] * iitBody.data[5]+
                 tm.data[10] * iitBody.data[8];
+
             iitWorld.data[0] = t4 * tm.data[0]+
                 t9 * tm.data[1]+
                 t14 * tm.data[2];
@@ -414,5 +432,5 @@
 
     });
 
-    Ape.Particle = RigidBody;
+    Ape.RigidBody = RigidBody;
 })();

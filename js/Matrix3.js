@@ -174,7 +174,7 @@ Ape.Matrix3 = Class.extend({
         ixy = ixy || 0;
         ixz = ixz || 0;
         iyz = iyz || 0;
-        this.set(
+        return this.set(
               ix, -ixy, -ixz,
             -ixy,   iy, -iyz,
             -ixz, -iyz,   iz
@@ -192,7 +192,7 @@ Ape.Matrix3 = Class.extend({
         var sqx = halfSizes.x * halfSizes.x,
             sqy = halfSizes.y * halfSizes.y,
             sqz = halfSizes.z * halfSizes.z;
-        this.setInertialTensorCoefficients(
+        return this.setInertialTensorCoefficients(
             0.3 * mass * (sqy + sqz),
             0.3 * mass * (sqx + sqz),
             0.3 * mass * (sqx + sqy)

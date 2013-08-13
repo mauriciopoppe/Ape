@@ -86,6 +86,39 @@ Ape.Matrix4 = Class.extend({
         return this.multiplyVector(v);
     },
 
+    /**
+     * Transforms the given vector by the transformational inverse
+     * of this matrix
+     *
+     * @param v
+     * @returns {THREE.Vector3}
+     */
+    transformInverse: function (v) {
+        var t = v.clone(),
+            d = this.data;
+        t.x -= d[3];
+        t.y -= d[7];
+        t.z -= d[11];
+        return new THREE.Vector3(
+            t.x * d[0] + t.y * d[4] + t.z * d[8],
+            t.x * d[1] + t.y * d[5] + t.z * d[9],
+            t.x * d[2] + t.y * d[6] + t.z * d[10]
+        );
+    },
+
+    /**
+     * Returns a vector representing one axis (a column) in the matrix
+     * @param {number} j The column to return
+     * @returns {THREE.Vector3}
+     */
+    getAxisVector: function (j) {
+        return new THREE.Vector3(
+            this.data[j],
+            this.data[j + 4],
+            this.data[j + 8]
+        );
+    },
+
     getDeterminant: function () {
         var d = this.data;
         return d[8] * d[5] * d[2] +
@@ -177,24 +210,6 @@ Ape.Matrix4 = Class.extend({
             2 * (q.y * q.z - q.x * q.w),
             1 - 2 * (q.x * q.x + q.y * q.y),
             pos.z
-        );
-    },
-
-    /**
-     * Transforms the given vector by the transformational inverse
-     * of this matrix
-     *
-     * @param v
-     * @returns {THREE.Vector3}
-     */
-    transformInverse: function (v) {
-        var t = v.clone(),
-            d = this.data;
-        t.x -= d[3]; t.y -= d[4]; t.z -= d[11];
-        return new THREE.Vector3(
-            t.x * d[0] + t.y * d[4] + t.z * d[8],
-            t.x * d[1] + t.y * d[5] + t.z * d[9],
-            t.x * d[2] + t.y * d[6] + t.z * d[10]
         );
     },
 

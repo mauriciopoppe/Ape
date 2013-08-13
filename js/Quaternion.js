@@ -42,7 +42,7 @@ Ape.Quaternion = Class.extend({
 
     normalize: function () {
         var length = this.w * this.w + this.x * this.x +
-            this.y * this.y + this.z * this.z;
+                     this.y * this.y + this.z * this.z;
         if (length < Ape.EPS) {
             this.w = 1;
             return this;
@@ -57,10 +57,12 @@ Ape.Quaternion = Class.extend({
 
     multiply: function (q2) {
         var q1 = this.clone();
+
         this.w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
         this.x = q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y;
-        this.y = q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x;
-        this.z = q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w;
+        this.y = q1.w * q2.y + q1.y * q2.w + q1.z * q2.x - q1.x * q2.z;
+        this.z = q1.w * q2.z + q1.z * q2.w + q1.x * q2.y - q1.y * q2.x;
+        
         return this;
     },
 
@@ -78,6 +80,7 @@ Ape.Quaternion = Class.extend({
             v.y * scale,
             v.z * scale
         );
+        q.multiply(this);
         this.w += q.w * 0.5;
         this.x += q.x * 0.5;
         this.y += q.y * 0.5;
@@ -86,6 +89,6 @@ Ape.Quaternion = Class.extend({
 
     rotateByVector: function (v) {
         var q = new Ape.Quaternion(0, v.x, v.y, v.z);
-        this.multiply(q);
+        return this.multiply(q);
     }
 });

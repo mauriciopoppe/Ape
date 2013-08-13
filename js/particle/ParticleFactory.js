@@ -8,8 +8,8 @@
 Ape.ParticleFactory = function (type) {
     var radius = 5;
     var geometry = new THREE.SphereGeometry(radius, 32, 32);
-    var material = new THREE.MeshNormalMaterial();
-    var particle = new Ape.Particle(geometry, material);
+//    var material = new THREE.MeshNormalMaterial();
+    var particle = new Ape.Particle(geometry);
     switch (type) {
         case 'simple':
             break;

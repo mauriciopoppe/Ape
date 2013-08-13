@@ -9,8 +9,8 @@
 (function () {
     var Particle;
 
-    Particle = function (config) {
-        THREE.Mesh.call(this, config);
+    Particle = function () {
+        THREE.Mesh.apply(this, arguments);
         /**
          * Holds the linear position of the particle in
          * world space.

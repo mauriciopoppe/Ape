@@ -40,6 +40,7 @@ Loader.list = [
     'T3/js/T3.js',
     'T3/js/Application.js',
     'T3/js/ObjectManager.js',
+    'T3/js/controller/Keyboard.js',
     'T3/js/controller/World.js',
     'T3/js/model/Coordinates.js',
 
@@ -52,4 +53,24 @@ Loader.list = [
     'js/particle/ParticleForceGenerator.js',
     'js/particle/ParticleDrag.js',
     'js/particle/ParticleGravity.js'
+];
+
+Loader.list.particle = [
+    'js/particle/Particle.js',
+    'js/particle/ParticleFactory.js',
+    'js/particle/ParticleForceRegistry.js',
+    'js/particle/ParticleForceGenerator.js',
+    'js/particle/ParticleDrag.js',
+    'js/particle/ParticleGravity.js'
+];
+
+Loader.list.rigidBody = [
+    'js/Quaternion.js',
+    'js/Matrix3.js',
+    'js/Matrix4.js',
+    'js/rigidBody/ForceRegistry.js',
+    'js/rigidBody/ForceGenerator.js',
+    'js/rigidBody/forces/Gravity.js',
+    'js/rigidBody/forces/Spring.js',
+    'js/rigidBody/RigidBody.js'
 ];
