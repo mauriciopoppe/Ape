@@ -294,14 +294,6 @@
                 .add(pt.cross(f));
         },
 
-        getPointInWorldSpace: function (point) {
-            return this.transformMatrix.transform(point);
-        },
-
-        getPointInLocalSpace: function (point) {
-            return this.transformMatrix.transformInverse(point);
-        },
-
         /**
          * Adds the given force to the given point on the rigid body, the direction
          * of the point is given in world space coordinates but the application point
@@ -428,6 +420,30 @@
 //            if (iitWorld) {
 //                console.warn("Inverse inertia tensor is be invalid");
 //            }
+        },
+
+        /**
+         * Transform a point given in OBJECT coordinates to
+         * WORLD coordinates (NOTE: make sure to understand
+         * that the normal basis of this object might have changed
+         * and may not be aligned with the world's normal basis)
+         * @param {THREE.Vector3} point
+         * @returns {THREE.Vector3}
+         */
+        getPointInWorldSpace: function (point) {
+            return this.transformMatrix.transform(point);
+        },
+
+        /**
+         * Transforms a point given in WORLD coordinates to
+         * OBJECT coordinates (NOTE: make sure to understand
+         * that the normal basis of this object might have changed
+         * and may not be aligned with the world's normal basis)
+         * @param {THREE.Vector3} point
+         * @returns {THREE.Vector3}
+         */
+        getPointInLocalSpace: function (point) {
+            return this.transformMatrix.transformInverse(point);
         }
 
     });

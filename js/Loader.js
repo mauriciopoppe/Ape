@@ -72,5 +72,6 @@ Loader.list.rigidBody = [
     'js/rigidBody/ForceGenerator.js',
     'js/rigidBody/forces/Gravity.js',
     'js/rigidBody/forces/Spring.js',
-    'js/rigidBody/RigidBody.js'
+    'js/rigidBody/RigidBody.js',
+    'js/rigidBody/RigidBodyFactory.js'
 ];

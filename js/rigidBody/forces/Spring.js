@@ -24,7 +24,7 @@ Ape.Spring = Ape.ForceGenerator.extend({
         this._super();
 
         /**
-         * The point of connection of the spring in object
+         * The point of connection of the spring in OBJECT
          * coordinates
          * @type {THREE.Vector3}
          */
@@ -39,7 +39,7 @@ Ape.Spring = Ape.ForceGenerator.extend({
         this.other = other;
 
         /**
-         * The point of connection of the spring in object
+         * The point of connection of the spring in OBJECT
          * coordinates (in the other body)
          * @type {THREE.Vector3}
          */
@@ -76,13 +76,5 @@ Ape.Spring = Ape.ForceGenerator.extend({
         // f_spring = magnitude * dˆ
         force = vector.clone().normalize().multiplyScalar(magnitude);
         body.addForceAtPoint(force, bodyInWorldSpace);
-
-        // add a damping factor since the system is perfect
-        // but there's some lose of energy
-//        var dampingFactor = 0.5;
-//        force = particle.velocity.clone();
-//        particle.addForce(
-//            force.multiplyScalar(-dampingFactor)
-//        );
     }
 });

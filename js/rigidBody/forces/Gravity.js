@@ -13,7 +13,7 @@ Ape.Gravity = Ape.ForceGenerator.extend({
          * Gravity acceleration
          * @type {THREE.Vector3}
          */
-        this.gravity = gravity;
+        this.gravity = gravity || Ape.GRAVITY.clone();
     },
 
     updateForce: function (body, duration) {

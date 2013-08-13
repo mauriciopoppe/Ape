@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Archimedes Physics Engine test</title>
+    <script src="js/Loader.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+    <link href="T3/css/reset.css" rel="stylesheet"/>
+    <link href="T3/css/main.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="css/master.css"/>
+</head>
+<body>
+    <div id="webgl-container"></div>
+    <script type="text/javascript">
+        Loader.list = Loader.list.concat(
+            Loader.list.rigidBody
+        );
+        Loader.list = Loader.list.concat([
+            'demoAssets/demo_21/World.js'
+        ]);
+        Loader(function () {
+            T3.Application.launch(Ape.World);
+        });
+    </script>
+</body>
+</html>
