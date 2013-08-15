@@ -444,6 +444,16 @@
          */
         getPointInLocalSpace: function (point) {
             return this.transformMatrix.transformInverse(point);
+        },
+
+        /**
+         * Sets the value for both the linear damping and the angular damping
+         * @param {number} linearDamping
+         * @param {number} angularDamping
+         */
+        setDamping: function (linearDamping, angularDamping) {
+            this.linearDamping = linearDamping;
+            this.angularDamping = angularDamping;
         }
 
     });

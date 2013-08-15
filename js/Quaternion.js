@@ -32,6 +32,14 @@ Ape.Quaternion = Class.extend({
         this.z = z !== undefined ? z : 0;
     },
 
+    set: function (w, x, y, z) {
+        this.w = w;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this.normalize();
+    },
+
     asArray: function () {
         return [this.w, this.x, this.y, this.z];
     },

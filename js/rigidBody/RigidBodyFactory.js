@@ -5,9 +5,9 @@
  * Time: 4:48 PM
  * To change this template use File | Settings | File Templates.
  */
-Ape.RigidBodyFactory = function (type) {
-    var s = 5;
-    var geometry = new THREE.CubeGeometry(s, s, s);
+Ape.RigidBodyFactory = function (type, size) {
+    size = size || 5;
+    var geometry = new THREE.CubeGeometry(size, size, size);
     var material = new THREE.MeshNormalMaterial();
     var body = new Ape.RigidBody(geometry, material);
 
@@ -23,10 +23,11 @@ Ape.RigidBodyFactory = function (type) {
     body.position.set(100, 100, 0);
     body.setInertiaTensor(
         new Ape.Matrix3().setBlockInertialTensor(
-            new THREE.Vector3(s * 0.5, s * 0.5, s * 0.5),
+            new THREE.Vector3(size * 0.5, size * 0.5, size * 0.5),
             body.getMass()
         )
     );
     return body;
 };
 Ape.RigidBodyFactory.SIMPLE = 'simple';
+Ape.RigidBodyFactory.GRAVITY = 'gravity';

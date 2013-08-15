@@ -197,5 +197,14 @@ Ape.Matrix3 = Class.extend({
             0.3 * mass * (sqx + sqz),
             0.3 * mass * (sqx + sqy)
         );
+    },
+
+    linearInterpolate: function (a, b, proportion) {
+        var i;
+        for (i = 0; i < 9; i += 1) {
+            this.data[i] = a.data[i] * (1 - proportion) +
+                b.data[i] * proportion;
+        }
+        return this;
     }
 });
