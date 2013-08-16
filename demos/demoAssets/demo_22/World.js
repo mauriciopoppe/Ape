@@ -97,6 +97,8 @@ Ape.World = T3.World.extend({
         // cameras
         this.cameraControls.object.position.set(15, 0, 0);
         this.cameraControls.target = this.aircraft.position.clone();
+        this.cameraControls.maxPolarAngle = Math.PI;
+
         this.aircraft.add(this.cameraControls.object);
     },
 
@@ -154,10 +156,10 @@ Ape.World = T3.World.extend({
     handleKeys: function () {
         // yaw
         if (T3.Keyboard.get('Q')) {
-            this.rudderControl += 0.01;
+            this.rudderControl += 0.1;
         }
         if (T3.Keyboard.get('E')) {
-            this.rudderControl -= 0.01;
+            this.rudderControl -= 0.1;
         }
 
         // pitch (both wings in the same direction)

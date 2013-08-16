@@ -75,7 +75,11 @@
          * into world space and vice versa. This can be achieved by calling the
          * getPointInSpace functions.
          */
-        this.transformMatrix = new Ape.Matrix4();
+        this.transformMatrix = new Ape.Matrix4(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0
+        );
 
         // ************** FORCE AND TORQUE ACCUMULATORS **************
         // store the current force, torque and acceleration of the rigid body

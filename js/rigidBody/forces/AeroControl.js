@@ -10,7 +10,7 @@
  * force doing interpolations between its min and max
  * tensor
  *
- * @class Ape.Spring
+ * @class Ape.AeroControl
  */
 Ape.AeroControl = Ape.Aero.extend({
     init: function (base, min, max, position, windSpeed) {
