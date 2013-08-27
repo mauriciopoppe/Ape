@@ -1,0 +1,15 @@
+/* slides */
+.demo-iframe {
+    width: 100%;
+    height: 100%
+}
+
+.demo {
+    padding: 0;
+    height: 750px;
+    width: 1520px;
+}
+
+.active {
+    z-index: 1;
+}

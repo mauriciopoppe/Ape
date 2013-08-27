@@ -1,60 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Archimedes Physics Engine test</title>
-    <script src="lib/Extend.js"></script>
-    <script src="js/Core.js"></script>
-    <script src="js/Vector3.js"></script>
-
-    <script src="js/Constants.js"></script>
-    <script src="js/Particle.js"></script>
-
-    <script src="lib/Game.js"></script>
-
+    <title>APE Presentation</title>
+    <link rel="stylesheet" href="css/impress.css"/>
+    <link rel="stylesheet" href="css/impressCustom.css"/>
 </head>
 <body>
-    <canvas id="app" width="350" height="350"></canvas>
-    <button onclick="pause()">PAUSE</button>
+
+    <div id="impress">
+
+        <div class="slide step" data-z="-3000">
+            <h1>Archimedes Physics Engine</h1>
+            <p>
+                Sample equation: <img src="http://latex.codecogs.com/svg.latex?1+sin(x)" />
+            </p>
+        </div>
+
+        <div class="demo step" data-x="0" data-y="0">
+            <iframe class="demo-iframe"
+                    data-url="demos/05_particleSpring.html">
+            </iframe>
+        </div>
+
+        <div class="demo step" data-x="1000" data-y="0">
+            <iframe class="demo-iframe"
+                    data-url="demos/08_particleContact.html">
+            </iframe>
+        </div>
+
+        <div class="demo step" data-x="2000">
+            <iframe class="demo-iframe"
+                    data-url="demos/10_particleCable.html">
+            </iframe>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="lib/impress.js"></script>
+    <script type="text/javascript" src="lib/jquery-2.0.3.js"></script>
+    <script> impress().init(); </script>
     <script type="text/javascript">
-        console.log('%c>> APE up and running!', 'color: #6FC3DF');
-        var canvas = document.getElementById('app');
-        var context = canvas.getContext('2d');
-        var width = canvas.width, height = canvas.height;
+        (function () {
 
-        // invert
-        context.translate(0, height);
-        context.scale(1, -1);
+            // hash change
+            var old, current;
+            $(window).on('hashchange', function () {
+                var id = window.location.hash.substr(2);
+                var el = $('#' + id);
 
-        // particle
-        var particle = new Ape.Particle();
-//        particle.velocity.set(0, 100, 0);
-        particle.acceleration.set(0, -20, 0);       // gravity
-        particle.position.set(100, 300, 0);
-        particle.setMass(1);
-//        particle.setInverseMass(0);
+                // remove old frames' src
+                old && old.each(function (index, iframe) {
+                    iframe.src = "";
+                });
 
+                // check if the element has iframes
+                current = el.find('iframe.demo-iframe');
+                current.each(function (index, iframe) {
+                    iframe.src = $(iframe).data('url');
+                    iframe.width = window.innerWidth;
+                    iframe.height = window.innerHeight;
+                });
 
-        Game = Game || {};
-        Game.setUp({
-            context: context,
-            reset: function () {
-                this.context.clearRect(0, 0, width, height);
-            },
-            update: function (delta) {
-                particle.integrate(delta);
-            },
-            render: function () {
-                this.context.beginPath();
-                this.context.arc(particle.position.x, particle.position.y, 10, 0, 2 * Math.PI, false);
-                this.context.fillStyle = 'green';
-                this.context.fill();
-            }
-        });
-        Game.launch();
+                old = current;
+            });
 
-        function pause() {
-            Game.controls.togglePause();
-        }
+        })();
     </script>
 </body>
 </html>

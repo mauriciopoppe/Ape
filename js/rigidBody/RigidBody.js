@@ -19,7 +19,7 @@
          *
          * This means that infinite mass object have a zero inverse mass since 1 / ∞ = 0
          * Objects of zero mass have an undefined inverse mass
-         * @type {*}
+         * @type {number}
          */
         this.inverseMass = 1.0;
         /**
