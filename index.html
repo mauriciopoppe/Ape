@@ -2,8 +2,7 @@
 <html>
 <head>
     <title>APE Presentation</title>
-    <link rel="stylesheet" href="css/impress.css"/>
-    <link rel="stylesheet" href="css/impressCustom.css"/>
+    <link rel="stylesheet" href="lib/impress.css"/>
 </head>
 <body>
 
@@ -38,32 +37,7 @@
     <script type="text/javascript" src="lib/impress.js"></script>
     <script type="text/javascript" src="lib/jquery-2.0.3.js"></script>
     <script> impress().init(); </script>
-    <script type="text/javascript">
-        (function () {
+    <script type="text/javascript" src="lib/slides.js"></script>
 
-            // hash change
-            var old, current;
-            $(window).on('hashchange', function () {
-                var id = window.location.hash.substr(2);
-                var el = $('#' + id);
-
-                // remove old frames' src
-                old && old.each(function (index, iframe) {
-                    iframe.src = "";
-                });
-
-                // check if the element has iframes
-                current = el.find('iframe.demo-iframe');
-                current.each(function (index, iframe) {
-                    iframe.src = $(iframe).data('url');
-                    iframe.width = window.innerWidth;
-                    iframe.height = window.innerHeight;
-                });
-
-                old = current;
-            });
-
-        })();
-    </script>
 </body>
 </html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>APE Presentation</title>
+    <link rel="stylesheet" href="css/slides.css"/>
+</head>
+<body>
+
+    <div id="nav">
+        <button class="slideButton" data-action="prev"> << </button>
+        <button class="slideButton" data-action="next"> >> </button>
+    </div>
+
+    <div id="impress">
+
+        <div class="step chapter" data-next="px">
+            <p class="title">
+                DISE&Ntilde;O DE UN MOTOR DE SIMULACION DE LA DINAMICA ENTRE
+                CUERPOS RIGIDOS ORIENTADO AL DESARROLLO DE JUEGOS
+            </p>
+            <p class="right subtitle">
+                Presentado por: <b>Mauricio Poppe</b>
+            </p>
+            <p class="right subtitle">
+                Tutor: <b>Ing. Orlando Rivera</b>
+            </p>
+            <br>
+            <p class="center subtitle">
+                Septiembre 2013
+            </p>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Objetivos de la presentacion</h1>
+            <ul>
+                <li>
+                    Demostrar motores de simulacion fisica existentes (Cannon.js y Ammo.js)
+                </li>
+                <li>
+                    Senalar la problematica existente en los mismos
+                </li>
+                <li>
+                    Plantear una propuesta de solucion
+                    <ul>
+                        <li>Objetivos</li>
+                        <li>Justificaciones</li>
+                        <li>Limites</li>
+                        <li>Alcances</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Inspiracion</p>
+        </div>
+            <div class="step demo" data-next="py">
+                <iframe class="demo-iframe"
+                    data-src="http://threejs.org/examples/#webgl_animation_cloth">
+                </iframe>
+            </div>
+            <div class="step demo" data-next="py">
+                <iframe class="demo-iframe"
+                        data-src="http://alteredqualia.com/xg/examples/animation_physics_ammo.html">
+                </iframe>
+            </div>
+            <div class="step demo" data-next="px ry">
+                <iframe class="demo-iframe"
+                        data-src="http://alteredqualia.com/xg/examples/animation_physics_level.html">
+                </iframe>
+            </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Simulacion fisica (fluidos)</h1>
+            <iframe class="demo-iframe demo-inline"
+                    data-src="http://madebyevan.com/webgl-water/" frameborder="0">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Simulacion fisica (cuerpos deformables)</h1>
+
+            <iframe class="demo-iframe demo-inline"
+                    data-src="http://egraether.com/demos/soft/index.html" frameborder="0">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Simulacion fisica (cuerpos rigidos)</h1>
+            <img class="center"
+                 style="width: 400px"
+                 src="images/panel1/rigidBody.jpg" alt=""/>
+            <p>Tipos</p>
+            <ul>
+                <li>Alta Precision</li>
+                <ul>
+                    <li>Peliculas animadas por computadora</li>
+                </ul>
+                <li>Tiempo Real</li>
+                <ul>
+                    <li class="highlight">Juegos</li>
+                </ul>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Simulacion fisica en Juegos</h1>
+            <p>
+                Fisica en general (independiente del juego)
+            </p>
+            <img class="center" src="https://www.ibm.com/developerworks/library/os-physicsengines/figure1.gif" alt=""/>
+            <p>Ventajas</p>
+            <ul>
+                <li>Reusable</li>
+                <li>Calidad de codigo (sujeto a extension)</li>
+            </ul>
+            <p>Desventajas</p>
+            <ul>
+                <li>Uso intensivo de recursos</li>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Planteamiento del problema</h1>
+            <ul>
+                <li>
+                    Evolucion de <span class="highlight">JavaScript</span>
+                </li>
+                <li>HTML5 Canvas</li>
+                <iframe class="demo-iframe demo-inline"
+                        style="height: 700px"
+                        data-src="http://29a.ch/sandbox/2010/box2d2/test.html" frameborder="0">
+                </iframe>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Planteamiento del problema</h1>
+            <br> <br>
+            <ul>
+                <li>
+                    Motores de simulacion fisica 3D Comerciales:
+                    <div class="center">
+                        <span class="highlight">Havok, PhysX, CarX (AAA Racing Games), True Axis, Chrono</span>
+                    </div>
+                </li>
+                <li>
+                    Motores de simulacion fisica 3D Open Source:
+                    <div class="center">
+                        <span class="highlight">Bullet, JigLib, Tokamak, Newton Game Dynamics,
+                            Open Dynamics Engine</span>
+                    </div>
+                </li>
+                <li>
+                    Motores de simulacion fisica 3D existentes para la web:
+                    <div class="center highlight">Cannon.js</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Objetivos</h1>
+            <br> <br>
+            <ul>
+                <li>General</li>
+                <li>Especificos:</li>
+                <ul>
+                    <li>Registro de fuerzas</li>
+                    <li>Integracion de fuerzas</li>
+                    <li>Deteccion y resolucion de colisiones</li>
+                    <li>Prototipos</li>
+                </ul>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Justificacion</h1>
+            <img class="center" style="width: 700px" src="images/panel1/html5.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Limites</h1>
+            <br> <br> <br>
+            <ul>
+                <li>Geometria Exacta</li>
+                <li>Dinamica de fluidos</li>
+                <li>Dinamica de cuerpos deformables</li>
+                <li>Fenomenos ambientales que cambien la geometria del objeto</li>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <h1>Alcances</h1>
+            <br> <br> <br>
+            <ul>
+                <li>Fuerzas implementadas</li>
+                <li>Rotacion en 3D</li>
+                <li>Prototipos</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="lib/jquery-2.0.3.js"></script>
+    <script type="text/javascript" src="lib/slides.js"></script>
+    <script type="text/javascript" src="lib/impress.js"></script>
+    <script> impress().init(); </script>
+</body>
+</html>
