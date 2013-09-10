@@ -3470,87 +3470,129 @@ body {
     background-size: 200px 200px;
   }
 }
+/* line 211, ../sass/slides.scss */
+img {
+  padding: 10px;
+  -webkit-box-shadow: #333333 2px 2px 10px;
+  -moz-box-shadow: #333333 2px 2px 10px;
+  box-shadow: #333333 2px 2px 10px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
 /* slides */
-/* line 212, ../sass/slides.scss */
+/* line 218, ../sass/slides.scss */
 .demo-iframe {
   padding: 0;
   width: 100%;
   height: 100%;
 }
 
-/* line 217, ../sass/slides.scss */
+/* line 223, ../sass/slides.scss */
 .demo-inline {
   overflow: hidden;
   width: 780px;
   height: 80%;
 }
 
-/* line 223, ../sass/slides.scss */
+/* line 229, ../sass/slides.scss */
 .left {
   text-align: left;
 }
 
-/* line 227, ../sass/slides.scss */
+/* line 233, ../sass/slides.scss */
 .right {
   text-align: right;
 }
 
-/* line 231, ../sass/slides.scss */
+/* line 237, ../sass/slides.scss */
 .center {
   text-align: center;
   margin: 0 auto;
 }
 
-/* line 236, ../sass/slides.scss */
+/* line 242, ../sass/slides.scss */
 .title {
   text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
   font-size: 40px;
   color: white;
 }
 
-/* line 242, ../sass/slides.scss */
+/* line 248, ../sass/slides.scss */
 .subtitle {
   font-size: 30px;
   color: white;
 }
 
-/* line 247, ../sass/slides.scss */
+/* line 253, ../sass/slides.scss */
 .highlight {
   text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25);
 }
 
-/* line 251, ../sass/slides.scss */
+/* line 257, ../sass/slides.scss */
 .active {
   z-index: 1;
 }
 
-/* line 255, ../sass/slides.scss */
+/* line 261, ../sass/slides.scss */
 img.center {
   display: block;
   margin: 20px auto;
 }
 
-/* line 260, ../sass/slides.scss */
+/* line 266, ../sass/slides.scss */
 #nav {
   z-index: 2;
   position: absolute;
   top: 5px;
   left: 5px;
 }
-/* line 266, ../sass/slides.scss */
+/* line 272, ../sass/slides.scss */
 #nav button {
   color: #e27619;
 }
 
 /* type of slides */
-/* line 272, ../sass/slides.scss */
+/* line 278, ../sass/slides.scss */
+.step {
+  display: none;
+}
+/* line 280, ../sass/slides.scss */
+.step img {
+  -webkit-animation: fadeOut 4s 0s ease both;
+  -moz-animation: fadeOut 4s 0s ease both;
+  -ms-animation: fadeOut 4s 0s ease both;
+  -o-animation: fadeOut 4s 0s ease both;
+  animation: fadeOut 4s 0s ease both;
+}
+/* line 283, ../sass/slides.scss */
+.step img.inline {
+  margin: 10px;
+  display: inline-block;
+}
+/* line 287, ../sass/slides.scss */
+.step.past, .step.active, .step.future {
+  display: block;
+}
+
+/* line 292, ../sass/slides.scss */
+.step.active img {
+  -webkit-animation: fadeInUp 4s 0s ease both;
+  -moz-animation: fadeInUp 4s 0s ease both;
+  -ms-animation: fadeInUp 4s 0s ease both;
+  -o-animation: fadeInUp 4s 0s ease both;
+  animation: fadeInUp 4s 0s ease both;
+}
+
+/* line 297, ../sass/slides.scss */
 .demo {
   padding: 0;
   height: 750px;
   width: 1520px;
 }
 
-/* line 278, ../sass/slides.scss */
+/* line 303, ../sass/slides.scss */
 .slide {
   -webkit-box-shadow: #333333 2px 2px 10px;
   -moz-box-shadow: #333333 2px 2px 10px;
@@ -3558,28 +3600,28 @@ img.center {
   border-top: 10px solid #e27619;
   border-bottom: 10px solid #e27619;
 }
-/* line 282, ../sass/slides.scss */
+/* line 307, ../sass/slides.scss */
 .slide h1 {
   font-size: 50px;
   padding-bottom: 10px;
   border-bottom: 2px solid #e27619;
   margin-bottom: 10px;
 }
-/* line 288, ../sass/slides.scss */
+/* line 313, ../sass/slides.scss */
 .slide p {
   padding: 10px 0;
 }
-/* line 291, ../sass/slides.scss */
+/* line 316, ../sass/slides.scss */
 .slide ul {
   list-style: disc;
   padding-left: 30px;
 }
-/* line 295, ../sass/slides.scss */
+/* line 320, ../sass/slides.scss */
 .slide li {
   padding: 10px 0;
 }
 
-/* line 300, ../sass/slides.scss */
+/* line 325, ../sass/slides.scss */
 .intro {
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
@@ -3590,7 +3632,7 @@ img.center {
   background-color: #e27619;
 }
 
-/* line 306, ../sass/slides.scss */
+/* line 331, ../sass/slides.scss */
 .chapter {
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
@@ -3606,7 +3648,7 @@ img.center {
   margin: 20px auto;
   text-align: center;
 }
-/* line 316, ../sass/slides.scss */
+/* line 341, ../sass/slides.scss */
 .chapter p {
   color: white;
   font-size: 100px;

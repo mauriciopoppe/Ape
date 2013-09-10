@@ -208,6 +208,12 @@ body {
   }
 }
 
+img {
+  padding: 10px;
+  @include box-shadow(#333 2px 2px 10px);
+  @include border-radius(5px);
+}
+
 /* slides */
 .demo-iframe {
   padding: 0;
@@ -269,6 +275,25 @@ img.center {
 }
 
 /* type of slides */
+.step {
+  display: none;
+  img {
+    @include animate(fadeOut, 4s, 0s);
+  }
+  img.inline {
+    margin: 10px;
+    display: inline-block;
+  }
+  &.past, &.active, &.future {
+    display: block;
+  }
+}
+.step.active {
+  img {
+    @include animate(fadeInUp, 4s, 0s);
+  }
+}
+
 .demo {
   padding: 0;
   height: 750px;
