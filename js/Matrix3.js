@@ -128,6 +128,15 @@ Ape.Matrix3 = Class.extend({
         return new Ape.Matrix3().setTranspose(this);
     },
 
+    transformTranspose: function (vector) {
+        var d = this.data;
+        return new THREE.Vector3(
+            vector.x * d[0] + vector.y * d[3] + vector.z * d[6],
+            vector.x * d[1] + vector.y * d[4] + vector.z * d[7],
+            vector.x * d[2] + vector.y * d[5] + vector.z * d[8]
+        );
+    },
+
     /**
      * Sets this matrix to be the rotation matrix corresponding to
      * the given quaternion.

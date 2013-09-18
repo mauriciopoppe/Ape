@@ -458,6 +458,22 @@
         setDamping: function (linearDamping, angularDamping) {
             this.linearDamping = linearDamping;
             this.angularDamping = angularDamping;
+        },
+
+        /**
+         * Adds the linear velocity `v` to this
+         * @param {THREE.Vector3} v
+         */
+        addVelocity: function (v) {
+            this.linearVelocity.add(v);
+        },
+
+        /**
+         * Adds the angular velocity `v` to this
+         * @param {THREE.Vector3} v
+         */
+        addRotation: function (v) {
+            this.angularVelocity.add(v);
         }
 
     });

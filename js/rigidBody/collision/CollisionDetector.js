@@ -329,15 +329,15 @@ Ape.CollisionDetector = Class.extend({
 
         var bestSingleAxis = best;
 
-        if (!tryAxis(one.getAxis(0).cross(two.getAxis(0)), 6)) { return 0; }
-        if (!tryAxis(one.getAxis(0).cross(two.getAxis(1)), 7)) { return 0; }
-        if (!tryAxis(one.getAxis(0).cross(two.getAxis(2)), 8)) { return 0; }
-        if (!tryAxis(one.getAxis(1).cross(two.getAxis(0)), 9)) { return 0; }
-        if (!tryAxis(one.getAxis(1).cross(two.getAxis(1)), 10)) { return 0; }
-        if (!tryAxis(one.getAxis(1).cross(two.getAxis(2)), 11)) { return 0; }
-        if (!tryAxis(one.getAxis(2).cross(two.getAxis(0)), 12)) { return 0; }
-        if (!tryAxis(one.getAxis(2).cross(two.getAxis(1)), 13)) { return 0; }
-        if (!tryAxis(one.getAxis(2).cross(two.getAxis(2)), 14)) { return 0; }
+        if (!tryAxis(one.getAxis(0).clone().cross(two.getAxis(0)), 6)) { return 0; }
+        if (!tryAxis(one.getAxis(0).clone().cross(two.getAxis(1)), 7)) { return 0; }
+        if (!tryAxis(one.getAxis(0).clone().cross(two.getAxis(2)), 8)) { return 0; }
+        if (!tryAxis(one.getAxis(1).clone().cross(two.getAxis(0)), 9)) { return 0; }
+        if (!tryAxis(one.getAxis(1).clone().cross(two.getAxis(1)), 10)) { return 0; }
+        if (!tryAxis(one.getAxis(1).clone().cross(two.getAxis(2)), 11)) { return 0; }
+        if (!tryAxis(one.getAxis(2).clone().cross(two.getAxis(0)), 12)) { return 0; }
+        if (!tryAxis(one.getAxis(2).clone().cross(two.getAxis(1)), 13)) { return 0; }
+        if (!tryAxis(one.getAxis(2).clone().cross(two.getAxis(2)), 14)) { return 0; }
 
         if (best === Infinity) { return 0; }
 
