@@ -76,5 +76,22 @@ Loader.list.rigidBody = [
     'js/rigidBody/forces/Aero.js',
     'js/rigidBody/forces/AeroControl.js',
     'js/rigidBody/RigidBody.js',
-    'js/rigidBody/RigidBodyFactory.js'
+    'js/rigidBody/RigidBodyFactory.js',
+    'js/rigidBody/CollisionShapeFactory.js',
+
+    // primitive
+    'js/rigidBody/primitive/Primitive.js',
+    'js/rigidBody/primitive/Box.js',
+    'js/rigidBody/primitive/Plane.js',
+    'js/rigidBody/primitive/Sphere.js',
+
+    // collision
+    'js/rigidBody/collision/BoundingSphere.js',
+    'js/rigidBody/collision/CollisionData.js',
+    'js/rigidBody/collision/CollisionDetector.js',
+    'js/rigidBody/collision/Contact.js',
+    'js/rigidBody/collision/ContactResolver.js',
+
+    // rigid body world
+    'js/rigidBody/RigidBodyWorld.js'
 ];

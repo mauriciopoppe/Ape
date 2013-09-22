@@ -81,8 +81,8 @@ Ape.CollisionDetector = Class.extend({
         // dot product will return the projection of the position
         // of the sphere in the direction of the normal vector
         // of the plane
-        var ballDistance = plane.direction.
-            dot(position) - sphere.radius - plane.offset;
+        var ballDistance = plane.direction
+            .dot(position) - sphere.radius - plane.offset;
 
         if (ballDistance >= 0) {
             // no collision detected
@@ -115,12 +115,23 @@ Ape.CollisionDetector = Class.extend({
      * @param data
      */
     boxAndHalfSpace: function (box, plane, data) {
+        var me = this;
+
         // only write contacts if there's enough room
         if (data.contactsLeft <= 0) {
             return 0;
         }
 
-        if (!Ape.IntersectionTests.boxAndHalfSpace(box, plane)) {
+        function checkBoxAndHalfSpaceIntersection(box, plane) {
+            // work out the radius from the box to the plane
+            var projectedRadius = me.transformToAxis(box, plane.direction);
+            // compute how far is the box from the origin
+            var boxDistance = plane.direction.
+                dot(box.getAxis(3)) - projectedRadius;
+            return boxDistance <= plane.offset;
+        }
+
+        if (!checkBoxAndHalfSpaceIntersection(box, plane)) {
             return 0;
         }
 
@@ -291,15 +302,18 @@ Ape.CollisionDetector = Class.extend({
     boxAndBox: function (one, two, data) {
         // lets assume that there's no contact
         var me = this,
-            contactPoint,
             toCenter = two.getAxis(3).sub(one.getAxis(3)),
             penetration = Infinity,
-            best = Infinity;
+            best = -1;
 
         function penetrationOnAxis(axis) {
-            var oneProject = Ape.IntersectionTests.transformToAxis(one, axis);
-            var twoProject = Ape.IntersectionTests.transformToAxis(two, axis);
-            var distance = Math.abs(toCenter.clone().dot(axis));
+            var oneProject = me.transformToAxis(one, axis),
+                twoProject = me.transformToAxis(two, axis),
+                distance = Math.abs(toCenter.dot(axis));
+
+            // return the overlap amount:
+            //  - positive means overlap
+            //  - negative means separation
             return oneProject + twoProject - distance;
         }
 
@@ -308,59 +322,62 @@ Ape.CollisionDetector = Class.extend({
                 return true;
             }
             axis.normalize();
-            var nPenetration = penetrationOnAxis(axis);
-            if (nPenetration < 0) {
+            var candidate = penetrationOnAxis(axis);
+            if (candidate < 0) {
                 return false;
             }
-            if (nPenetration < penetration) {
-                penetration = nPenetration;
+            if (candidate < penetration) {
+                penetration = candidate;
                 best = index;
             }
             return true;
         }
 
+        // check overlap over one's (x, y, z) axes
         if (!tryAxis(one.getAxis(0), 0)) { return 0; }
         if (!tryAxis(one.getAxis(1), 1)) { return 0; }
         if (!tryAxis(one.getAxis(2), 2)) { return 0; }
-        
+
+        // check overlap over two's (x, y, z) axes
         if (!tryAxis(two.getAxis(0), 3)) { return 0; }
         if (!tryAxis(two.getAxis(1), 4)) { return 0; }
         if (!tryAxis(two.getAxis(2), 5)) { return 0; }
 
         var bestSingleAxis = best;
 
-        if (!tryAxis(one.getAxis(0).clone().cross(two.getAxis(0)), 6)) { return 0; }
-        if (!tryAxis(one.getAxis(0).clone().cross(two.getAxis(1)), 7)) { return 0; }
-        if (!tryAxis(one.getAxis(0).clone().cross(two.getAxis(2)), 8)) { return 0; }
-        if (!tryAxis(one.getAxis(1).clone().cross(two.getAxis(0)), 9)) { return 0; }
-        if (!tryAxis(one.getAxis(1).clone().cross(two.getAxis(1)), 10)) { return 0; }
-        if (!tryAxis(one.getAxis(1).clone().cross(two.getAxis(2)), 11)) { return 0; }
-        if (!tryAxis(one.getAxis(2).clone().cross(two.getAxis(0)), 12)) { return 0; }
-        if (!tryAxis(one.getAxis(2).clone().cross(two.getAxis(1)), 13)) { return 0; }
-        if (!tryAxis(one.getAxis(2).clone().cross(two.getAxis(2)), 14)) { return 0; }
+        // check overlap over the combination of two's and one's axes
+        if (!tryAxis(one.getAxis(0).cross(two.getAxis(0)), 6)) { return 0; }
+        if (!tryAxis(one.getAxis(0).cross(two.getAxis(1)), 7)) { return 0; }
+        if (!tryAxis(one.getAxis(0).cross(two.getAxis(2)), 8)) { return 0; }
+        if (!tryAxis(one.getAxis(1).cross(two.getAxis(0)), 9)) { return 0; }
+        if (!tryAxis(one.getAxis(1).cross(two.getAxis(1)), 10)) { return 0; }
+        if (!tryAxis(one.getAxis(1).cross(two.getAxis(2)), 11)) { return 0; }
+        if (!tryAxis(one.getAxis(2).cross(two.getAxis(0)), 12)) { return 0; }
+        if (!tryAxis(one.getAxis(2).cross(two.getAxis(1)), 13)) { return 0; }
+        if (!tryAxis(one.getAxis(2).cross(two.getAxis(2)), 14)) { return 0; }
 
-        if (best === Infinity) { return 0; }
+        Ape.assert(best !== -1);
 
         // We know which axis the collision is on (i.e. best),
         // but we need to work out which of the two faces on
         // this axis.
-        function fillPointFaceBoxBox(toCenter, best) {
-            var contact = me.createContact();
+        function fillPointFaceBoxBox(one, two, toCenter, best) {
             var normal = one.getAxis(best);
-            if (one.getAxis(best).dot(toCenter) > 0) {
-                normal = normal.multiplyScalar(-1);
+            if (normal.dot(toCenter) > 0) {
+                normal.multiplyScalar(-1);
             }
 
-            // work out which vertex of box two
-            var vertex = two.halfSize;
+            // work out which vertex of box two we're colliding with
+            var vertex = two.halfSize.clone();
             if (two.getAxis(0).dot(normal) < 0) { vertex.x *= -1; }
             if (two.getAxis(1).dot(normal) < 0) { vertex.y *= -1; }
             if (two.getAxis(2).dot(normal) < 0) { vertex.z *= -1; }
 
             // create the contact data
+            var contact = me.createContact();
             contact.contactNormal = normal;
             contact.penetration = penetration;
-            contact.contactPoint = two.transform.clone().multiplyVector3(vertex);
+            contact.contactPoint = two.transform.clone().multiplyVector(vertex);
 
             // set body data
             contact.body[0] = one.body;
@@ -371,10 +388,10 @@ Ape.CollisionDetector = Class.extend({
         }
 
         if (best < 3) {
-            fillPointFaceBoxBox(toCenter, best);
+            fillPointFaceBoxBox(one, two, toCenter, best);
             return 1;
         } else if (best < 6) {
-            fillPointFaceBoxBox(toCenter.multiplyScalar(-1), best - 3);
+            fillPointFaceBoxBox(two, one, toCenter.clone().multiplyScalar(-1), best - 3);
             return 1;
         } else {
             best -= 6;
@@ -387,6 +404,7 @@ Ape.CollisionDetector = Class.extend({
 
             // The axis should point from box one to box two
             if (axis.dot(toCenter) > 0) { axis.multiplyScalar(-1); }
+
             var ptOnOneEdge = one.halfSize.clone();
             var ptOnTwoEdge = two.halfSize.clone();
             var map = ['x', 'y', 'z'];
@@ -398,10 +416,10 @@ Ape.CollisionDetector = Class.extend({
                 else if (two.getAxis(i).dot(axis) > 0) { ptOnTwoEdge[map[i]] *= -1; }
             }
 
-            ptOnOneEdge = one.transform.clone().multiplyVector3(ptOnOneEdge);
-            ptOnTwoEdge = two.transform.clone().multiplyVector3(ptOnTwoEdge);
+            ptOnOneEdge = one.transform.multiplyVector(ptOnOneEdge);
+            ptOnTwoEdge = two.transform.multiplyVector(ptOnTwoEdge);
 
-            contactPoint = function (pOne, dOne, oneSize, pTwo, dTwo, twoSize, useOne) {
+            function contactPoint(pOne, dOne, oneSize, pTwo, dTwo, twoSize, useOne) {
                 // THREE.Vector3
                 var toSt, cOne, cTwo;
 
@@ -437,17 +455,17 @@ Ape.CollisionDetector = Class.extend({
                     mub < -twoSize) {
                     return useOne ? pOne : pTwo;
                 } else {
-                    cOne = pOne.clone().add(dOne.multiplyScalar(mua));
-                    cTwo = pTwo.clone().add(dTwo.multiplyScalar(mub));
-                    return cOne.clone().multiplyScalar(0.5).add(
-                        cTwo.clone().multiplyScalar(0.5)
+                    cOne = pOne.add(dOne.multiplyScalar(mua));
+                    cTwo = pTwo.add(dTwo.multiplyScalar(mub));
+                    return cOne.multiplyScalar(0.5).add(
+                        cTwo.multiplyScalar(0.5)
                     );
                 }
-            };
+            }
 
             var vertex = contactPoint(
-                ptOnOneEdge, oneAxis, one.halfSize[oneIndex],
-                ptOnTwoEdge, twoAxis, two.halfSize[twoIndex],
+                ptOnOneEdge, oneAxis, one.halfSize[map[oneIndex]],
+                ptOnTwoEdge, twoAxis, two.halfSize[map[twoIndex]],
                 bestSingleAxis > 2
             );
 
@@ -465,10 +483,55 @@ Ape.CollisionDetector = Class.extend({
         }
     },
 
+    transformToAxis: function (box, axis) {
+        return box.halfSize.x * Math.abs(axis.dot(box.getAxis(0))) +
+               box.halfSize.y * Math.abs(axis.dot(box.getAxis(1))) +
+               box.halfSize.z * Math.abs(axis.dot(box.getAxis(2)));
+    },
+
     /**
      * @returns {Ape.Contact}
      */
     createContact: function () {
         return new Ape.Contact();
+    },
+
+    detector: {
+        sphere: {
+            sphere: 'sphereAndSphere',
+            plane: 'sphereAndHalfSpace'
+        },
+        box: {
+            box: 'boxAndBox',
+            sphere: 'boxAndSphere',
+            plane: 'boxAndHalfSpace',
+            point: 'boxAndPoint'
+        }
+    },
+
+    /**
+     * For any two objects passed, detects which is the method
+     * to call to detect collisions based on the rules described in `this.detector`
+     * @param a
+     * @param b
+     * @param data
+     */
+    detect: function (a, b, data) {
+        var i,
+            first, second,
+            method,
+            objects = [a, b],
+            types = [a.getType(), b.getType()];
+
+        for (i = 0; i < 2; i += 1) {
+            first = i;
+            second = 1 - i;
+            method = this.detector[types[first]] &&
+                this.detector[types[first]][types[second]];
+            if (method) {
+                this[method](objects[first], objects[second], data);
+                return;
+            }
+        }
     }
 });

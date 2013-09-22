@@ -25,6 +25,7 @@ Ape.ContactResolver = Class.extend({
         this.velocityEpsilon = config.velocityEpsilon || 1e-2;
 
         /**
+         * @private
          * Total number of iterations used in the resolver
          * @type {number}
          */
@@ -37,6 +38,7 @@ Ape.ContactResolver = Class.extend({
         this.positionIterations = config.positionIterations || 1;
 
         /**
+         * @private
          * Total number of iterations used in the resolver
          * @type {number}
          */

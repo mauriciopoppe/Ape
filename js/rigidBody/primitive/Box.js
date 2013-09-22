@@ -22,5 +22,11 @@ Ape.Box = Ape.Primitive.extend({
          * @type {THREE.Vector3}
          */
         this.halfSize = halfSize;
-    }
+    },
+
+    /**
+     * Each instance created is of type box
+     * @type {string}
+     */
+    type: 'box'
 });

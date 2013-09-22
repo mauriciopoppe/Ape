@@ -31,7 +31,14 @@ Ape.Primitive = Class.extend({
          * @type {Ape.Matrix4}
          */
         this.transform = null;
+
     },
+
+    /**
+     * Type of object
+     * @type {string}
+     */
+    type: null,
 
     /**
      * Convenience method to access the axis vectors
@@ -58,5 +65,12 @@ Ape.Primitive = Class.extend({
         this.transform = this.body.transformMatrix.clone().multiply(
             this.offset
         );
+    },
+
+    getType: function () {
+        if (!this.type) {
+            throw new Error('Ape.Primitive(): type needed');
+        }
+        return this.type;
     }
 });

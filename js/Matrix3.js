@@ -17,10 +17,22 @@ Ape.Matrix3 = Class.extend({
     },
 
     set: function (m11, m12, m13, m21, m22, m23, m31, m32, m33) {
-        var data = this.data;
-        data[0] = m11; data[1] = m12; data[2] = m13;
-        data[3] = m21; data[4] = m22; data[5] = m23;
-        data[6] = m31; data[7] = m32; data[8] = m33;
+        var d = this.data,
+            special = {
+                0: true,
+                4: true,
+                8: true
+            },
+            i;
+        d[0] = m11; d[1] = m12; d[2] = m13;
+        d[3] = m21; d[4] = m22; d[5] = m23;
+        d[6] = m31; d[7] = m32; d[8] = m33;
+
+        // fix undefined values
+        for (i = 0; i < 9; i += 1) {
+            d[i] = d[i] !== undefined ? d[i] : Number(!!special[i]);
+        }
+
         return this;
     },
 
@@ -208,6 +220,20 @@ Ape.Matrix3 = Class.extend({
         );
     },
 
+    /**
+     * Sets the value of this matrix as the inertial tensor of a sphere
+     * with uniform density
+     * @param radius
+     * @param mass
+     */
+    setSphereInertialTensor: function (radius, mass) {
+        return this.setInertialTensorCoefficients(
+            2 / 5 * mass * radius * radius,
+            2 / 5 * mass * radius * radius,
+            2 / 5 * mass * radius * radius
+        );
+    },
+
     linearInterpolate: function (a, b, proportion) {
         var i;
         for (i = 0; i < 9; i += 1) {
@@ -215,5 +241,19 @@ Ape.Matrix3 = Class.extend({
                 b.data[i] * proportion;
         }
         return this;
+    },
+
+    /**
+     * Sets the vectors passed as a parameter as the columns of
+     * this matrix
+     * @param {THREE.Vector3} a
+     * @param {THREE.Vector3} b
+     * @param {THREE.Vector3} c
+     */
+    setComponents: function (a, b, c) {
+        var d = this.data;
+        d[0] = a.x; d[1] = b.x; d[2] = c.x;
+        d[3] = a.y; d[4] = b.y; d[5] = c.y;
+        d[6] = a.z; d[7] = b.z; d[8] = c.z;
     }
 });

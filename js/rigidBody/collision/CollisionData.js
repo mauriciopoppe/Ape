@@ -7,12 +7,14 @@
  */
 /**
  * A helper structure that contains information for the detector
- * to use in building its contact data
+ * to use while it's building its contact data
  *
  * @class Ape.CollisionData
  */
 Ape.CollisionData = Class.extend({
-    init: function () {
+    init: function (config) {
+        config = config || {};
+
         /**
          * Holds the contacts array to write into
          * @type {Array}
@@ -26,30 +28,23 @@ Ape.CollisionData = Class.extend({
         this.contactsLeft = null;
 
         /**
-         * Holds the number of contacts found so far
-         * @type {number}
-         */
-        this.contactCount = null;
-
-        //TODO: understand where this vars came from
-        /**
          * Holds the friction value to be written into any collision
          * @type {number}
          */
-        this.friction = null;
+        this.friction = config.friction || 0;
 
         /**
          * Holds the restitution value to be written into any collision
          * @type {number}
          */
-        this.restitution = null;
+        this.restitution = config.restitution || 0;
 
         /**
          * Holds the collision tolerance, the objects that are this
          * close should have collisions generated
          * @type {number}
          */
-        this.tolerance = null;
+        this.tolerance = config.tolerance || 0;
     },
 
     /**
@@ -66,7 +61,6 @@ Ape.CollisionData = Class.extend({
      */
     reset: function (maxContacts) {
         this.contactsLeft = maxContacts;
-        this.contactCount = 0;
         this.contacts = [];
     },
 
@@ -76,6 +70,5 @@ Ape.CollisionData = Class.extend({
      */
     addContact: function (count) {
         this.contactsLeft -= count;
-        this.contactCount += count;
     }
 });

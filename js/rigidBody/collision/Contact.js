@@ -60,9 +60,9 @@ Ape.Contact = Class.extend({
          * A transform matrix that converts coordinates in the CONTACT
          * frame of reference to WORLD coordinates, the columns of this
          * matrix form an orthonormal set of vectors
-         * @type {Ape.Matrix4}
+         * @type {Ape.Matrix3}
          */
-        this.contactToWorld = new Ape.Matrix4();
+        this.contactToWorld = new Ape.Matrix3();
 
         /**
          * Holds the closing velocity at the point of contact
@@ -155,7 +155,10 @@ Ape.Contact = Class.extend({
      * TODO: consider friction
      */
     calculateContactBasis: function () {
-        var contactTangent = [],
+        var contactTangent = [
+                new THREE.Vector3(),
+                new THREE.Vector3()
+            ],
             scale;
 
         if (Math.abs(this.contactNormal.x) > Math.abs(this.contactNormal.y)) {
@@ -255,7 +258,7 @@ Ape.Contact = Class.extend({
             restitution = 0;
         }
 
-        this.desiredVelocity = -this.contactVelocity.multiplyScalar(1 + restitution);
+        this.desiredVelocity = -this.contactVelocity.x * (1 + restitution);
     },
 
     /**

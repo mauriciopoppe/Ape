@@ -11,7 +11,7 @@
  * @class Ape.Matrix4
  */
 Ape.Matrix4 = Class.extend({
-    init: function (data) {
+    init: function () {
         /**
          * Holds 12 real values
          * It's assumed that the remaining row has (0, 0, 0, 1)
@@ -34,10 +34,22 @@ Ape.Matrix4 = Class.extend({
 
     set: function (m11, m12, m13, m14, m21, m22, m23, m24,
            m31, m32, m33, m34) {
-        var data = this.data;
-        data[0] = m11; data[1] = m12; data[2] = m13; data[3] = m14;
-        data[4] = m21; data[5] = m22; data[6] = m23; data[7] = m24;
-        data[8] = m31; data[9] = m32; data[10] = m33; data[11] = m34;
+        var d = this.data,
+            special = {
+                0: true,
+                5: true,
+                10: true
+            },
+            i;
+        d[0] = m11; d[1] = m12; d[2] = m13; d[3] = m14;
+        d[4] = m21; d[5] = m22; d[6] = m23; d[7] = m24;
+        d[8] = m31; d[9] = m32; d[10] = m33; d[11] = m34;
+
+        // fix undefined values
+        for (i = 0; i < 12; i += 1) {
+            d[i] = d[i] !== undefined ? d[i] : Number(!!special[i]);
+        }
+
         return this;
     },
 
@@ -245,13 +257,5 @@ Ape.Matrix4 = Class.extend({
             v.x * d[1] + v.y * d[5] + v.z * d[9],
             v.x * d[2] + v.y * d[6] + v.z * d[10]
         );
-    },
-
-    localToWorldDirn: function (local, transform) {
-        return transform.transformDirection(local);
-    },
-
-    worldToLocalDirn: function (world, transform) {
-        return transform.transformInverseDirection(world);
     }
 });

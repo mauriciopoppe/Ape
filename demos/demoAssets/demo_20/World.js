@@ -67,16 +67,9 @@ Ape.World = T3.World.extend({
     },
 
     createRigidBody: function (size) {
-        var geometry = new THREE.CubeGeometry(size, size, size),
-            material = new THREE.MeshNormalMaterial(),
-            rigidBody = new Ape.RigidBody(geometry, material);
-        rigidBody.setMass(1);
-        rigidBody.setInertiaTensor(
-            new Ape.Matrix3().setBlockInertialTensor(
-                new THREE.Vector3(size * 0.5, size * 0.5, size * 0.5),
-                rigidBody.getMass()
-            )
-        );
+        var rigidBody = Ape.RigidBodyFactory.createCube({
+            size: size
+        });
         scene.add(rigidBody);
         return rigidBody;
     },

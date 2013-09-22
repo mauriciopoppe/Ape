@@ -21,5 +21,11 @@ Ape.Sphere = Ape.Primitive.extend({
          * @type {*}
          */
         this.radius = radius;
-    }
+    },
+
+    /**
+     * Each instance created is of type sphere
+     * @type {string}
+     */
+    type: 'sphere'
 });
