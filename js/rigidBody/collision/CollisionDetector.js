@@ -395,7 +395,7 @@ Ape.CollisionDetector = Class.extend({
             return 1;
         } else {
             best -= 6;
-            var oneIndex = best / 3;
+            var oneIndex = ~~(best / 3);
             var twoIndex = best % 3;
             var oneAxis = one.getAxis(oneIndex);
             var twoAxis = two.getAxis(twoIndex);
@@ -479,6 +479,8 @@ Ape.CollisionDetector = Class.extend({
             contact.body[1] = two.body;
             contact.restitution = data.restitution;
             contact.friction = data.friction;
+
+            data.contacts.push(contact);
             return 1;
         }
     },

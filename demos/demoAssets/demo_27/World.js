@@ -19,6 +19,7 @@ Ape.World = Ape.RigidBodyWorld.extend({
 
     initWorld: function () {
         var factory = Ape.CollisionShapeFactory,
+            total,
             box,
             i;
 
@@ -30,41 +31,17 @@ Ape.World = Ape.RigidBodyWorld.extend({
                 direction: new THREE.Vector3(0, 1, 0),
                 createMesh: true
             })
-//            ,
-//            factory.createPlane({
-//                direction: new THREE.Vector3(-0.2, 1, -0.5),
-//                createMesh: true
-//            }),
-//            factory.createPlane({
-//                direction: new THREE.Vector3(0.2, 1, 0.5),
-//                createMesh: true
-//            }),
-//            factory.createPlane({
-//                direction: new THREE.Vector3(-0.2, 1, 0.5),
-//                createMesh: true
-//            }),
-//            factory.createPlane({
-//                direction: new THREE.Vector3(0.2, 1, -0.5),
-//                createMesh: true
-//            })
         ];
         for (i = 0; i < this.planes.length; i += 1) {
             this.objects.push(this.planes[i]);
         }
 
-        for (i = 0; i < 30; i += 1) {
-            box = this.createBox(10);
+        total = 3;
+        for (i = 0; i < total; i += 1) {
+            box = this.createBox(i, total);
             this.boxes.push(box);
             this.objects.push(box);
         }
-
-//        box = this.createBox(5);
-//        this.boxes.push(box);
-//        this.objects.push(box);
-//
-//        box = this.createBox(30);
-//        this.boxes.push(box);
-//        this.objects.push(box);
 
         // fix camera
         this.cameraControls.target.set(0, 0, 0);
@@ -103,14 +80,14 @@ Ape.World = Ape.RigidBodyWorld.extend({
         }
     },
 
-    createBox: function (size) {
+    createBox: function (size, max) {
         var box = Ape.CollisionShapeFactory.createBox({
-                size: size
+                size: (max - size) * 10
             });
         box.body.position.set(
-            Math.random() * 50,
-            100 + Math.random() * 100,
-            Math.random() * 50
+            0,
+            50 + size * 40,
+            0
         );
         return box;
     }
