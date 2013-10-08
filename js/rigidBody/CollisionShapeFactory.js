@@ -7,17 +7,33 @@
  */
 Ape.CollisionShapeFactory = {
 
+	/**
+	 * Creates a collision-able box by creating a RigidBody
+	 * attached to an `Ape.Box`
+	 * @param {Object} config
+	 * @param {number} config.size Size of each side of the box
+	 * @param {number} config.size Box's width (if width is not provided
+	 * `size` is used instead)
+	 * @param {number} config.size Box's height (if height is not provided
+	 * `size` is used instead)
+	 * @param {number} config.size Box's depth (if depth is not provided
+	 * `size` is used instead)
+	 * @returns {Ape.Box}
+	 */
     createBox: function (config) {
         // fix config
         config = config || {};
-        config.size = config.size || 5;
+		config.size = config.size || 5;
+		config.width = config.width || config.size;
+		config.height = config.height || config.size;
+		config.depth = config.depth || config.size;
 
-        var size = config.size,
-            body,
-            box;
+		// default options
+		var body,
+			box;
 
         // create a cube mesh
-        body = Ape.RigidBodyFactory.createCube(config);
+        body = Ape.RigidBodyFactory.createBox(config);
         scene.add(body);
 
         // the mesh is represented with a box in the collision
@@ -25,12 +41,23 @@ Ape.CollisionShapeFactory = {
         box = new Ape.Box(
             body,                                                   // body
             new Ape.Matrix4(),                                      // offset (identity)
-            new THREE.Vector3(size / 2, size / 2, size / 2)         // half size
+            new THREE.Vector3(
+	            config.width / 2,
+	            config.height / 2,
+	            config.depth / 2
+            )         // half size
         );
         box.calculateInternals();
         return box;
     },
 
+	/**
+	 * Creates a collision-able sphere by creating a RigidBody
+	 * attached to an `Ape.Sphere`
+	 * @param {Object} config
+	 * @param {number} config.radius Radius of the sphere
+	 * @returns {Ape.Sphere}
+	 */
     createSphere: function (config) {
         // fix config
         config = config || {};
@@ -53,6 +80,14 @@ Ape.CollisionShapeFactory = {
         return sphere;
     },
 
+	/**
+	 * Creates a collision-able plane by creating a RigidBody
+	 * attached to an `Ape.Box`
+	 * @param {Object} config
+	 * @param {Object} config.direction Normal of the plane
+	 * @param {Object} config.offset Movement from the origin
+	 * @returns {Ape.Plane}
+	 */
     createPlane: function (config) {
         config = config || {};
 

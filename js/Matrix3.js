@@ -18,19 +18,19 @@ Ape.Matrix3 = Class.extend({
 
     set: function (m11, m12, m13, m21, m22, m23, m31, m32, m33) {
         var d = this.data,
-            special = {
-                0: true,
-                4: true,
-                8: true
-            },
+            special = [
+                1, 0, 0,
+                0, 1, 0,
+                0, 0, 1
+            ],
             i;
         d[0] = m11; d[1] = m12; d[2] = m13;
         d[3] = m21; d[4] = m22; d[5] = m23;
         d[6] = m31; d[7] = m32; d[8] = m33;
 
         // fix undefined values
-        for (i = 0; i < 9; i += 1) {
-            d[i] = d[i] !== undefined ? d[i] : Number(!!special[i]);
+        for (i = -1; ++i < 9;) {
+            d[i] = d[i] !== undefined ? d[i] : special[i];
         }
 
         return this;
@@ -40,6 +40,18 @@ Ape.Matrix3 = Class.extend({
         var d = this.data;
         return new Ape.Matrix3(
             d[0], d[1], d[2], d[3], d[4], d[5], d[6], d[7], d[8]
+        );
+    },
+
+    add: function (m) {
+        Ape.assert(m instanceof Ape.Matrix3);
+        var d1 = this.data;
+        var d2 = m.data;
+
+        return new Ape.Matrix3(
+            d1[0] + d2[0], d1[1] + d2[1], d1[2] + d2[2],
+            d1[3] + d2[3], d1[4] + d2[4], d1[5] + d2[5],
+            d1[6] + d2[6], d1[7] + d2[7], d1[8] + d2[8]
         );
     },
 
@@ -66,6 +78,7 @@ Ape.Matrix3 = Class.extend({
     /**
      * Transform the given vector by this matrix
      * @param v
+     * @return THREE.Vector3
      */
     multiplyVector: function (v) {
         var d = this.data;
@@ -78,7 +91,22 @@ Ape.Matrix3 = Class.extend({
 
     /**
      * Transform the given vector by this matrix
+     * @param s
+     * @return Ape.Matrix3
+     */
+    multiplyScalar: function (s) {
+        var d = this.data;
+        return new Ape.Matrix3(
+            d[0] * s, d[1] * s, d[2] * s,
+            d[3] * s, d[4] * s, d[5] * s,
+            d[6] * s, d[7] * s, d[8] * s
+        );
+    },
+
+    /**
+     * Transform the given vector by this matrix
      * @param v
+     * @return THREE.Vector3
      */
     transform: function (v) {
         return this.multiplyVector(v);
@@ -255,5 +283,28 @@ Ape.Matrix3 = Class.extend({
         d[0] = a.x; d[1] = b.x; d[2] = c.x;
         d[3] = a.y; d[4] = b.y; d[5] = c.y;
         d[6] = a.z; d[7] = b.z; d[8] = c.z;
+    },
+
+    /**
+     * Sets the matrix to be a skew symmetric matrix based on
+     * the given vector. The skew symmetric matrix is the
+     * equivalent of the vector product.
+     *
+     *      // let a, b be Vector3
+     *      a (cross) b = skewSymmetric(a) * b
+     * @param v
+     * @chainable
+     */
+    setSkewSymmetric: function (v) {
+        var d = this.data;
+        // set diagonal to zero
+        d[0] = d[4] = d[8] = 0;
+        d[1] = -v.z;
+        d[2] = v.y;
+        d[3] = v.z;
+        d[5] = -v.x;
+        d[6] = -v.y;
+        d[7] = v.x;
+        return this;
     }
 });

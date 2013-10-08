@@ -120,17 +120,22 @@ Ape.ParticleContact = Class.extend({
         }
 
         // calculate the impulse to apply
+        // We know that:
+        //      f = m * a = m * dv / dt
+        //      f * dt = m * dv
+        // f * dt is the impulse which represents a quantity of motion to
+        // be applied to the object:
+        //
         // let:
-        //      g be the impulse
+        //      p be the impulse
         //      v the velocity of the particle
         //      m the mass of the particle
-        //
-        // g = v * m
+        // p = m * v
         // if we have the inverseMass instead then
-        // g = v * 1 / (1 / m)
+        // p = 1 / (1 / m) * m
         // and (1 / m) == inverseMass
-        // so g = v * (1 / inverseMass)
-        // g = v / inverseMass
+        // so p = (1 / inverseMass) * v
+        // p = v / inverseMass
         var impulse = deltaVelocity / totalInverseMass;
 
         // amount of impulse per unit of inverse mass
@@ -138,6 +143,8 @@ Ape.ParticleContact = Class.extend({
         // for particleA it will be applied in the same direction as the contact
         // normal and for particleB (if possible) it will be pushed in the opposite
         // direction (-contactNormal)
+        // let's calculate the amount of impulse needed to move 1 unit of mass
+        // in the direction of the contact normal
         var impulsePerIMass = this.contactNormal.clone()
             .multiplyScalar(impulse);
 
@@ -192,6 +199,24 @@ Ape.ParticleContact = Class.extend({
 
         // find the amount of penetration resolution per unit of inverse mass
         // applied in the direction of the contact normal
+        // Let's consider that we have the sum of the masses instead of the
+        // sum of the inverse masses, so if we want to move two particles
+        // in the opposite directions to resolve the penetration, we have to
+        // apply the movement in proportion to their mass:
+        //
+        //     movement = penetration
+        //     sumOfMasses = massA + massB
+        //     movementForA = movement * massA / sumOfMasses
+        //     movementForB = movement * massB / sumOfMasses
+        //
+        // we have the sum of the inverse masses instead, since a proportion
+        // will be used there's no need to make the conversion from the sum
+        // of inverse masses to the sum of masses
+        //
+        //     movement = penetration
+        //     sumOfIMasses = IMassA + IMassB
+        //     movementForA = movement * IMassA / sumOfIMasses
+        //     movementForB = movement * IMassB / sumOfIMasses
         var movePerIMass = this.contactNormal.clone()
             .multiplyScalar(this.penetration / totalInverseMass);
 

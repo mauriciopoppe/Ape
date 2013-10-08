@@ -117,7 +117,8 @@ Ape.ContactResolver = Class.extend({
             // find biggest penetration
             max = this.positionEpsilon;
             maxIndex = -1;
-            for(i = 0; i < numContacts; i += 1) {
+            i = numContacts;
+            for(i = -1; ++i < numContacts;) {
                 if (contactArray[i].penetration > max) {
                     max = contactArray[i].penetration;
                     maxIndex = i;
@@ -139,12 +140,12 @@ Ape.ContactResolver = Class.extend({
 
             // this action may have changed the penetration of other bodies
             // so update the contacts (do not check for collisions again)
-            for (i = 0; i < numContacts; i += 1) {
-                for (b = 0; b < 2; b += 1) {
+            for (i = -1; ++i < numContacts;) {
+                for (b = -1; ++b < 2;) {
                     if (contactArray[i].body[b]) {
                         // check for a match with each body in the newly
                         // resolved contact
-                        for (d = 0; d < 2; d += 1) {
+                        for (d = -1; ++d < 2;) {
                             if (contactArray[i].body[b] === contact.body[d]) {
                                 deltaPosition = linearChange[d].clone().add(
                                     angularChange[d].clone().cross(
@@ -187,7 +188,7 @@ Ape.ContactResolver = Class.extend({
             // find biggest penetration
             max = this.velocityEpsilon;
             maxIndex = -1;
-            for(i = 0; i < numContacts; i += 1) {
+            for(i = -1; ++i < numContacts;) {
                 if (contactArray[i].desiredVelocity > max) {
                     max = contactArray[i].desiredVelocity;
                     maxIndex = i;
@@ -209,12 +210,12 @@ Ape.ContactResolver = Class.extend({
             // with the change in velocity of the two bodies, the update of
             // contact velocities means that some of the relative closing
             // velocities need recomputing
-            for (i = 0; i < numContacts; i += 1) {
-                for (b = 0; b < 2; b += 1) {
+            for (i = -1; ++i < numContacts;) {
+                for (b = -1; ++b < 2;) {
                     if (contactArray[i].body[b]) {
                         // check for a match with each body in the newly
                         // resolved contact
-                        for (d = 0; d < 2; d += 1) {
+                        for (d = -1; ++d < 2;) {
                             if (contactArray[i].body[b] === contact.body[d]) {
                                 deltaVelocity = velocityChange[d].clone().add(
                                     rotationChange[d].clone().cross(

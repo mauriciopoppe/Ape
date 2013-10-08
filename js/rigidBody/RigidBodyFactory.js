@@ -7,7 +7,7 @@
  */
 Ape.RigidBodyFactory = function (type, size) {
     size = size || 5;
-    var geometry = new THREE.CubeGeometry(size, size, size);
+    var geometry = new THREE.BoxGeometry(size, size, size);
     var material = new THREE.MeshNormalMaterial();
     var body = new Ape.RigidBody(geometry, material);
 
@@ -30,23 +30,53 @@ Ape.RigidBodyFactory = function (type, size) {
     return body;
 };
 
-Ape.RigidBodyFactory.createCube = function (config) {
+/**
+ * Creates a RigidBody which has a box as its geometry,
+ * this method also applies the corresponding inertia tensor
+ *
+ * This method should be rarely called, use `CollisionShapeFactory.createBox` instead
+ *
+ * @param {Object} config
+ * @param {number} config.size Box's side length
+ * @param {number} config.size Box's width (if width is not provided
+ * `size` is used instead)
+ * @param {number} config.size Box's height (if height is not provided
+ * `size` is used instead)
+ * @param {number} config.size Box's depth (if depth is not provided
+ * `size` is used instead)
+ * @returns {Ape.RigidBody}
+ */
+Ape.RigidBodyFactory.createBox = function (config) {
     // default options
-    var size = config.size || 5;
+    var size = config.size || 5,
+	    width = config.width || size,
+	    height = config.height || size,
+	    depth = config.depth || size;
 
-    var geometry = new THREE.CubeGeometry(size, size, size);
+    var geometry = new THREE.CubeGeometry(width, height, depth);
     var material = new THREE.MeshNormalMaterial();
     var body = new Ape.RigidBody(geometry, material);
     this.applyConfig(body, config);
     body.setInertiaTensor(
         new Ape.Matrix3().setBlockInertialTensor(
-            new THREE.Vector3(size * 0.5, size * 0.5, size * 0.5),
+            new THREE.Vector3(width * 0.5, height * 0.5, depth * 0.5),
             body.getMass()
         )
     );
     return body;
 };
 
+/**
+ * Creates a RigidBody which has a sphere as its geometry,
+ * this method also applies the corresponding inertia tensor.
+ *
+ * This method should be rarely called, use `CollisionShapeFactory.createSphere` instead
+ *
+ * @param {Object} config
+ * @param {Object} config.radius Radius of the geometric representation
+ * @param {Object} config.type Particular c
+ * @returns {Ape.RigidBody}
+ */
 Ape.RigidBodyFactory.createSphere = function (config) {
     // default options
     var radius = config.radius || 5;
@@ -64,17 +94,28 @@ Ape.RigidBodyFactory.createSphere = function (config) {
     return body;
 };
 
+/**
+ * @private
+ * Identifies the type of pre-configured option through
+ * `config.type`, if there's a matching property it applies
+ * the corresponding characteristics to the `body`
+ * @param body
+ * @param config
+ */
 Ape.RigidBodyFactory.applyConfig = function (body, config) {
-    config.type = config.type || Ape.RigidBodyFactory.GRAVITY;
-    switch (config.type) {
-        case Ape.RigidBodyFactory.GRAVITY:
-            body.acceleration = Ape.GRAVITY.clone();
-            break;
-        default:
-            break;
-    }
+    var types = Ape.RigidBodyFactory.types,
+	    method = types[config.type] || types.gravity;
+    method(body);
     body.setMass(1);
 };
 
-Ape.RigidBodyFactory.SIMPLE = 'simple';
-Ape.RigidBodyFactory.GRAVITY = 'gravity';
+/**
+ * Callbacks executed depending on the type of object
+ * @type {Object}
+ */
+Ape.RigidBodyFactory.types = {
+	gravity: function (body) {
+		body.acceleration = Ape.GRAVITY.clone();
+	},
+	simple: function (body) {}
+};

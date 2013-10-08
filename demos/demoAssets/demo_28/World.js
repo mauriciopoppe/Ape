@@ -19,29 +19,32 @@ Ape.World = Ape.RigidBodyWorld.extend({
 
     initWorld: function () {
         var factory = Ape.CollisionShapeFactory,
+            box,
             i;
 
         this.objects = [];
-
+        this.boxes = [];
+        // generate planes
         this.planes = [
             factory.createPlane({
                 direction: new THREE.Vector3(0, 1, 0),
                 createMesh: true
-            }),
-            factory.createPlane({
-                direction: new THREE.Vector3(-0.2, 1, -0.5),
-                createMesh: true
             })
         ];
-
-        this.objects.push(this.planes[0], this.planes[1]);
-
-        this.spheres = [];
-        for (i = 0; i < 5; i += 1) {
-            var sphere = this.createSphere();
-            this.spheres.push(sphere);
-            this.objects.push(sphere);
+        for (i = 0; i < this.planes.length; i += 1) {
+            this.objects.push(this.planes[i]);
         }
+
+        for (i = 0; i < 50; i += 1) {
+            box = this.createBox(10);
+            this.boxes.push(box);
+            this.objects.push(box);
+        }
+
+        // fix camera
+        this.cameraControls.target.set(0, 0, 0);
+        this.cameraControls.object// THREE.Camera
+            .position.set(210, 70, 210);
     },
 
     update: function (delta) {
@@ -50,40 +53,41 @@ Ape.World = Ape.RigidBodyWorld.extend({
     },
 
     updateObjects: function(delta) {
-	    var length = this.spheres.length,
-		    sphere,
-		    i;
         this.forceRegistry.update(delta);
-
-	    for (i = -1; ++i < length;) {
-		    sphere = this.spheres[i];
-	        sphere.body.integrate(delta);
-            sphere.calculateInternals();
-        }
+        this.boxes.forEach(function (box) {
+            box.body.integrate(delta);
+            box.calculateInternals();
+        });
     },
 
     generateContacts: function() {
         // Set up the collision data structure
         this.collisionData.reset(this.maxContacts);
         this.collisionData.friction = 0.9;
-        this.collisionData.restitution = 0.2;
+        this.collisionData.restitution = 0.1;
         this.collisionData.tolerance = 0.1;
 
         var i, j,
             total = this.objects.length;
 
         // collide the box with the planes
-        for (i = -1; ++i < total;) {
-            for (j = i; ++j < total;) {
+        for (i = 0; i < total; i += 1) {
+            for (j = i + 1; j < total; j += 1) {
                 Ape.CollisionDetector.prototype
                     .detect(this.objects[i], this.objects[j], this.collisionData);
             }
         }
     },
 
-    createSphere: function () {
-        var sphere = Ape.CollisionShapeFactory.createSphere();
-        sphere.body.position.set(100, 100 + Math.random() * 200, 0);
-        return sphere;
+    createBox: function (size) {
+        var box = Ape.CollisionShapeFactory.createBox({
+                size: size
+            });
+        box.body.position.set(
+            Math.random() * 50,
+            100 + Math.random() * 100,
+            Math.random() * 50
+        );
+        return box;
     }
 });

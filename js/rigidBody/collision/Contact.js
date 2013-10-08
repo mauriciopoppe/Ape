@@ -152,7 +152,6 @@ Ape.Contact = Class.extend({
      * the matrix that transforms from CONTACT space to WORLD space), the x direction
      * is generated from the contact normal, and the (y,z) arbitrary considering
      * which (y,z) axes is closer to the world's (y,z) axes
-     * TODO: consider friction
      */
     calculateContactBasis: function () {
         var contactTangent = [
@@ -230,11 +229,14 @@ Ape.Contact = Class.extend({
         contactVelocity = this.contactToWorld.transformTranspose(velocity);
 
         // STABILIZATION and FRICTION
-        // calculate velocity that is due to forces without reactions
-        accumulatedVelocity = body.acceleration.clone().multiplyScalar(duration);
-        accumulatedVelocity = this.contactToWorld.transformTranspose(accumulatedVelocity);
+        // calculate the amount of velocity that is due to forces without reactions
+        accumulatedVelocity = body.lastFrameAcceleration.clone()
+            .multiplyScalar(duration);
+        accumulatedVelocity = this.contactToWorld
+            .transformTranspose(accumulatedVelocity);
+        // ignore any velocity change in the direction of the contact normal
+        // only check planar acceleration
         accumulatedVelocity.x = 0;
-
         contactVelocity.add(accumulatedVelocity);
 
         // process velocity
@@ -251,18 +253,28 @@ Ape.Contact = Class.extend({
         var velocityLimit = 0.25,
             restitution = this.restitution;
 
-        // STABILIZATION GOES HERE
+        // STABILIZATION
+        var accumulatedVelocity = this.body[0].lastFrameAcceleration
+            .dot(this.contactNormal) * duration;
+
+        if (this.body[1]) {
+            accumulatedVelocity -= this.body[1].lastFrameAcceleration
+                .dot(this.contactNormal) * duration;
+        }
 
         // if the velocity is too low limit the restitution
+        // to avoid the vibration of the rigid bodies
         if (Math.abs(this.contactVelocity.x) < velocityLimit) {
             restitution = 0;
         }
 
-        this.desiredVelocity = -this.contactVelocity.x * (1 + restitution);
+//        this.desiredVelocity = -this.contactVelocity.x * (1 + restitution);
+        this.desiredVelocity = -this.contactVelocity.x -
+            restitution * (this.contactVelocity.x - accumulatedVelocity);
     },
 
     /**
-     * Performs the resolution of this contact
+     * Turns an impulse generated into velocity and rotation change
      * @param {Array<THREE.Vector3>} velocityChange
      * @param {Array<THREE.Vector3>} rotationChange
      */
@@ -290,7 +302,6 @@ Ape.Contact = Class.extend({
         impulsiveTorque = this.relativeContactPosition[0].clone().cross(impulse);
         rotationChange[0] = inverseInertiaTensor[0].transform(impulsiveTorque);
         velocityChange[0] = impulse.clone().multiplyScalar(this.body[0].getInverseMass());
-
         // apply the changes
         this.body[0].addVelocity(velocityChange[0]);
         this.body[0].addRotation(rotationChange[0]);
@@ -300,7 +311,6 @@ Ape.Contact = Class.extend({
             impulsiveTorque = impulse.clone().cross(this.relativeContactPosition[1]);
             rotationChange[1] = inverseInertiaTensor[1].transform(impulsiveTorque);
             velocityChange[1] = impulse.clone().multiplyScalar(-this.body[1].getInverseMass());
-
             // apply the changes
             this.body[1].addVelocity(velocityChange[1]);
             this.body[1].addRotation(rotationChange[1]);
@@ -322,7 +332,9 @@ Ape.Contact = Class.extend({
             totalInertia = 0,
             linearInertia = [], angularInertia = [];
 
-        for (i = 0; i < 2; i += 1) {
+        // work out the inertia of each object in the direction
+        // of the contact normal due to angular inertia only
+        for (i = -1; ++i < 2;) {
             if (this.body[i]) {
                 inverseInertiaTensor = this.body[i].inverseInertiaTensor;
 
@@ -342,14 +354,14 @@ Ape.Contact = Class.extend({
         }
 
         // loop again to apply the changes
-        for (i = 0; i < 2; i += 1) {
+        for (i = -1; ++i < 2;) {
             angularChange[i] = new THREE.Vector3();
             linearChange[i] = new THREE.Vector3();
 
             if (this.body[i]) {
                 var sign = (i === 0 ? 1 : -1);
-                angularMove[i] = sign * this.penetration * angularInertia[i] / totalInertia;
-                linearMove[i] = sign * this.penetration * linearInertia[i] / totalInertia;
+                angularMove[i] = sign * this.penetration * (angularInertia[i] / totalInertia);
+                linearMove[i] = sign * this.penetration * (linearInertia[i] / totalInertia);
 
                 // we have the linear amount of movement required by
                 // turning the rigid body (in angularMove)
@@ -359,9 +371,7 @@ Ape.Contact = Class.extend({
                 } else {
                     // work out the direction we would like to rotate in
                     var targetAngularDirection = this.relativeContactPosition[i].clone()
-                        .cross(
-                            this.contactNormal
-                        );
+                        .cross(this.contactNormal);
                     inverseInertiaTensor = this.body[i].inverseInertiaTensor;
                     angularChange[i] = inverseInertiaTensor.transform(targetAngularDirection)
                         .multiplyScalar(angularMove[i] / angularInertia[i]);
@@ -434,6 +444,61 @@ Ape.Contact = Class.extend({
      * @returns {THREE.Vector3}
      */
     calculateFrictionImpulse: function (inverseInertiaTensor) {
+        var impulseContact,
+            inverseMass = this.body[0].getInverseMass(),
+            impulseToTorque = new Ape.Matrix3()
+                .setSkewSymmetric(this.relativeContactPosition[0]);
 
+        // build the matrix to convert contact impulse to change
+        // in velocity in world coordinates
+        var deltaToWorld = impulseToTorque.clone();
+        deltaToWorld = deltaToWorld.multiply(inverseInertiaTensor[0]);
+        deltaToWorld = deltaToWorld.multiply(impulseToTorque);
+        deltaToWorld = deltaToWorld.multiplyScalar(-1);
+
+        if (this.body[1]) {
+            inverseMass += this.body[1].getInverseMass();
+            impulseToTorque.setSkewSymmetric(this.relativeContactPosition[1]);
+
+            var deltaToWorld2 = impulseToTorque.clone();
+            deltaToWorld2 = deltaToWorld2.multiply(inverseInertiaTensor[1]);
+            deltaToWorld2 = deltaToWorld2.multiply(impulseToTorque);
+            deltaToWorld2 = deltaToWorld2.multiplyScalar(-1);
+
+            deltaToWorld = deltaToWorld.add(deltaToWorld2);
+        }
+
+        // change to contact coordinates
+        var deltaVelocity = this.contactToWorld.transpose();
+        deltaVelocity = deltaVelocity.multiply(deltaToWorld);
+        deltaVelocity = deltaVelocity.multiply(this.contactToWorld);
+
+        // add in the linear velocity change to the diagonal
+        deltaVelocity.data[0] += inverseMass;
+        deltaVelocity.data[4] += inverseMass;
+        deltaVelocity.data[8] += inverseMass;
+
+        var impulseMatrix = deltaVelocity.inverse();
+        var velocityKill = new THREE.Vector3(
+            this.desiredVelocity,
+            -this.contactVelocity.y,
+            -this.contactVelocity.z
+        );
+        impulseContact = impulseMatrix.transform(velocityKill);
+        var planarImpulse = Math.sqrt(impulseContact.y * impulseContact.y +
+            impulseContact.z * impulseContact.z);
+        if (planarImpulse > impulseContact.x * this.friction) {
+            impulseContact.y /= planarImpulse;
+            impulseContact.z /= planarImpulse;
+
+            impulseContact.x = deltaVelocity.data[0] +
+                deltaVelocity.data[1] * this.friction * impulseContact.y +
+                deltaVelocity.data[2] * this.friction * impulseContact.z;
+
+            impulseContact.x = this.desiredVelocity / impulseContact.x;
+            impulseContact.y *= this.friction * impulseContact.x;
+            impulseContact.z *= this.friction * impulseContact.x;
+        }
+        return impulseContact;
     }
 });

@@ -35,19 +35,19 @@ Ape.Matrix4 = Class.extend({
     set: function (m11, m12, m13, m14, m21, m22, m23, m24,
            m31, m32, m33, m34) {
         var d = this.data,
-            special = {
-                0: true,
-                5: true,
-                10: true
-            },
+            special = [
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0
+            ],
             i;
         d[0] = m11; d[1] = m12; d[2] = m13; d[3] = m14;
         d[4] = m21; d[5] = m22; d[6] = m23; d[7] = m24;
         d[8] = m31; d[9] = m32; d[10] = m33; d[11] = m34;
 
         // fix undefined values
-        for (i = 0; i < 12; i += 1) {
-            d[i] = d[i] !== undefined ? d[i] : Number(!!special[i]);
+        for (i = -1; ++i < 12;) {
+            d[i] = d[i] !== undefined ? d[i] : special[i];
         }
 
         return this;

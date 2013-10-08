@@ -213,7 +213,8 @@ Ape.CollisionDetector = Class.extend({
             Math.min(Math.max(relativeCenter.y, -box.halfSize.y), box.halfSize.y),
             Math.min(Math.max(relativeCenter.z, -box.halfSize.z), box.halfSize.z)
         );
-        var distance = closestPoint.clone().sub(relativeCenter).length;
+        var distance = closestPoint.clone().sub(relativeCenter).length();
+        Ape.assert(typeof distance === 'number');
         if (distance > sphere.radius) {
             // no contact
             return 0;
@@ -498,6 +499,22 @@ Ape.CollisionDetector = Class.extend({
         return new Ape.Contact();
     },
 
+
+	/**
+	 * The `detect` method identifies which the method to be executed
+	 * to detect collisions between a pair of objects:
+	 *
+	 *      // e.g.
+	 *      // detect collision between: sphere and sphere
+	 *      detector: {
+	 *          sphere: {
+	 *              sphere: 'sphereAndSphere'
+	 *          }
+	 *      }
+	 *      // method `sphereAndSphere` will be called
+	 *
+     * @type {Object}
+	 */
     detector: {
         sphere: {
             sphere: 'sphereAndSphere',
@@ -525,7 +542,7 @@ Ape.CollisionDetector = Class.extend({
             objects = [a, b],
             types = [a.getType(), b.getType()];
 
-        for (i = 0; i < 2; i += 1) {
+        for (i = -1; ++i < 2;) {
             first = i;
             second = 1 - i;
             method = this.detector[types[first]] &&

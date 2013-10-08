@@ -10,7 +10,7 @@
  * in the world (so it doesn't represent a rigid body)
  * @class Ape.Plane
  */
-Ape.Plane = Ape.Primitive.extend({
+Ape.Plane = Class.extend({
     init: function () {
         /**
          * Direction of the plane normal
@@ -29,5 +29,13 @@ Ape.Plane = Ape.Primitive.extend({
      * Each instance created is of type plane
      * @type {string}
      */
-    type: 'plane'
+    type: 'plane',
+
+    /**
+     * Returns the type of object ('plane')
+     * @returns {string|type}
+     */
+    getType: function () {
+        return this.type;
+    }
 });

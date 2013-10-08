@@ -99,6 +99,15 @@
          * @type {THREE.Vector3}
          */
         this.acceleration = new THREE.Vector3();
+
+
+        // ************** STABILIZATION **************
+        /**
+         * To remove any velocity that has been built up from
+         * acceleration we need to create a new data member which is this
+         * @type {number}
+         */
+        this.lastFrameAcceleration = 0;
     };
 
     RigidBody.prototype = new THREE.Mesh();
@@ -220,6 +229,9 @@
                 this.orientation,
                 THREE.Euler.DefaultOrder
             );
+
+            // STABILIZATION
+            this.lastFrameAcceleration = linearAcceleration;
 
             // normalize the orientation, update the transformMatrix and
             // inverseInertiaTensor matrices to reflect the new changes
