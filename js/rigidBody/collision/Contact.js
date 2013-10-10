@@ -75,9 +75,9 @@ Ape.Contact = Class.extend({
          * Holds the desired change in velocity to apply
          * to give it the correct impulse to the rigid body
          * to resolve the contact
-         * @type {THREE.Vector3}
+         * @type {number}
          */
-        this.desiredVelocity = new THREE.Vector3();
+        this.desiredVelocity = 0;
 
         /**
          * Holds the relative position of the contact in OBJECT

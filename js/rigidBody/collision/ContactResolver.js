@@ -91,10 +91,11 @@ Ape.ContactResolver = Class.extend({
      * @param {number} duration
      */
     prepareContacts: function (contactArray, numContacts, duration) {
-        contactArray.forEach(function (contact) {
+	    var i;
+	    for (i = -1; ++i < numContacts;) {
             // calculate the internal contact data (basis, inertia, etc)
-            contact.calculateInternals(duration);
-        });
+            contactArray[i].calculateInternals(duration);
+        }
     },
 
     /**

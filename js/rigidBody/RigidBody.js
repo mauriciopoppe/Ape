@@ -105,9 +105,9 @@
         /**
          * To remove any velocity that has been built up from
          * acceleration we need to create a new data member which is this
-         * @type {number}
+         * @type {THREE.Vector3}
          */
-        this.lastFrameAcceleration = 0;
+        this.lastFrameAcceleration = new THREE.Vector3();
     };
 
     RigidBody.prototype = new THREE.Mesh();

@@ -66,9 +66,11 @@ Ape.CollisionData = Class.extend({
 
     /**
      * Notifies the data that `count` number of contacts have been written
-     * @param count
+     * @param {Array} contacts
      */
-    addContact: function (count) {
-        this.contactsLeft -= count;
+    addContact: function (contacts) {
+	    Ape.assert(contacts instanceof Array);
+	    this.contacts.concat(contacts);
+        this.contactsLeft -= contacts.length;
     }
 });
