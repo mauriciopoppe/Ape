@@ -97,6 +97,8 @@ Ape.World = T3.World.extend({
             }
         }
 
+        this.cameraControls.object.position.set(150, 100, 50);
+//        this.cameraControls.target = new THREE.Vector3(200, 100, 0);
 
 //        this.particleRegistry.add(
 //            gravityParticle,

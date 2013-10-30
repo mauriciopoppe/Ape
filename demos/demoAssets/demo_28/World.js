@@ -41,6 +41,17 @@ Ape.World = Ape.RigidBodyWorld.extend({
             this.objects.push(box);
         }
 
+//        box = this.createBox(10);
+//        box.body.position.set(0, 50, 0);
+//        this.boxes.push(box);
+//        this.objects.push(box);
+//
+//        box = this.createBox(10);
+//        box.body.position.set(0, 100, 0);
+//        box.body.rotation.set(0, 0, 0);
+//        this.boxes.push(box);
+//        this.objects.push(box);
+
         // fix camera
         this.cameraControls.target.set(0, 0, 0);
         this.cameraControls.object// THREE.Camera

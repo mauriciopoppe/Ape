@@ -136,7 +136,12 @@ Ape.ParticleContact = Class.extend({
         // and (1 / m) == inverseMass
         // so p = (1 / inverseMass) * v
         // p = v / inverseMass
-        var impulse = deltaVelocity / totalInverseMass;
+//        var impulse = deltaVelocity / totalInverseMass;
+        var velocityProjection = this.particles[0].velocity.dot(this.contactNormal);
+        if (this.particles[1]) {
+            velocityProjection += -this.particles[1].velocity.dot(this.contactNormal);
+        }
+        var impulse = -(1 + this.restitution) * velocityProjection / totalInverseMass;
 
         // amount of impulse per unit of inverse mass
         // this is the total impulse that will be distributed between the particles,

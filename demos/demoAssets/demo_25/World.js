@@ -65,7 +65,7 @@ Ape.World = Ape.RigidBodyWorld.extend({
     generateContacts: function() {
         // Set up the collision data structure
         this.collisionData.reset(this.maxContacts);
-        this.collisionData.friction = 0.9;
+        this.collisionData.friction = 0.5;
         this.collisionData.restitution = 0.2;
         this.collisionData.tolerance = 0.1;
 

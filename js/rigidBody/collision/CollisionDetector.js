@@ -307,12 +307,17 @@ Ape.CollisionDetector = Class.extend({
             penetration = Infinity,
             best = -1;
 
+        // checks if the projections of the objects [one, two]
+        // over the given axis intersect, this is checked by cutting the objects
+        // with a plane that is perpendicular to the axis and passes through
+        // each object's center, the projections of those "half sizes" are
+        // computed in `me.transformToAxis`
         function penetrationOnAxis(axis) {
             var oneProject = me.transformToAxis(one, axis),
                 twoProject = me.transformToAxis(two, axis),
                 distance = Math.abs(toCenter.dot(axis));
 
-            // return the overlap amount:
+            // returns the overlap amount:
             //  - positive means overlap
             //  - negative means separation
             return oneProject + twoProject - distance;
@@ -333,6 +338,21 @@ Ape.CollisionDetector = Class.extend({
             }
             return true;
         }
+
+        // check if there's an overlap by checking if there's
+        // a Separating Axis Test, this test says that the bodies are not colliding
+        // if there's a axis (in 2d) or a plane (in 3d) that passes between the objects
+        // without colliding any of them.
+        //
+        // What we'll do is check for each axis if there's some overlap
+        // if not it means that there's an axis or plane that may go between the objects
+        // In 3d we need 15 checks as explained here:
+        // http://gamedev.stackexchange.com/questions/44500/how-many-and-which-axes-to-use-for-3d-obb-collision-with-sat
+        //
+        // In any case to avoid calculating all the overlap over one axis, we can
+        // divide the shape in two parts (no matter which axis or plane we choose, if that
+        // plane contains the center of the object it'll cut it in equally proportional
+        // dimensions)
 
         // check overlap over one's (x, y, z) axes
         if (!tryAxis(one.getAxis(0), 0)) { return 0; }
@@ -360,10 +380,12 @@ Ape.CollisionDetector = Class.extend({
         Ape.assert(best !== -1);
 
         // We know which axis the collision is on (i.e. best),
-        // but we need to work out which of the two faces on
-        // this axis.
+        // but we need to work out which of the two faces that
+        // are perpendicular to this axis need to be taken.
         function fillPointFaceBoxBox(one, two, toCenter, best) {
             var normal = one.getAxis(best);
+
+            // The axis should point from box one to box two
             if (normal.dot(toCenter) > 0) {
                 normal.multiplyScalar(-1);
             }
@@ -392,7 +414,7 @@ Ape.CollisionDetector = Class.extend({
             fillPointFaceBoxBox(one, two, toCenter, best);
             return 1;
         } else if (best < 6) {
-            fillPointFaceBoxBox(two, one, toCenter.clone().multiplyScalar(-1), best - 3);
+            fillPointFaceBoxBox(two, one, toCenter.multiplyScalar(-1), best - 3);
             return 1;
         } else {
             best -= 6;
@@ -420,13 +442,16 @@ Ape.CollisionDetector = Class.extend({
             ptOnOneEdge = one.transform.multiplyVector(ptOnOneEdge);
             ptOnTwoEdge = two.transform.multiplyVector(ptOnTwoEdge);
 
-            function contactPoint(pOne, dOne, oneSize, pTwo, dTwo, twoSize, useOne) {
+            function contactPoint(
+                    pOne, dOne, oneSize,
+                    pTwo, dTwo, twoSize,
+                    useOne) {
                 // THREE.Vector3
                 var toSt, cOne, cTwo;
 
                 // number
                 var dpStaOne, dpStaTwo, dpOneTwo, smOne, smTwo;
-                var denom, mua, mub;
+                var denominator, mua, mub;
 
                 smOne = dOne.lengthSq();
                 smTwo = dTwo.lengthSq();
@@ -436,24 +461,22 @@ Ape.CollisionDetector = Class.extend({
                 dpStaOne = dOne.dot(toSt);
                 dpStaTwo = dTwo.dot(toSt);
 
-                denom = smOne * smTwo - dpOneTwo * dpOneTwo;
+                denominator = smOne * smTwo - dpOneTwo * dpOneTwo;
 
                 // Zero denominator indicates parallel lines
-                if (Math.abs(denom) < 1e-4) {
+                if (Math.abs(denominator) < 1e-4) {
                     return useOne ? pOne : pTwo;
                 }
 
-                mua = (dpOneTwo * dpStaTwo - smTwo * dpStaOne) / denom;
-                mub = (smOne * dpStaTwo - dpOneTwo * dpStaOne) / denom;
+                mua = (dpOneTwo * dpStaTwo - smTwo * dpStaOne) / denominator;
+                mub = (smOne * dpStaTwo - dpOneTwo * dpStaOne) / denominator;
 
                 // If either of the edges has the nearest point out
                 // of bounds, then the edges aren't crossed, we have
                 // an edge-face contact. Our point is on the edge, which
                 // we know from the useOne parameter.
-                if (mua > oneSize ||
-                    mua < -oneSize ||
-                    mub > twoSize ||
-                    mub < -twoSize) {
+                if (mua > oneSize || mua < -oneSize ||
+                    mub > twoSize || mub < -twoSize) {
                     return useOne ? pOne : pTwo;
                 } else {
                     cOne = pOne.add(dOne.multiplyScalar(mua));
@@ -486,6 +509,14 @@ Ape.CollisionDetector = Class.extend({
         }
     },
 
+    /**
+     * Projects a box to an axis, to avoid computing the whole projection of the box
+     * we can project only half of the box
+     * Check http://www.jkh.me/files/tutorials/Separating%20Axis%20Theorem%20for%20Oriented%20Bounding%20Boxes.pdf
+     * @param box
+     * @param axis
+     * @returns {number}
+     */
     transformToAxis: function (box, axis) {
         return box.halfSize.x * Math.abs(axis.dot(box.getAxis(0))) +
                box.halfSize.y * Math.abs(axis.dot(box.getAxis(1))) +

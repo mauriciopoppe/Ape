@@ -7,7 +7,7 @@
  */
 Ape.RigidBodyFactory = function (type, size) {
     size = size || 5;
-    var geometry = new THREE.BoxGeometry(size, size, size);
+    var geometry = new THREE.CubeGeometry(size, size, size);
     var material = new THREE.MeshNormalMaterial();
     var body = new Ape.RigidBody(geometry, material);
 

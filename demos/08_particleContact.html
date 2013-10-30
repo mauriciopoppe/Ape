@@ -18,6 +18,9 @@
             'demoAssets/demo_08/World.js'
         ]);
         Loader(function () {
+            T3.Application.setUp(function () {
+                this.fps = 60;    // 60fps
+            });
             T3.Application.launch(Ape.World);
         });
     </script>

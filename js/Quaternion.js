@@ -8,7 +8,7 @@
 Ape.Quaternion = Class.extend({
     init: function (w, x, y, z) {
         /**
-         * Real component of the quaterion
+         * Real component of the quaternion
          * @type {number}
          */
         this.w = w !== undefined ? w : 1;

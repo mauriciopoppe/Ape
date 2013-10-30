@@ -67,8 +67,9 @@ Ape.World = T3.World.extend({
     },
 
     createRigidBody: function (size) {
-        var rigidBody = Ape.RigidBodyFactory.createCube({
-            size: size
+        var rigidBody = Ape.RigidBodyFactory.createBox({
+            size: size,
+            type: 'simple'
         });
         scene.add(rigidBody);
         return rigidBody;

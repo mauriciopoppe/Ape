@@ -12,33 +12,37 @@ Ape.World = T3.World.extend({
     },
 
     initWorld: function () {
-        var particles = [];
-        particles[0] = Ape.ParticleFactory(
+        var particles = [],
+	        p;
+        p = Ape.ParticleFactory(
             Ape.ParticleFactory.SIMPLE
         );
-        particles[0].setMass(100);
-        particles[0].setDamping(0.7);
-        particles[0].acceleration = Ape.GRAVITY.clone();
-        particles[0].position.set(100, 10, 0);
-        scene.add(particles[0]);
+        p.setMass(100);
+        p.setDamping(0.7);
+        p.acceleration = Ape.GRAVITY.clone();
+        p.position.set(100, 10, 0);
+        scene.add(p);
+	    particles.push(p);
 
-        particles[1] = Ape.ParticleFactory(
+        p = Ape.ParticleFactory(
             Ape.ParticleFactory.SIMPLE
         );
-        particles[1].setMass(1000);
-        particles[1].setDamping(0.7);
-        particles[1].acceleration = Ape.GRAVITY.clone();
-        particles[1].position.set(200, 10, 0);
-        scene.add(particles[1]);
+        p.setMass(1000);
+        p.setDamping(0.7);
+        p.acceleration = Ape.GRAVITY.clone();
+        p.position.set(200, 10, 0);
+        scene.add(p);
+	    particles.push(p);
 
-        particles[2] = Ape.ParticleFactory(
+	    p = Ape.ParticleFactory(
             Ape.ParticleFactory.SIMPLE
         );
-        particles[2].setMass(1);
-        particles[2].setDamping(0.7);
-        particles[2].acceleration = Ape.GRAVITY.clone();
-        particles[2].position.set(300, 10, 0);
-        scene.add(particles[2]);
+	    p.setMass(1);
+	    p.setDamping(0.7);
+	    p.acceleration = Ape.GRAVITY.clone();
+	    p.position.set(300, 10, 0);
+	    scene.add(p);
+	    particles.push(p);
 
         // liquid
         var pGeometry = new THREE.PlaneGeometry(1000, 1000);

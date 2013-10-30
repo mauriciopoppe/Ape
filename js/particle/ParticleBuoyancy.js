@@ -62,20 +62,16 @@ Ape.ParticleBuoyancy = Ape.ParticleForceGenerator.extend({
     },
 
     updateForce: function (particle, duration) {
-        var depth = particle.position.y,// - this.maxDepth * 0.5,
-            force = new THREE.Vector3();
+        var depth = particle.position.y,
+            force = new THREE.Vector3(),
+	        immersedDepth;
 
         if (depth <= this.liquidHeight) {
-            if (depth + this.maxDepth <= this.liquidHeight) {
-                // completely submerged
-                force.y = this.volume * this.liquidDensity * -Ape.GRAVITY.y;
-            } else {
-                var submerged = (this.liquidHeight - depth) / this.maxDepth;
-                Ape.assert(submerged <= 1 && submerged >= 0);
-                // partially submerged
-                force.y = submerged * this.volume * this.liquidDensity * -Ape.GRAVITY.y;
-            }
-            particle.addForce(force);
+	        // buoyancy force applied has its maximum force at maxDepth
+	        immersedDepth = Math.min(this.liquidHeight - depth, this.maxDepth);
+	        force.y = immersedDepth / this.maxDepth *
+		        this.volume * this.liquidDensity * -Ape.GRAVITY.y;
+	        particle.addForce(force);
         }
     }
 });

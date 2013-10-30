@@ -210,14 +210,6 @@
                 );
 
             // angular position (orientation) update
-            // let:
-            //      p be the angular displacement
-            //      w be the angular velocity
-            //      alpha be the angular acceleration
-            // p' = p + w * t + 0.5 * a * t * t
-            // since 0.5 * a * t * t gives a really small number it's commonly ignored
-            // so
-            // p' = p + w * t
             this.orientation
                 .addScaledVector(this.angularVelocity, delta);
 

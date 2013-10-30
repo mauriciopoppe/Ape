@@ -12,7 +12,8 @@ Ape.World = T3.World.extend({
     },
 
     initWorld: function () {
-        var me = this;
+        var me = this,
+	        p;
 
         this.particles = [];
 
@@ -20,7 +21,18 @@ Ape.World = T3.World.extend({
             this.particles.push(me.randomParticle());
         }
 
-        this.accumulatedTime = 0;
+	    // two particle tests
+//	    p = this.particles[0];
+//	    p.position.set(0, 0, 0);
+//	    p.velocity.set(50, 50, 0);
+//	    p.setMass(1);
+//
+//	    p = this.particles[1];
+//	    p.position.set(300, 0, 0);
+//	    p.velocity.set(-50, 50, 0);
+//      p.setMass(1);
+
+	    this.accumulatedTime = 0;
         this.particleRegistry = new Ape.ParticleForceRegistry();
     },
 
