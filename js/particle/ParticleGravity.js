@@ -11,9 +11,9 @@ Ape.ParticleGravity = Ape.ParticleForceGenerator.extend({
 
         /**
          * Gravity acceleration
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
-        this.gravity = gravity;
+        this.gravity = gravity || Ape.GRAVITY;
     },
 
     updateForce: function (particle, duration) {

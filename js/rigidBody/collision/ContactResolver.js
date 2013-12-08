@@ -1,59 +1,59 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 9/12/13
- * Time: 4:34 PM
- * To change this template use File | Settings | File Templates.
+ * Class that resolves the contact created by an instance of the class
+ * Ape.CollisionDetector, this class resolves contact following this algorithm:
+ *
+ * - prepare the contacts for processing
+ * - resolve the interpenetration problems with the contacts
+ * - resolve the velocity problems with the contacts
+ *
+ * @class Ape.collision.ContactResolver
  */
-/**
- * One instance of this class is needed for the whole simulation
- * @class Ape.ContactResolver
- */
-Ape.ContactResolver = Class.extend({
+Ape.collision.ContactResolver = Class.extend({
     init: function (config) {
         /**
          * Holds the number of iterations to perform when resolving velocity
-         * @type {number}
+         * @property {number} [velocityIterations=1]
          */
         this.velocityIterations = config.velocityIterations || 1;
 
         /**
          * To avoid instabilities, velocities smaller than this value
          * are considered to be zero
-         * @type {number}
+         * @property {number} [velocityEpsilon=1e-2]
          */
         this.velocityEpsilon = config.velocityEpsilon || 1e-2;
 
         /**
          * @private
          * Total number of iterations used in the resolver
-         * @type {number}
+         * @property {number} [velocityIterationsUsed=0]
          */
         this.velocityIterationsUsed = 0;
 
         /**
          * Holds the number of iterations to perform when resolving position
-         * @type {number}
+         * @property {number} [positionIterations=1]
          */
         this.positionIterations = config.positionIterations || 1;
 
         /**
          * @private
          * Total number of iterations used in the resolver
-         * @type {number}
+         * @property {number} [positionIterationsUsed=0]
          */
         this.positionIterationsUsed = 0;
 
         /**
          * To avoid instabilities, positions smaller than this value
          * are considered to be zero
-         * @type {number}
+         * @property {number} [positionEpsilon=1e-2]
          */
         this.positionEpsilon = config.positionEpsilon || 1e-2;
     },
 
     /**
-     * Checks if the config is good to continue resolving the contacts
+     * Checks if the iterations completed haven't surpassed the iterations defined
+     * in the configuration options to continue resolving the contacts
      * @returns {boolean}
      */
     isValid: function () {
@@ -65,7 +65,7 @@ Ape.ContactResolver = Class.extend({
 
     /**
      * Resolves a set of contacts for both penetration and velocity
-     * @param {Array<Ape.Contact>} contactArray
+     * @param {Ape.collision.Contact[]} contactArray
      * @param {number} numContacts
      * @param {number} duration
      */
@@ -85,8 +85,9 @@ Ape.ContactResolver = Class.extend({
     },
 
     /**
-     * Resolves a set of contacts for both penetration and velocity
-     * @param {Array<Ape.Contact>} contactArray
+     * Prepares the contacts calculating its internal properties (see
+     * {@link Ape.collision.Contact#calculateInternals for more info})
+     * @param {Ape.collision.Contact[]} contactArray
      * @param {number} numContacts
      * @param {number} duration
      */
@@ -99,8 +100,9 @@ Ape.ContactResolver = Class.extend({
     },
 
     /**
-     * Resolves a set of contacts for both penetration and velocity
-     * @param {Array<Ape.Contact>} contactArray
+     * Adjusts the positions of the rigid bodies involved in a contact
+     * resolving any interpenetration existing in the bodies
+     * @param {Ape.collision.Contact[]} contactArray
      * @param {number} numContacts
      * @param {number} duration
      */
@@ -170,8 +172,9 @@ Ape.ContactResolver = Class.extend({
     },
 
     /**
-     * Resolves a set of contacts for both penetration and velocity
-     * @param {Array<Ape.Contact>} contactArray
+     * Adjusts the velocities of the rigid bodies involved in a contact
+     * distributing the velocity in the system between the bodies
+     * @param {Ape.collision.Contact[]} contactArray
      * @param {number} numContacts
      * @param {number} duration
      */

@@ -1,41 +1,33 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 8/5/13
- * Time: 11:52 AM
- * To change this template use File | Settings | File Templates.
- */
-
-/**
  * Represents a contact between 2 rigid bodies (the second rigid body
  * can be null meaning that it can't be moved)
  *
  * Resolving a contact removes their interpenetration and applies
  * sufficient impulse to keep them apart
- * @class Ape.Contact
+ * @class Ape.collision.Contact
  */
-Ape.Contact = Class.extend({
+Ape.collision.Contact = Class.extend({
     init: function (config) {
         config = config || {};
         /**
          * Holds the bodies that are involved in the contact.
          * The second body can be NULL meaning that it's not movable
-         * @type {Array}
+         * @type {Ape.RigidBody[]}
          */
         this.body = config.body || [];
 
         /**
          * Holds the normal restitution factor at the contact normal
-         * @type {number}
+         * @type {number} [restitution=0]
          */
         this.restitution = config.restitution !== undefined ?
             config.restitution : 0;
 
         /**
          * Holds the direction of the contact in WORLD coordinates
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
-        this.contactNormal = config.contactNormal || new THREE.Vector3();
+        this.contactNormal = config.contactNormal || new Ape.Vector3();
 
         /**
          * Holds the depth of penetration at the contact point
@@ -46,13 +38,13 @@ Ape.Contact = Class.extend({
         // ************* Rigid body specific variables *************
         /**
          * Holds the contact point in WORLD coordinates
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
-        this.contactPoint = config.contactPoint || new THREE.Vector3();
+        this.contactPoint = config.contactPoint || new Ape.Vector3();
 
         /**
          * Holds the lateral friction coefficient at the contact
-         * @type {number}
+         * @type {number} [friction=0]
          */
         this.friction = config.friction || 0;
 
@@ -67,22 +59,22 @@ Ape.Contact = Class.extend({
         /**
          * Holds the closing velocity at the point of contact
          * (set when `calculateInternals` is run)
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
-        this.contactVelocity = new THREE.Vector3();
+        this.contactVelocity = new Ape.Vector3();
 
         /**
          * Holds the desired change in velocity to apply
          * to give it the correct impulse to the rigid body
          * to resolve the contact
-         * @type {number}
+         * @type {number} [desiredVelocity=0]
          */
         this.desiredVelocity = 0;
 
         /**
          * Holds the relative position of the contact in OBJECT
          * coordinates of both rigid bodies
-         * @type {Array<THREE.Vector3>}
+         * @type {Ape.Vector3[]}
          */
         this.relativeContactPosition = [];
     },
@@ -101,9 +93,9 @@ Ape.Contact = Class.extend({
     },
 
     /**
+     * @private
      * Swaps the bodies (in the case the first is null), this also changes
      * the direction of the contact normal
-     * @private
      */
     swapBodies: function () {
         this.contactNormal.multiplyScalar(-1);
@@ -111,8 +103,13 @@ Ape.Contact = Class.extend({
     },
 
     /**
-     * Calculates internal data from state date, such as:
-     *      - contactToWorld
+     * Calculates internal data useful to create the contact such as:
+     *
+     * - orthogonal contact basis
+     * - relative contact position
+     * - velocity at the contact point
+     * - velocity change
+     *
      * @param {number} duration
      */
     calculateInternals: function (duration) {
@@ -155,8 +152,8 @@ Ape.Contact = Class.extend({
      */
     calculateContactBasis: function () {
         var contactTangent = [
-                new THREE.Vector3(),
-                new THREE.Vector3()
+                new Ape.Vector3(),
+                new Ape.Vector3()
             ],
             scale;
 
@@ -210,7 +207,7 @@ Ape.Contact = Class.extend({
      *
      * @param {number} bodyIndex
      * @param {number} duration
-     * @returns THREE.Vector3
+     * @returns Ape.Vector3
      */
     calculateLocalVelocity: function (bodyIndex, duration) {
         var body = this.body[bodyIndex],
@@ -275,8 +272,8 @@ Ape.Contact = Class.extend({
 
     /**
      * Turns an impulse generated into velocity and rotation change
-     * @param {Array<THREE.Vector3>} velocityChange
-     * @param {Array<THREE.Vector3>} rotationChange
+     * @param {Ape.Vector3[]} velocityChange
+     * @param {Ape.Vector3[]} rotationChange
      */
     applyVelocityChange: function (velocityChange, rotationChange) {
         var inverseInertiaTensor = [],
@@ -320,8 +317,8 @@ Ape.Contact = Class.extend({
     /**
      * Applies a change in the position considering the linear and angular
      * changes in the position
-     * @param {Array<THREE.Vector3>} linearChange
-     * @param {Array<THREE.Vector3>} angularChange
+     * @param {Ape.Vector3[]} linearChange
+     * @param {Ape.Vector3[]} angularChange
      * @param {number} penetration
      */
     applyPositionChange: function (linearChange, angularChange, penetration) {
@@ -355,8 +352,8 @@ Ape.Contact = Class.extend({
 
         // loop again to apply the changes
         for (i = -1; ++i < 2;) {
-            angularChange[i] = new THREE.Vector3();
-            linearChange[i] = new THREE.Vector3();
+            angularChange[i] = new Ape.Vector3();
+            linearChange[i] = new Ape.Vector3();
 
             if (this.body[i]) {
                 var sign = (i === 0 ? 1 : -1);
@@ -396,9 +393,9 @@ Ape.Contact = Class.extend({
     /**
      * Calculates the impulse needed to resolve this contact given that it
      * has no friction
-     * @param {Array<Ape.Matrix3>} inverseInertiaTensor Inverse inertia tensor
+     * @param {Ape.Matrix3[]} inverseInertiaTensor Inverse inertia tensor
      * of the two bodies (`inverseInertiaTensor[1]` might be null)
-     * @returns {THREE.Vector3}
+     * @returns {Ape.Vector3}
      */
     calculateFrictionlessImpulse: function (inverseInertiaTensor) {
         var deltaVelocityWorld,
@@ -433,15 +430,15 @@ Ape.Contact = Class.extend({
                     this.body[1].getInverseMass();
         }
 
-        return new THREE.Vector3(this.desiredVelocity / deltaVelocity, 0, 0);
+        return new Ape.Vector3(this.desiredVelocity / deltaVelocity, 0, 0);
     },
 
     /**
      * Calculates the impulse needed to resolve this contact given that it
      * has friction
-     * @param {Array<Ape.Matrix3>} inverseInertiaTensor Inverse inertia tensor
+     * @param {Ape.Matrix3[]} inverseInertiaTensor Inverse inertia tensor
      * of the two bodies (`inverseInertiaTensor[1]` might be null)
-     * @returns {THREE.Vector3}
+     * @returns {Ape.Vector3}
      */
     calculateFrictionImpulse: function (inverseInertiaTensor) {
         var impulseContact,
@@ -479,7 +476,7 @@ Ape.Contact = Class.extend({
         deltaVelocity.data[8] += inverseMass;
 
         var impulseMatrix = deltaVelocity.inverse();
-        var velocityKill = new THREE.Vector3(
+        var velocityKill = new Ape.Vector3(
             this.desiredVelocity,
             -this.contactVelocity.y,
             -this.contactVelocity.z

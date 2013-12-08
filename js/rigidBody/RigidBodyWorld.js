@@ -25,21 +25,21 @@ Ape.RigidBodyWorld = T3.World.extend({
         // ********* INTERNAL *********
         /**
          * The user can register new forces through this instance
-         * @type {Ape.ForceRegistry}
+         * @type {Ape.force.ForceRegistry}
          */
-        this.forceRegistry = new Ape.ForceRegistry();
+        this.forceRegistry = new Ape.force.ForceRegistry();
         /**
          * Holds the contacts to be resolved by the Collision
          * Resolver class
-         * @type {Ape.CollisionData}
+         * @type {Ape.collision.CollisionData}
          */
-        this.collisionData = new Ape.CollisionData();
+        this.collisionData = new Ape.collision.CollisionData();
 
         /**
          * Holds the contact resolver
-         * @type {Ape.ContactResolver}
+         * @type {Ape.collision.ContactResolver}
          */
-        this.resolver = new Ape.ContactResolver({
+        this.resolver = new Ape.collision.ContactResolver({
             velocityIterations: this.maxContacts * 8,
             positionIterations: this.maxContacts * 8
         });

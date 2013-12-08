@@ -1,18 +1,21 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 8/14/13
- * Time: 9:36 AM
- * To change this template use File | Settings | File Templates.
- */
-/**
  * AeroControl, a force generator that applies an aerodynamic
  * force doing interpolations between its min and max
  * tensor
  *
- * @class Ape.AeroControl
+ * @class Ape.force.AeroControl
+ * @extends Ape.force.Aero
  */
-Ape.AeroControl = Ape.Aero.extend({
+Ape.force.AeroControl = Ape.force.Aero.extend({
+    /**
+     * Ape.force.AeroControl constructor
+     * @param {Ape.Matrix3} base Base tensor (tensor used if the object is resting)
+     * @param {Ape.Matrix3} min Min tensor
+     * @param {Ape.Matrix3} max Max tensor
+     * @param {Ape.Vector3} position Position in the rigid body to apply
+     * the aerodynamic force to
+     * @param windSpeed
+     */
     init: function (base, min, max, position, windSpeed) {
 
         this._super(base, position, windSpeed);
@@ -20,14 +23,14 @@ Ape.AeroControl = Ape.Aero.extend({
         /**
          * Holds the aerodynamic tensor for the surface, when
          * the control is at its maximum value
-         * @type {Ape.Matrix3}
+         * @property {Ape.Matrix3}
          */
         this.maxTensor = max;
 
         /**
          * Holds the aerodynamic tensor for the surface, when
          * the control is at its minimum value
-         * @type {Ape.Matrix3}
+         * @property {Ape.Matrix3}
          */
         this.minTensor = min;
 
@@ -41,7 +44,7 @@ Ape.AeroControl = Ape.Aero.extend({
          *      >0 = an interpolation between base and maxTensor is used
          *      +1 = the max tensor is used
          *
-         * @type {number}
+         * @property {number}
          */
         this.controlSetting = 0;
     },
@@ -49,6 +52,7 @@ Ape.AeroControl = Ape.Aero.extend({
     /**
      * Calculate the final aerodynamic tensor for the current
      * control setting
+     * @return Ape.Matrix3
      */
     getTensor: function () {
         if (this.controlSetting <= -1) {
@@ -72,16 +76,23 @@ Ape.AeroControl = Ape.Aero.extend({
      * Sets the position of this control, it should be between
      * -1 and 1, values outside that range give undefined
      * results.
-     * @param value
+     * @param {number} value Value between -1 and 1, if it's -1 then the
+     * min tensor is used, if the value is 1 then the max tensor is used,
+     * if the value is 0 then the base tensor is used
      */
     setControl: function (value) {
         if (value < -1 || value > 1) {
-            console.warn('Ape.AeroControl.setControl(): value should ' +
+            console.warn('Ape.force.AeroControl.setControl(): value should ' +
                 'be in the range [-1, 1]');
         }
         this.controlSetting = value;
     },
 
+    /**
+     * Applies a force to a body by choosing the right tensor
+     * @param body
+     * @param duration
+     */
     updateForce: function (body, duration) {
         var tensor = this.getTensor();
         this.updateForceFromTensor(body, duration, tensor);

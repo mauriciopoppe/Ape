@@ -31,7 +31,7 @@ Ape.ParticleSpring = Ape.ParticleForceGenerator.extend({
 
         /**
          * Holds the spring constant
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
         this.springConstant = springConstant;
 

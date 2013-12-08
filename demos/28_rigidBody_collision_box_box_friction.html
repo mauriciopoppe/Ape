@@ -12,13 +12,26 @@
 </head>
 <body>
     <div id="webgl-container"></div>
+    <script src="../lib/three.59.js"></script>
+    <!-- ape :) -->
+    <script src="../dist/ape.r0.0.1.js"></script>
     <script type="text/javascript">
-        Loader.list = Loader.list.concat(
-            Loader.list.rigidBody
-        );
-        Loader.list = Loader.list.concat([
-            'demoAssets/demo_28/World.js'
-        ]);
+        // uncomment three.js in Loader.js to make this work
+        Loader.list = Loader.list.T3
+            .concat(Loader.list.T3Extension)
+            .concat(['demoAssets/demo_28/World.js']);
+
+        // remove three.js from the loader list
+        (function() {
+            var i;
+            for(i = 0; i < Loader.list.length; i += 1) {
+                if (Loader.list[i].indexOf('three') !== -1) {
+                    Loader.list.splice(i, 1);
+                    break;
+                }
+            }
+        })();
+
         Loader(function () {
             T3.Application.launch(Ape.World);
         });

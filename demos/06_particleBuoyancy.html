@@ -13,8 +13,11 @@
 <body>
     <div id="webgl-container"></div>
     <script type="text/javascript">
+        Loader.list = Loader.list
+                .concat(Loader.list.T3)
+                .concat(Loader.list.particle);
+
         Loader.list = Loader.list.concat([
-            'js/particle/ParticleBuoyancy.js',
             'demoAssets/demo_06/World.js'
         ]);
         Loader(function () {

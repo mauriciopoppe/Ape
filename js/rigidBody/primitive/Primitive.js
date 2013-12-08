@@ -1,11 +1,16 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 8/18/13
- * Time: 8:19 PM
- * To change this template use File | Settings | File Templates.
+ * @abstract
+ * Base class for collisionable shapes, this acts as a wrapper for rigid bodies
+ * making them collisionable, a collisionable shape is defined with 3 properties:
+ *
+ * - **body**: An instance of the class Ape.RigidBody
+ * - **offset**: The collisionable shape might define another place
+ * for the rigid body to be collisionable
+ * - **transform**: A matrix4 resultant of the combination of the offset
+ * property and the transform matrix of the rigid body
+ * @class Ape.primitive.Primitive
  */
-Ape.Primitive = Class.extend({
+Ape.primitive.Primitive = Class.extend({
     init: function (body, offset) {
         /**
          * Rigid body
@@ -35,8 +40,9 @@ Ape.Primitive = Class.extend({
     },
 
     /**
-     * Type of object
-     * @type {string}
+     * Type of object (based on this property the Ape.CollisionDetector is
+     * capable of detecting the algorithm it has to use)
+     * @property {string}
      */
     type: null,
 
@@ -44,14 +50,14 @@ Ape.Primitive = Class.extend({
      * Convenience method to access the axis vectors
      * in the transform matrix
      *
-     * i.e.
+     *      // i.e.
      *      // since the column 3 in the Ape.Matrix4
      *      // holds the displacement of the object
      *      // to get the position of the primitive:
      *      primitive.getAxis(3)
      *
      * @param index
-     * @returns {THREE.Vector3}
+     * @returns {Ape.Vector3}
      */
     getAxis: function (index) {
         return this.transform.getAxisVector(index);
@@ -59,7 +65,8 @@ Ape.Primitive = Class.extend({
 
     /**
      * Calculates the internals for the primitives such as
-     * its transform matrix
+     * its transform matrix that is calculated by multiplying the body's
+     * transformation matrix and the offset of the wrapper primitive
      */
     calculateInternals: function () {
         this.transform = this.body.transformMatrix.clone().multiply(
@@ -67,9 +74,13 @@ Ape.Primitive = Class.extend({
         );
     },
 
+    /**
+     * Getter for the property `type`
+     * @returns {string}
+     */
     getType: function () {
         if (!this.type) {
-            throw new Error('Ape.Primitive(): type needed');
+            throw new Error('Ape.primitive.Primitive(): type needed');
         }
         return this.type;
     }

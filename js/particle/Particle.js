@@ -15,18 +15,18 @@
          * Holds the linear position of the particle in
          * world space.
          */
-        this.position = this.position || new THREE.Vector3();
+        this.position = this.position || new Ape.Vector3();
         /**
          * Holds the linear velocity of the particle in
          * world space.
          */
-        this.velocity = new THREE.Vector3();
+        this.velocity = new Ape.Vector3();
         /**
          * Holds the acceleration of the particle. This value
          * can be used to set acceleration due to gravity (its primary
          * use) or any other constant acceleration.
          */
-        this.acceleration = new THREE.Vector3();
+        this.acceleration = new Ape.Vector3();
         /**
          * Holds the amount of damping applied to linear
          * motion. Damping is required to remove energy added
@@ -47,7 +47,7 @@
          * Holds the accumulated force to be applied at the next
          * simulation iteration only. This value is zeroed at each integration step.
          */
-        this.accumulatedForce = new THREE.Vector3();
+        this.accumulatedForce = new Ape.Vector3();
 
     };
 

@@ -44,7 +44,7 @@ Ape.ParticleBuoyancy = Ape.ParticleForceGenerator.extend({
 
         /**
          * Object volume
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
         this.volume = volume;
 
@@ -63,7 +63,7 @@ Ape.ParticleBuoyancy = Ape.ParticleForceGenerator.extend({
 
     updateForce: function (particle, duration) {
         var depth = particle.position.y,
-            force = new THREE.Vector3(),
+            force = new Ape.Vector3(),
 	        immersedDepth;
 
         if (depth <= this.liquidHeight) {

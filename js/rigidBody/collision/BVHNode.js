@@ -12,15 +12,15 @@
 Ape.BVHNode = Class.extend({
     init: function (parent, volume, body) {
         /**
-         * Holds the child nodes of this node
-         * @type {Array<Ape.BVHNode>}
+         * Holds the child spheres of this node
+         * @type {Ape.collision.BoundingSphere[]}
          */
         this.children = [null, null];
 
         /**
          * Holds a single bounding volume encompassing
          * all the descendants of this node
-         * @type {Ape.BoundingSphere}
+         * @type {Ape.collision.BoundingSphere}
          */
         this.volume = volume;
 
@@ -107,7 +107,7 @@ Ape.BVHNode = Class.extend({
     /**
      * Inserts the given rigid body, with the given bounding volume
      * @param newBody
-     * @param {Ape.BoundingSphere} newVolume
+     * @param {Ape.collision.BoundingSphere} newVolume
      */
     insert: function (newBody, newVolume) {
         // if we're at a leaf then the only option is to spawn two
@@ -152,7 +152,7 @@ Ape.BVHNode = Class.extend({
         if (this.isLeaf()) {
             return;
         }
-        this.volume = new Ape.BoundingSphere().join(
+        this.volume = new Ape.collision.BoundingSphere().join(
             this.children[0].volume,
             this.children[1].volume
         );

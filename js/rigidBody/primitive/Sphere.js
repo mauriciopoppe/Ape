@@ -1,31 +1,30 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 8/18/13
- * Time: 8:23 PM
- * To change this template use File | Settings | File Templates.
- */
-/**
- * The sphere is usually defined with a radius and a center,
+ * The sphere is defined with a radius and a center,
  * the center point is given by the offset from the origin
- * of the rigid body, data which is hold in `Ape.Primitive`
- * @class Ape.Sphere
- * @inherit Ape.Primitive
+ * of the rigid body, data which is hold in `Ape.primitive.Primitive`
+ * @class Ape.primitive.Sphere
+ * @extends Ape.primitive.Primitive
  */
-Ape.Sphere = Ape.Primitive.extend({
+Ape.primitive.Sphere = Ape.primitive.Primitive.extend({
+    /**
+     * Ape.primitive.Sphere constructor
+     * @param {Ape.RigidBody} body
+     * @param {Ape.Matrix4} offset
+     * @param {number} radius
+     */
     init: function (body, offset, radius) {
         this._super(body, offset);
 
         /**
          * Radius of the sphere
-         * @type {*}
+         * @property {number}
          */
         this.radius = radius;
     },
 
     /**
-     * Each instance created is of type sphere
-     * @type {string}
+     * Each instance created is of type 'sphere'
+     * @property {string}
      */
     type: 'sphere'
 });

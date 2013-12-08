@@ -6,3 +6,14 @@
     display: block;
     border: 1px solid black;
 }
+
+button {
+    -webkit-box-shadow: 0 8px 6px -6px black;
+    -moz-box-shadow: 0 8px 6px -6px black;
+    box-shadow: 0 8px 6px -6px black;
+    border: none;
+    background: #6FC3DF;
+    height: 40px;
+    width: 100%;
+    margin-top: 10px;
+}

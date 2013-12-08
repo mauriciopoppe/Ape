@@ -33,18 +33,18 @@ Ape.World = T3.World.extend({
         scene.add(gravityBody);
 
         // additional forces
-        this.forceRegistry = new Ape.ForceRegistry();
+        this.forceRegistry = new Ape.force.ForceRegistry();
 
         // adding gravity to the one body
         this.forceRegistry.add(
             gravityBody,
-            new Ape.Gravity(Ape.GRAVITY)
+            new Ape.force.Gravity(Ape.GRAVITY)
         );
 
         // adding a spring between the bodies
         this.forceRegistry.add(
             gravityBody,
-            new Ape.Spring(
+            new Ape.force.Spring(
                 new THREE.Vector3(-2.5, 0, 0),      // localConnectionPoint
                 staticBody,                         // other
                 new THREE.Vector3(0, -2.5, 0),      // otherConnectionPoint

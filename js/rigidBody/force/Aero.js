@@ -1,16 +1,10 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 8/14/13
- * Time: 9:36 AM
- * To change this template use File | Settings | File Templates.
- */
-/**
- * Aero, a force generator that applies an aerodynamic force
+ * A force generator that applies an aerodynamic force
  *
- * @class Ape.Spring
+ * @class Ape.force.Aero
+ * @extends Ape.force.ForceGenerator
  */
-Ape.Aero = Ape.ForceGenerator.extend({
+Ape.force.Aero = Ape.force.ForceGenerator.extend({
     init: function (tensor, position, windSpeed) {
 
         this._super();
@@ -25,7 +19,7 @@ Ape.Aero = Ape.ForceGenerator.extend({
         /**
          * Holds the relative position of the aerodynamic surface
          * in OBJECT space
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
         this.position = position;
 
@@ -34,15 +28,29 @@ Ape.Aero = Ape.ForceGenerator.extend({
          * the environment. This is easier than managing a separate
          * wind speed vector per generator and having to update
          * it manually as the wind changes.
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
         this.windSpeed = windSpeed;
     },
 
+    /**
+     * Applies a force to a rigid body using the tensor defined
+     * for the aerodynamic force
+     * @param body
+     * @param duration
+     */
     updateForce: function (body, duration) {
         this.updateForceFromTensor(body, duration, this.tensor);
     },
 
+    /**
+     * Calculates the force to apply to a body given its linear velocity
+     * and WORLD wind speed, the resulting force is applied in OBJECT
+     * coordinates
+     * @param {Ape.RigidBody} body
+     * @param {number} duration
+     * @param {Ape.Matrix3} tensor
+     */
     updateForceFromTensor: function (body, duration, tensor) {
         // calculate the total velocity (windSpeed and body's velocity)
         var velocity = body.linearVelocity.clone();
@@ -56,12 +64,6 @@ Ape.Aero = Ape.ForceGenerator.extend({
         var bodyForce = tensor.transform(objectVelocity);
         var force = body.transformMatrix
             .transformDirection(bodyForce);
-
-//        if (this.position.equals(new THREE.Vector3(2, 0, 0))) {
-//            console.log("---------");
-//            console.log(force);
-//            console.log(this.position);
-//        }
 
         // apply the force
         body.addForceAtBodyPoint(force, this.position);

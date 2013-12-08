@@ -32,21 +32,21 @@ Ape.World = T3.World.extend({
         );
 
         // force registry
-        this.forceRegistry = new Ape.ForceRegistry();
+        this.forceRegistry = new Ape.force.ForceRegistry();
 
         // buoyancy force
-        this.buoyancy = new Ape.Buoyancy(
-            new THREE.Vector3(0.2, 3, 0),         // center
+        this.buoyancy = new Ape.force.Buoyancy(
+            new THREE.Vector3(0.001, 3, 0),         // center
             400,                                  // maxDepth
             1,                                  // volume
-            7                                   // liquid height
+            6                                   // liquid height
         );
 
         // wind
         this.windSpeed = new THREE.Vector3(0, 0, 0);
 
         // tensors
-        this.sail = new Ape.Aero(
+        this.sail = new Ape.force.Aero(
             new Ape.Matrix3(
                 -0.1, 0, 0,
                 0, 0, 0,

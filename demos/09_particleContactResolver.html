@@ -13,9 +13,11 @@
 <body>
     <div id="webgl-container"></div>
     <script type="text/javascript">
+        Loader.list = Loader.list
+                .concat(Loader.list.T3)
+                .concat(Loader.list.particle);
+
         Loader.list = Loader.list.concat([
-            'js/collision/ParticleContact.js',
-            'js/collision/ParticleContactResolver.js',
             'demoAssets/demo_09/World.js'
         ]);
         Loader(function () {

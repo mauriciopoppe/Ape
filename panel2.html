@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>APE Presentation</title>
+    <link rel="stylesheet" href="css/slides.css"/>
+    <link rel="stylesheet" href="lib/highlight/styles/tomorrow-night-eighties.css"/>
+</head>
+<body>
+
+    <div id="nav">
+        <div id="time"></div>
+        <button class="slideButton" data-action="prev"> << </button>
+        <button class="slideButton" data-action="next"> >> </button>
+    </div>
+
+    <div id="impress">
+
+        <div class="step intro" data-next="px">
+            <p class="title">
+                DISE&Ntilde;O DE UN MOTOR DE SIMULACI&Oacute;N DE LA DIN&Aacute;MICA ENTRE
+                CUERPOS R&Iacute;GIDOS ORIENTADO AL DESARROLLO DE JUEGOS
+                <br/>
+            </p>
+            <p class="right subtitle">
+                Presentado por: <b>Mauricio Poppe</b>
+            </p>
+            <p class="right subtitle">
+                Tutores: <b>Ing. Orlando Rivera</b> <br/>
+                         <b>Ing. Mario Condori</b>
+            </p>
+            <br>
+            <p class="center subtitle">
+                Noviembre 2013
+            </p>
+        </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Perfil del proyecto de investigaci&oacute;n</p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Planteamiento del problema</h1>
+            <ul>
+                <li>
+                    Evoluci&oacute;n de <span class="highlight">JavaScript</span>
+                </li>
+                <li>HTML5 Canvas</li>
+            </ul>
+            <iframe id="cp_embed_Ckzen"
+                    src="//codepen.io/soulwire/embed/Ckzen?height=453&safe=true&theme-id=602&slug-hash=Ckzen&user=soulwire&default-tab=result&animations=run"
+                    scrolling="no" frameborder="0" height="400" allowtransparency="true" class="cp_embed_iframe"
+                    style="width: 100%; overflow: hidden;"></iframe>
+
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Planteamiento del problema</h1>
+            <br> <br>
+            <ul>
+                <li>
+                    Motores de simulaci&oacute;n f&iacute;sica 3D Comerciales:
+                    <div class="center">
+                        <span class="highlight">Havok, PhysX, CarX (AAA Racing Games), True Axis, Chrono</span>
+                    </div>
+                </li>
+                <li>
+                    Motores de simulaci&oacute;n f&iacute;sica 3D Open Source:
+                    <div class="center">
+                        <span class="highlight">Bullet, JigLib, Tokamak, Newton Game Dynamics,
+                            Open Dynamics Engine</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Planteamiento del problema</h1>
+            <p style="position: relative">
+                Motores de simulaci&oacute;n f&iacute;sica 3D existentes para la web:
+            </p>
+            <div class="center highlight" style="
+                position: relative">Cannon.js</div>
+            <iframe class="demo-iframe demo-inline"
+                    style="height: 450px"
+                    data-src="http://schteppe.github.io/cannon.js/examples/threejs_fps.html" frameborder="0">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Objetivos</h1>
+            <ul>
+                <li>General</li>
+                <li>Espec&iacute;ficos</li>
+                <img class="inline" style="width: 300px;" src="images/panel1/registro_fuerzas.jpg" alt=""/>
+                <img class="inline" style="width: 300px;" src="images/panel1/integration.png" alt=""/>
+                <br>
+            </ul>
+            <img class="center" style="width: 150px; margin: 0 auto;" src="images/panel1/collision.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Objetivos Espec&iacute;ficos</h1>
+            <br>
+            <iframe class="demo-iframe demo-inline"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/08_particleContact.html" frameborder="0">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Justificaci&oacute;n Pr&aacute;ctica</h1>
+            <p><a href="http://opensource.org/licenses/MIT" target="_blank">Licencia MIT</a></p>
+            <img class="center" style="width: 700px" src="images/panel1/reusability.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Justificaci&oacute;n Tecnol&oacute;gica</h1>
+            <img class="center" style="width: 650px" src="images/panel1/html5.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>L&iacute;mites</h1>
+            <br><br><br>
+            <img style="width: 300px;" src="images/panel1/polygon.png" alt=""/>
+            <img style="width: 400px;" src="images/panel1/fluidDynamics.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>L&iacute;mites</h1>
+            <img class="center" style="width: 500px;" src="images/panel1/softBody.jpg" alt=""/>
+            <img class="center" style="width: 200px;" src="images/panel1/heat.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="px ry">
+            <h1>Alcances</h1>
+            Fuerzas implementadas
+            <img class="center" style="width: 200px;" src="images/panel1/spring.jpg" alt=""/>
+            Rotaci&oacute;n en 3D
+            <img class="center" style="width: 350px;" src="images/panel1/plane.gif" alt=""/>
+        </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Recopilación de datos</p>
+        </div>
+            <div class="step slide" data-next="py">
+                <h1>Observaciones</h1>
+                <br/>
+                <ul>
+                    <li>Cuerpo rígido</li>
+                    <li>Forma de un cuerpo rígido</li>
+                    <li>Posición lineal y angular</li>
+                    <li>Velocidad lineal y angular</li>
+                    <li>Aceleración lineal y angular</li>
+                </ul>
+            </div>
+            <div class="step slide" data-next="px ry">
+                <h1>Observaciones</h1>
+                <ul>
+                    <li>Masa</li>
+                    <li>Fuerza</li>
+                    <li>Torque</li>
+                    <li>Colisiones y contactos</li>
+                    <img class="center" src="http://onlinephys.com/elephant.jpg"/>
+                </ul>
+            </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Análisis del proyecto</p>
+        </div>
+            <div class="step slide" data-next="py">
+                <h1>Requerimientos funcionales</h1>
+                <ul>
+                    <li>Creación de objetos</li>
+                    <ul>
+                        <li>Creación de partículas</li>
+                        <li>Creación de cuerpos rígidos</li>
+                    </ul>
+                    <li>Agregación de características</li>
+                    <ul>
+                        <li>Masa, posición, velocidad, aceleración</li>
+                    </ul>
+                    <li>Registro de objetos</li>
+                    <li>Registro y acumulacion de fuerzas</li>
+                    <li>Registro y acumulacion de torques</li>
+                </ul>
+            </div>
+
+            <div class="step slide" data-next="py">
+                <h1>Requerimientos funcionales</h1>
+                <ul>
+                    <li>Detección de colisiones</li>
+                    <ul>
+                        <li>Entre esferas</li>
+                        <li>Entre una esfera y un plano</li>
+                        <li>Entre cajas</li>
+                        <li>Entre una caja y una esfera</li>
+                        <li>Entre una caja y un plano</li>
+                    </ul>
+                    <li>Resolución de colisiones</li>
+                </ul>
+            </div>
+
+            <div class="step slide" data-next="py">
+                <h1>Requerimientos no funcionales</h1>
+                <ul>
+                    <li>Proveer resultados creibles</li>
+                    <li>Funcionar a un ritmo aceptable</li>
+                    <li>Configurable</li>
+                    <li>El código debe cumplir con el estandar ECMAScript</li>
+                    <li>Capaz de ser integrado a otros sistemas de renderización</li>
+                    <li>Bajo acoplamiento y alta cohesión</li>
+                    <li>Estar documentado</li>
+                </ul>
+            </div>
+
+            <div class="step slide" data-next="py">
+                <h1>Análisis de casos de uso</h1>
+                <img class="center" style="width: 500px;"
+                     src="images/Figures/useCases/objectCreation.jpg" alt=""/>
+                <p class="center">Diagrama de casos de uso de la creación de objetos</p>
+            </div>
+
+            <div class="step slide" data-next="py">
+                <h1>Análisis de casos de uso</h1>
+                <img class="center" style="width: 500px;"
+                     src="images/Figures/useCases/properties.jpg" alt=""/>
+                <p class="center">Diagrama de casos de uso de la adición de propiedades</p>
+            </div>
+
+            <div class="step slide" data-next="px ry">
+                <h1>Análisis de casos de uso</h1>
+                <img class="center" style="width: 500px;"
+                     src="images/Figures/useCases/forceRegistration.jpg" alt=""/>
+                <p class="center">Diagrama de casos de uso de creación de fuerzas</p>
+            </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Física de partículas</p>
+        </div>
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Vectores</h1>-->
+            <!--<p>Representan una <i>cantidad</i> y una <i>dirección</i></p>-->
+            <!--<p>Vector fila:</p>-->
+            <!--$$\vec v = \begin{bmatrix}x\\y\\z\end{bmatrix}$$-->
+            <!--<p>Vector columna:</p>-->
+            <!--$$\vec v = \begin{bmatrix}x&y&z\end{bmatrix}$$-->
+            <!--<p>Suma de vectores:</p>-->
+            <!--$$\vec v = \vec a + \vec b = [a_x + b_x, a_y + b_y, a_z + b_z]$$-->
+            <!--<p>Multiplicación por un escalar:</p>-->
+            <!--$$k * \vec v = [k * v_x, k * v_y, k * v_z]$$-->
+        <!--</div>-->
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Vectores</h1>-->
+            <!--<p>Inverso aditivo:</p>-->
+            <!--$$-1 * \vec v = [-v_x, -v_y, -v_z]$$-->
+            <!--<p>Magnitud:</p>-->
+            <!--$$|\vec v| = \sqrt{x^2 + y^2 + z^2}$$-->
+            <!--<p>Normalización:</p>-->
+            <!--$$\widehat a = \frac{\vec a}{|\vec a|}$$-->
+            <!--<p>Representación alternativa con un vector normalizado:</p>-->
+            <!--$$\vec a = |\vec a| * \widehat a$$-->
+        <!--</div>-->
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Producto escalar</h1>-->
+            <!--$$\vec a \cdot \vec b = |\vec a||\vec b| \cos\theta$$-->
+            <!--<p>Interpretación alternativa:</p>-->
+            <!--$$\vec a \cdot \vec b = a_xb_x + a_yb_y + a_zb_z$$-->
+            <!--<p>La proyección de $\vec a$ sobre $\vec b$ es:</p>-->
+            <!--$$projection = \vec a \cdot \widehat b$$-->
+            <!--<img class="center" style="width: 350px" src="images/Figures/mt/dotproduct.png" alt=""/>-->
+        <!--</div>-->
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Producto vectorial</h1>-->
+            <!--$$\vec a \times \vec b =-->
+            <!--\begin{bmatrix} a_x \\ a_y \\ a_z \end{bmatrix} \times-->
+            <!--\begin{bmatrix} b_x \\ b_y \\ b_z \end{bmatrix} =-->
+            <!--\begin{bmatrix}-->
+            <!--a_yb_z - a_zb_y \\-->
+            <!--a_zb_x - a_xb_z \\-->
+            <!--a_xb_y - a_yb_x-->
+            <!--\end{bmatrix}$$-->
+            <!--<p>Interpretación alternativa:</p>-->
+            <!--$$\vec a \times \vec b = |\vec a||\vec b| \sin\theta \widehat n$$-->
+            <!--<img class="center" style="width: 350px" src="images/Figures/mt/crossproduct.png" alt=""/>-->
+        <!--</div>-->
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Cálculo diferencial</h1>-->
+            <!--<p>Derivada = medida de cuanto cambia una función en respuesta a los-->
+                <!--cambios de otra cantidad</p>-->
+            <!--<p>Diferenciación = encontrar la derivada de una funcion en un punto</p>-->
+            <!--$$y = f(x)$$-->
+            <!--<p>Caso mas simple: y = mx + b</p>-->
+            <!--$$m = \frac{\text{change in y}}{\text{change in x}} = \frac{\Delta y}{\Delta x}$$-->
+            <!--<p>-->
+                <!--Expresando la pendiente en términos de un punto (a, f(a)) y-->
+                <!--un punto cercano (a + h, f(a + h))-->
+            <!--</p>-->
+            <!--$$m = \frac{f(a + h) - f(a)}{(a + h) -a}$$-->
+            <!--$$m = \frac{f(a + h) - f(a)}{h}$$-->
+        <!--</div>-->
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Cálculo diferencial</h1>-->
+            <!--<img class="center" style="width: 350px"-->
+                 <!--src="images/panel2/derivative.gif" alt=""/>-->
+            <!--<p>Si es que h tiene a cero:</p>-->
+            <!--<div class="equation">-->
+                <!--$$f'(a) = \lim_{h \to 0} \frac{f(a + h) - f(a)}{h}$$-->
+            <!--</div>-->
+            <!--<p>Si es que el limite existe, entonces la funcion f es-->
+                <!--<i>diferenciable en a</i>-->
+            <!--</p>-->
+        <!--</div>-->
+
+        <div class="step slide" data-next="py">
+            <h1>Cálculo diferencial</h1>
+            <br/><br/>
+            <p>Velocidad = cambio en la posición sobre un instante de tiempo</p>
+            $$v = \frac{x' - x}{\Delta t} = \frac{\Delta x}{\Delta t}$$
+            <p>Cuando $\Delta t$ tiende a cero:</p>
+            $$v = \lim_{\Delta t \to 0} \frac{\Delta x}{\Delta t} = \frac{dx}{dt}$$
+            <p>Aceleración = cambio en la velocidad sobre un instante de tiempo</p>
+            $$a = \frac{dv}{dt} = \frac{d}{dt} \frac{dx}{dt} = \frac{d^2x}{dt^2}$$
+        </div>
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Cálculo integral: primer teorema fundamental de cálculo</h1>-->
+            <!--<img class="center" style="width: 300px"-->
+                 <!--src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/FTC_geometric2.png/800px-FTC_geometric2.png" alt=""/>-->
+            <!--$$A(x + h) - A(x) ~ f(x) * h$$-->
+            <!--<p>Añadiendo el exceso para igualar la ecuacion:</p>-->
+            <!--$$A(x + h) - A(x) = f(x) * h + excess$$-->
+            <!--$$f(x) = \frac{A(x + h) - A(x)}{h} - \frac{excess}{h}$$-->
+            <!--<p>Si h se aproxima a 0 la ultima fracción tiende a cero:</p>-->
+            <!--$$f(x) = \lim_{h \to 0} \frac{A(x + h) - A(x)}{h}$$-->
+        <!--</div>-->
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Cálculo integral: primer teorema fundamental de cálculo</h1>-->
+            <!--<br/>-->
+            <!--<p>Recordando la definición de la derivada:</p>-->
+            <!--$$f'(a) = \lim_{h \to 0} \frac{f(a + h) - f(a)}{h}$$-->
+            <!--<p>Se puede observar que:</p>-->
+                <!--<div class="equation">-->
+                    <!--$$f(x) = A'(x)$$-->
+                <!--</div>-->
+            <!--<ul>-->
+                <!--<li>La función f es la <i>derivada</i> de la función de área A</li>-->
+                <!--<li>La función de área A es la <i>antiderivada</i> de la función f</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+
+        <div class="step slide" data-next="py">
+            <h1>Cálculo integral: segundo teorema fundamental de cálculo</h1>
+            <br/><br/>
+            <p>
+                Asumamos que $f$ y $F$ son funciones definidas
+                en un intervalo cerrado $[a, b]$ y que:
+            </p>
+            $$F'(x) = f(x)$$
+            <p>Si la función es integrable en el intervalo $[a, b]$:</p>
+            $$\int_{a}^{b} f(x)\;dx = F(b) - F(a)$$
+        </div>
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Cálculo integral: segundo teorema fundamental de cálculo</h1>-->
+            <!--<img class="center" style="width: 400px"-->
+                 <!--src="images/panel2/integral.gif" alt=""/>-->
+            <!--<p>Demostración:</p>-->
+            <!--$$-->
+            <!--\lim_{\Delta x \to 0} F(b) - F(a) =-->
+            <!--\lim_{\Delta x \to 0} \sum_{i = 0}^{n} f(c_i) \Delta x_i-->
+            <!--$$-->
+            <!--$$-->
+            <!--F(b) - F(a) =-->
+            <!--\lim_{\Delta x \to 0} \sum_{i = 0}^{n} f(c_i) \Delta x_i-->
+            <!--$$-->
+            <!--<div class="equation">-->
+                <!--$$F(b) - F(a) = \int_{a}^{b}f(x)\;dx$$-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="step slide" data-next="py">
+            <h1>Transformación de la aceleración y la velocidad</h1>
+            <p>La aceleración es el cambio de velocidad instantáneo:</p>
+            $$ a = \frac{dv}{dt} \leftarrow v'(t) = a(t) $$
+            <p>Usando la segunda ley fundamental del cálculo:</p>
+            $$ \int_{T_1}^{T_2} a(t) dt = v(T_2) - v(T_1) $$
+            <p>Si la aceleración es constante y los tiempos son $T_1 = 0$ y $T_2 = T$:</p>
+            <div class="equation">
+                $$v(T) = v(0) + aT$$
+            </div>
+            <p>De la misma forma podemos expresar la velocidad:</p>
+            $$ \int_{T_1}^{T_2} v(t) dt = x(T_2) - x(T_1) $$
+            <div class="equation">
+                $$x(T) = x(0) + v(0)T + \frac{1}{2}aT^2$$
+            </div>
+
+        </div>
+
+        <!--<div class="step slide" data-next="py">-->
+            <!--<h1>Transformación de la velocidad</h1>-->
+            <!--<br/>-->
+            <!--<p>De la misma forma podemos expresar la velocidad:</p>-->
+            <!--$$ \int_{T_1}^{T_2} v(t) dt = x(T_2) - x(T_1) $$-->
+            <!--<p>Si la velocidad es constante y los tiempos son $T_1 = 0$ y $T_2 = T$:</p>-->
+            <!--$$-->
+                <!--\begin{eqnarray}-->
+                    <!--\int_{0}^{T} v(t)\;dt &=& x(T) - x(0) \\-->
+                    <!--\int_{0}^{T} (v(0) + at)\;dt &=& x(T) - x(0) \\-->
+                    <!--v(0) \int_{0}^{T} dt + a \int_{0}^{T} t\;dt &=& x(T) - x(0) \\-->
+                    <!--v(0) * t\;|_0^T + (\frac{1}{2}at^2)\;|_0^t &=& x(T) - x(0) \\-->
+                    <!--v(0)T + \frac{1}{2}aT^2 &=& x(T) - x(0)-->
+                <!--\end{eqnarray}-->
+            <!--$$-->
+            <!--<div class="equation">-->
+                <!--$$x(T) = x(0) + v(0)T + \frac{1}{2}aT^2$$-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="step slide" data-next="py">
+            <h1>Leyes de movimiento</h1>
+            <p>
+                <b>Primera ley de Newton</b>: Si no hay fuerzas ejercidas sobre un cuerpo,
+                el cuerpo se movera con una velocidad constante
+            </p>
+            $$\sum{F} = 0$$
+            <p>
+                Sin embargo la velocidad del objeto cambia debido a:
+            </p>
+            $$
+                \begin{eqnarray}
+                    damping &=& 0.995 \\
+                    v(T) &=& v(T) * damping^t
+                \end{eqnarray}
+            $$
+            <p>
+                <b>Segunda ley de Newton</b>: El cambio de movimiento es
+                proporcional a la fuerza motriz impresa
+            </p>
+            $$F = m * a$$
+            <p>
+                En el motor de simulación es necesario simular objetos
+                inamovibles ($m = \infty$)
+            </p>
+            $$a = \frac{1}{m} * F$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>La fuerza de gravedad</h1>
+            <p>Ley de la gravedad universal:</p>
+            $$f = G \frac{m_Am_B}{r^2}$$
+            <p>
+                Asumiendo que uno de los objetos es el planeta tierra:
+            </p>
+            $$f = g * m$$
+            <p>Donde $g$ es una constante igual a $9.81m/s^2$:</p>
+            $$a = \frac{1}{m} * f$$
+            $$a = \frac{1}{m} * g * m = g$$
+            <p>Todas las cantidades son representadas como vectores en el
+            motor de simulación:</p>
+            $$\vec g = \begin{bmatrix} 0 \\ -g \\ 0 \end{bmatrix}$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Características de una partícula</h1>
+            <pre><code>
+/**
+ * Holds the linear position of the particle in world space.
+ */
+this.position = new APE.Vector3();
+/**
+ * Holds the linear velocity of the particle in world space.
+ */
+this.velocity = new APE.Vector3();
+/**
+ * Holds the acceleration of the particle. This value
+ * can be used to set acceleration due to gravity (its primary
+ * use) or any other constant acceleration.
+ */
+this.acceleration = new APE.Vector3();
+/**
+ * Holds the amount of damping applied to linear
+ * motion. Damping is required to remove energy added
+ * through numerical instability in the integrator.
+ */
+this.damping = 0.9;
+/**
+* Inverse of the mass
+*/
+this.inverseMass = 1.0;
+            </code></pre>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Transformación de la aceleración</h1>
+            <pre><code>
+// delta is the time elapsed since the last frame
+// Phase 1: Velocity update
+this.velocity = this.velocity
+    .multiplyScalar(
+        Math.pow(this.damping, delta)
+    )
+    .add(
+        this.acceleration
+            .multiplyScalar(delta)
+    );
+
+// Phase 2: Position update
+this.position = this.position
+    .add(
+        this.velocity.clone()
+            .multiplyScalar(delta)
+    )
+    // since delta squared times 0.5 gives a really small number,
+    // the acceleration is commonly ignored
+    .add(
+        this.acceleration.clone()
+            .multiplyScalar(delta * delta * 0.5)
+    );
+                </code>
+            </pre>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagrama de actividades</h1>
+            <img class="center" style="width: 400px; box-shadow: none"
+                    src="images/Figures/c6/integration.jpg" alt=""/>
+            <p class="center">Diagrama de actividades de la integración de partículas</p>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/01_simpleParticle.html">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagrama de actividades</h1>
+            <img class="center" style="width: 400px; box-shadow: none"
+                 src="images/Figures/c6/particleType.jpg" alt=""/>
+            <p class="center">Diagrama de actividades de la creación de multiple partículas</p>
+        </div>
+
+        <div class="step demo" data-next="px ry">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/02_typeOfParticle.html">
+            </iframe>
+        </div>
+        <!-- end fisica de particulas -->
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Física con masa agregada</p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Principio de D'Alembert</h1>
+            <br/><br/>
+            <p>
+                Alternativa a la segunda ley de Newton:
+            </p>
+            $$
+                \begin{eqnarray}
+                    F = m * a && \text{Segunda ley de Newton}	\\
+                    F - m * a = 0 && \text{Forma alternativa de D'Alembert}
+                \end{eqnarray}
+            $$
+            <br/>
+            <p>
+                Acumulación de fuerzas:
+            </p>
+            $$\vec f = \sum_i{f_i}$$
+            <p>
+                Integración en el motor:
+            </p>
+            $$a_{net} = a + \frac{1}{m} * \sum_i{f_i}$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Principio de D'Alembert</h1>
+            <pre><code>
+// Particle
+...
+/**
+ * Holds the accumulated force to be applied at the next
+ * simulation iteration only. This value is zeroed after the integration.
+ */
+this.accumulatedForce = new APE.Vector3();
+
+/**
+ * Adds a force to this particle to be applied during the integration
+ */
+addForce: function (f) {
+    this.accumulatedForce
+        .add(f);
+}
+
+// Integration
+var resultingAcceleration =
+    this.acceleration.clone()   // constant acceleration
+    .add(
+        this.accumulatedForce.clone()
+            .multiplyScalar(this.inverseMass)
+    );
+...
+this.accumulatedForce = new Ape.Vector3();
+            </code></pre>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Generación de fuerzas</h1>
+            <pre><code>
+// Class GravityGenerator
+updateForce: function (particle, duration) {
+    // gravity doesn't affect infinite mass objects
+    if (particle.getMass() === Infinity) { return; }
+    // f = m * g
+    particle.addForce(
+        this.gravity.clone()
+            .multiplyScalar(particle.getMass())
+    );
+}
+
+// Class DragGenerator
+updateForce: function (particle, duration) {
+    var pVelocity = particle.velocity.clone().normalize();
+
+    // f_drag = -|v| ( k1 * |v| + k2 * (|v| ^ 2) )
+    var drag = pVelocity.length();
+    drag = this.k1 * drag + this.k2 * drag * drag;
+
+    // multiply the drag by the negate of the normalized velocity
+    var force = pVelocity.multiplyScalar(-drag);
+    particle.addForce(force);
+}
+            </code></pre>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagrama de clases</h1>
+            <br/><br/><br/>
+            <img class="center" style="width: 760px; box-shadow: none;"
+                 src="images/Figures/c7/strategy.jpg" alt=""/>
+            <p class="center">Diagrama de clases de los generadores de fuerza</p>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/03_particleForces.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/04_particleForces3D.html">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Resortes</h1>
+            <br/><br/>
+            <p>
+                La ley de Hooke indica que:
+            </p>
+            $$f_{spring} = k * x$$
+            <p>
+                $x$ es la distancia que se quiere comprimir o expandir (desde el reposo), $k$ es una constante
+                característica de cada resorte
+            </p>
+            <p>
+                En el motor de simulación puede ser modelado como:
+            </p>
+            <div class="equation">
+                $$f_{spring} = -k * \Delta x$$
+            </div>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/05_particleSpring.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/06_particleBuoyancy.html">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Detección de colisiones entre partículas</h1>
+            <img class="center" style="width: 300px; box-shadow: none"
+                src="images/Figures/c7/sphere.png" alt=""/>
+            Existe colisión si:
+            $$
+            r_A + r_B >= distance
+            $$
+            <ul>
+                <li>Cantidad de interpenetración = $r_A + r_B - distance$</li>
+                <li>Coeficiente de restitución = $\epsilon$</li>
+                <li>Normal de contacto = $\widehat{(B - A)}$</li>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Resolución de colisiones entre partículas</h1>
+            <img class="center" style="width: 630px; box-shadow: none"
+                 src="images/Figures/c7/contactVelocity.png" alt=""/>
+            <p class="center">Velocidad en el punto contacto</p>
+            $$\widehat n \cdot \vec v_A - \widehat n \cdot \vec v_B$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Resolución de colisiones entre partículas</h1>
+            <br/>
+            <p>Velocidad en el punto contacto</p>
+            $$\vec v_C = \widehat n \cdot \vec v_A - \widehat n \cdot \vec v_B$$
+            $$\vec v_S = -\vec v_C$$
+            <br/>
+            <p>Velocidad despues del contacto</p>
+            $$\epsilon = \frac{v_{fB} - v_{fA}}{v_{oA} - v_{oB}}$$
+            $$v_{fB} - v_{fA} = \epsilon * {v_{oA} - v_{oB}}$$
+            $$v_{fB} - v_{fA} = -\epsilon * {v_{oB} - v_{oA}}$$
+            $$\vec v_S' = -\epsilon * \vec v_S$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Conservación del momentum</h1>
+            <br/><br/>
+            <p>Momentum:</p>
+            $$p = m * v$$
+            <p>Conservación del momentum:</p>
+            $$m_Av_{oA} + m_Bv_{oB} = m_Av_{fA} + m_Bv_{fB}$$
+            <p>Considerando que una partícula es inamovible:</p>
+            $$m_Av_{oA} = m_Av_{fA}\;+\;?$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Impulso</h1>
+            <br/>
+            $$F * t_f = p_f - p_o$$
+            <div class="equation">
+                $$J = m(v_f - v_o)$$
+            </div>
+            <p>Para el objeto A:</p>
+            $$m_Av_oA = m_Av_fA + J$$
+            <p>Para el objeto B:</p>
+            $$m_Bv_oB = m_Bv_fB - J$$
+            <p>
+                Combinando las ecuaciones del coeficiente de restitución, la conservación
+                de momentum en A, la conservación de momentum en B y despejando J
+            </p>
+            $$J = \frac{(-\epsilon - 1)(v_{oA} - v_{oB})(m_Am_B)}{m_A + m_B}$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Resolución de la interpenetación</h1>
+            <br/><br/>
+            <p>
+                Los objetos estan interpenetrados una distancia $d$ que tiene que ser
+                repartida entre los objetos
+            </p>
+            $$\Delta x + \Delta y = d$$
+            <p>Podemos relacionar estos valores con sus masas a través de:</p>
+            $$
+                \begin{eqnarray}
+                    m_A\Delta x_A &=& m_B\Delta x_B \\
+                    \Delta x_A &=& \frac{1}{\sum m^{-1}} * \frac{1}{m_A} * d \\
+                    \Delta x_B &=& \frac{1}{\sum m^{-1}} * \frac{1}{m_B} * d
+                \end{eqnarray}
+            $$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagrama de actividades</h1>
+            <img class="center" style="width: 450px; margin: 0 auto; box-shadow: none;"
+                 src="images/Figures/c7/collision.jpg" alt=""/>
+            <p class="center">Detección y resolución de colisiones</p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Resolución de colisiones</h1>
+            <pre><code>
+// calculate total inverse mass
+var totalInverseMass = this.particles[0].getInverseMass();
+totalInverseMass += this.particles[1].getInverseMass();
+
+// calculate the velocity at the contact
+var velocityProjection = this.particles[0]
+                .velocity.dot(
+                    this.contactNormal
+                );
+if (this.particles[1]) {
+    velocityProjection += -this.particles[1]
+                .velocity.dot(
+                    this.contactNormal
+                );
+}
+
+// impulse generated in the collision
+var impulse = -(1 + this.restitution) *
+                velocityProjection / totalInverseMass;
+
+// calculate impulse in contact coordinates
+var impulsePerIMass = this.contactNormal.clone()
+    .multiplyScalar(impulse);
+            </code></pre>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Resolución de colisiones</h1>
+            <br/><br/>
+            <pre><code>
+// apply the impulses
+this.particles[0].velocity
+    .add(
+        impulsePerIMass.clone()
+            .multiplyScalar(
+                this.particles[0].getInverseMass()
+            )
+    );
+this.particles[1].velocity
+    .add(
+        impulsePerIMass.clone()
+            .multiplyScalar(
+                -this.particles[1].getInverseMass()
+            )
+    );
+            </code></pre>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/08_particleContact.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/10_particleCable.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/11_particleRod.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="px ry">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/13_application_cloth.html">
+            </iframe>
+        </div>
+        <!-- end fisica con masa agregada -->
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Física de cuerpo rígido</p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Rotaciones</h1>
+            <br/>
+            <p>Un cuerpo rígido es representado por:</p>
+            <ul>
+                <li>Posicion: ($x, y, z$)</li>
+                <li>Orientación: $Euler\;Angles$, $M_R$, $Quaternion$</li>
+            </ul>
+            <div class="two-column">
+                <div>
+                    <br/>
+                    <p>Ángulos de Euler en 2d:</p>
+                    $$q = \begin{bmatrix} \cos\theta \\ \sin\theta \end{bmatrix}$$
+                    <p>Centro de masa:</p>
+                    $$\text{center of mass} = \frac{1}{m} \sum_{n}{m_i * p_i}$$
+                </div>
+                <div>
+                    <img class="center" style="width: 300px; box-shadow: none"
+                         src="images/Figures/c8/rotation.png" alt=""/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Transformaciones</h1>
+            <br/>
+            <img class="center" style="width: 600px; box-shadow: none"
+                 src="images/panel2/movement.png" alt=""/>
+            <p>Traslación como una suma de vectores:</p>
+            $$3 * [1, 0] + 2 * [0, 1] = [3, 2]$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Transformaciones</h1>
+            <br/><br/>
+            <p>Generalizando:</p>
+            $$
+                \begin{bmatrix}
+                    x' \\ y'
+                \end{bmatrix} =
+                    x \begin{bmatrix} a \\ b \end{bmatrix} +
+                    y \begin{bmatrix} c \\ d \end{bmatrix}
+            $$
+            <p>Multiplicando $x * [a,\;b]$ y $y * [c,\;d]:$</p>
+            $$
+                \begin{bmatrix}
+                    x' \\ y'
+                \end{bmatrix} =
+                \begin{bmatrix}
+                    x * a + y * c \\
+                    x * b + y * d
+                \end{bmatrix}
+            $$
+            <p>Reduciendo la matriz a una multiplicación de matrices:</p>
+            $$
+                \begin{bmatrix}
+                    x' \\ y'
+                \end{bmatrix} =
+                \begin{bmatrix}
+                    a & c \\
+                    b & d
+                \end{bmatrix}
+                \begin{bmatrix}
+                    x \\
+                    y
+                \end{bmatrix}
+            $$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Transformaciones</h1>
+            <img class="center" style="width: 650px; box-shadow: none;"
+                 src="images/panel2/2drotation.jpg" alt=""/>
+            <p style="font-size: 15px;">Fuente: http://blog.wolfire.com/2010/07/Linear-algebra-for-game-developers-part-3</p>
+            <ul>
+                <li>Rotar punto por punto</li>
+                <li>
+                    Rotar todo el sistema de referencia definido por las bases
+                    ortonormales del objeto
+                </li>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Matrices de transformación</h1>
+            <br/><br/>
+            <p>Matriz de rotación</p>
+            $$
+                R_{2D} =
+                \begin{bmatrix}
+                    \cos\theta & -\sin\theta \\
+                    \sin\theta & \cos\theta
+                \end{bmatrix}
+                \begin{bmatrix}
+                    x \\ y
+                \end{bmatrix} =
+                \begin{bmatrix}
+                    x * \cos \theta - y * \sin \theta \\
+                    y * \sin \theta + y * \cos \theta
+                \end{bmatrix}
+            $$
+            <p>Matriz de escala</p>
+            $$
+                S_{2D} =
+                \begin{bmatrix}
+                    s_x & 0 \\
+                    0 & s_y
+                \end{bmatrix}
+                \begin{bmatrix}
+                x \\
+                y
+                \end{bmatrix} =
+                \begin{bmatrix}
+                x * s_x \\
+                y * s_y
+                \end{bmatrix}
+            $$
+            <p>Matriz de traslación</p>
+            $$
+                T_{2D} =
+                \begin{bmatrix}
+                    1 & 0 & t_x \\
+                    0 & 1 & t_y \\
+                    0 & 0 & 1
+                \end{bmatrix}\;
+                \begin{bmatrix}
+                    x \\
+                    y \\
+                    1
+                \end{bmatrix} =
+                \begin{bmatrix}
+                    x + t_x \\
+                    y + t_y \\
+                    1
+                \end{bmatrix}
+            $$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Orientación en 3D</h1>
+
+            <img style="width: 350px; box-shadow: none"
+                 src="images/Figures/c8/euler.png" alt=""/>
+            <img style="width: 350px; box-shadow: none"
+                 src="images/panel2/gimbalLock.gif" alt=""/>
+            $$R = \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Matrices de rotación en 3D</h1>
+            <br/>
+            <p>Rotación alrededor del eje Z:</p>
+            $$
+                R_Z =
+                \begin{bmatrix}
+                    \cos\theta & -\sin\theta & 0 \\
+                    \sin\theta & \cos\theta & 0 \\
+                    0 & 0 & 1
+                \end{bmatrix}
+            $$
+            <p>Rotación alrededor del eje Y:</p>
+            $$
+                R_Y =
+                \begin{bmatrix}
+                    \cos\theta & 0 & \sin\theta \\
+                    0 & 1 & 0 \\
+                    -\sin\theta & 0 & \cos\theta
+                \end{bmatrix}
+            $$
+            <p>Rotación alrededor del eje X:</p>
+            $$
+                R_X =
+                \begin{bmatrix}
+                    1 & 0 & 0 \\
+                    0 & \cos\theta & -\sin\theta \\
+                    0 & \sin\theta & \cos\theta
+                \end{bmatrix}
+            $$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Cuaternion</h1>
+            <br/>
+            Un cuaternion unitario:
+            <ul>
+                <li>Eje sobre el cual se ejerce la rotación = $(x, y, z)$</li>
+                <li>cantidad de rotación que ocurrira en ese eje = $w$</li>
+            </ul>
+            $$
+                q = w + x * i + y * j + z * k \\
+                i = j = k = \sqrt{-1}
+            $$
+            <p>Si la cantidad de rotación es $\theta$ el cuaternion es:</p>
+            $$
+                w' = \cos \frac{\theta}{2} \\
+                x' = x * \cos \frac{\theta}{2} \\
+                y' = y * \sin \frac{\theta}{2} \\
+                z' = z * \sin \frac{\theta}{2}
+            $$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Correspondencia entre ecuaciones de movimiento lineal y angular</h1>
+            <img class="center" style="width: 780px; box-shadow: none"
+                 src="images/panel2/angularC.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Movimientos Angulares</h1>
+            <p>Velocidad angular: eje de rotación $\widehat a$ y radio de cambio $r$:</p>
+            $$\omega = r * \widehat a$$
+            <p>Cambio en la velocidad angular:</p>
+            <div class="equation">
+                $$\omega' = \omega + \omega_{new} = \omega + \alpha * \Delta t$$
+            </div>
+            <p>Cambio en la orientacion:</p>
+            <div class="equation">
+                $$\varphi' = \varphi + \frac{\Delta t}{2} * \omega * \varphi$$
+            </div>
+            <p>Omega para la ecuación anterior es el cuaternion:</p>
+            $$\omega = \begin{bmatrix} 0 \\ \omega_x \\ \omega_y \\ \omega_z \end{bmatrix}$$
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Torque</h1>
+            <p>
+                Dada la fuerza $f$, el centro de masa $q$,
+                el punto de aplicacion de la fuerza $p$ y la
+                distancia desde el centro de masa hasta el punto $p$ que es $r$
+            </p>
+            $$\tau = r \times F = |r||F| \sin \theta$$
+            <p>Relación entre el torque y la aceleración angular:</p>
+            $$
+                F = m * a \\
+                \tau = I * \alpha
+            $$
+            <img class="center" style="width: 300px; box-shadow: none"
+                 src="images/panel2/torque.gif" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Acumulador de torque</h1>
+            <br/><br/>
+            <pre><code>
+...
+/**
+ * Holds the accumulated torque to be applied at the next
+ * simulation iteration only. This value is zeroed at each integration step.
+ */
+this.accumulatedTorque = new APE.Vector3();
+
+addForceAtPoint: function (f, point) {
+    // vector from the center of mass to the point
+    var pt = point.clone().sub(this.position);
+    this.accumulatedForce
+        .add(f);
+    this.accumulatedTorque
+        .add(pt.cross(f));
+}
+            </code></pre>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Momento de inercia</h1>
+            <ul>
+                <li>Equivalente rotacional de la masa</li>
+                <li>Dependiente del eje de rotación</li>
+            </ul>
+            $$I_a = \sum_{i=1}^{n}{m_id^2_{p_i \rightarrow a}}$$
+            <p>
+                Donde $I_a$ es el momento de inercia en el eje $a$,
+                $n$ es el número de partículas, $d^2_{p_i \rightarrow a}$
+                es la distancia existente entre la partícula $i$ y el
+                eje de rotación $a$.
+            </p>
+            <p>Desventajas:</p>
+            <ul>
+                <li>Excesiva cantidad de cálculos durante cada frame</li>
+                <li>Modelado impreciso (se necesitan $\infty$ partículas para
+                    modelar un cuerpo rígido)</li>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Tensor de Inercia</h1>
+            <ul>
+                <li>Almacena todos los momentos de inercia existentes</li>
+                <li>Matriz de 3x3 que puede ser manipulada en tiempo real</li>
+            </ul>
+            $$\tau = I * \frac{d\omega}{dt}$$
+            $$
+            \begin{bmatrix}
+                \tau_x \\ \tau_y \\ \tau_z
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+                I_{xx} & I_{xy} & I_{xz} \\
+                I_{yx} & I_{yy} & I_{yz} \\
+                I_{zx} & I_{zy} & I_{zz}
+            \end{bmatrix}
+            \begin{bmatrix}
+                d \omega_x \\ d \omega_y \\ d \omega_z
+            \end{bmatrix}
+            $$
+            <p>La aceleración angular es entonces:</p>
+            $$
+                \begin{eqnarray}
+                    \tau &=& I * \frac{d\omega}{dt} \\
+                    I^{-1} \tau &=& I^{-1}I \alpha
+                \end{eqnarray}
+            $$
+            <div class="equation">
+                $$\alpha = I^{-1} \tau$$
+            </div>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Implementación</h1>
+            <br/>
+            <pre><code>
+// angular acceleration
+// alpha = I^-1 * torque
+var angularAcceleration =
+    this.inverseInertiaTensorWorld.multiply(
+        this.accumulatedTorque
+    );
+...
+// angular velocity update
+// w' = w + angular_acceleration * delta
+this.angularVelocity = this.angularVelocity
+    .add(
+        angularAcceleration
+            .multiplyScalar(delta)
+    );
+...
+// modify the cuaternion representing the orientation
+// of the rigid body
+// varphi' = varphi + delta/2 * angular_velocity * varphi
+this.orientation
+    .addScaledVector(this.angularVelocity, delta);
+            </code></pre>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/20_rigidBodyCube.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/21_rigidBodySpring.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/22_rigidBodyFlightSimulator.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="px ry">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/23_rigidBodySailBoat.html">
+            </iframe>
+        </div>
+        <!-- end fisica de cuerpo rigido -->
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Detección de colisiones</p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Consideraciones acerca de la geometría de los objetos</h1>
+            <img class="center" style="width: 670px; box-shadow: none"
+                 src="images/Figures/c9/approximation.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Tipos de contacto</h1>
+            <img class="center" style="width: 450px; box-shadow: none"
+                 src="images/Figures/c9/casesOfContact.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Algoritmos de colisión</h1>
+            <p>Entre esferas:</p>
+            $$
+            	colision =
+                    \begin{cases}
+                        verdadero	& \text{si } r_1 + r_2 >= d \\
+                        falso & \text{de cualquier otra manera}
+                    \end{cases}
+            $$
+            <p>Entre una esfera y un plano:</p>
+            $$
+            colision =
+                \begin{cases}
+                    verdadero	& center * \widehat n - planeTranslation < radius \\
+                    falso & \text{de cualquier otra manera}
+                \end{cases}
+            $$
+            <p>Entre dos cajas:</p>
+            <img class="center" style="width: 300px; box-shadow: none"
+                 src="images/Figures/c9/sat.jpg" alt=""/>
+            <p class="center" style="font-size: 15px;">Separating Axis Theorem</p>
+        </div>
+
+        <div class="step slide" data-next="px ry">
+            <h1>Colision entre dos cajas</h1>
+            <img class="center" style="width: 400px; box-shadow: none"
+                 src="images/Figures/c9/projection.png" alt=""/>
+            <p class="center" style="font-size: 15px;">
+                Proyección de las cajas sobre un eje
+            </p>
+            $$
+            	colision =
+                \begin{cases}
+                    verdadero	& \text{si } proyection_{halfA} + proyection_{halfB} >= |center_B - center_A| \\
+                    falso	& \text{de cualquier otra manera}
+                \end{cases}
+
+            $$
+        </div>
+
+        <!-- end deteccion de colisiones -->
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Resolución de colisiones</p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Impulsos</h1>
+            <br/><br/>
+            <p>
+                De la misma forma que se necesitaba aplicar un impulso lineal para
+                resolver la colisión lineal es necesario agregar un impulso <b>angular</b>
+                para resolver la rotación del cuerpo rígido
+            </p>
+            $$F * \Delta t = p_f - p_o$$
+            $$\tau * \Delta t = I * \omega_f - I * \omega_o$$
+            <div class="equation">
+                $$\tau * \Delta t = \Delta L$$
+            </div>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Algoritmo para encontrar el impulso</h1>
+            <br/>
+            <ol>
+                <li>
+                    Calcular las coordenadas relativas al contacto
+                    con el eje $X$ paralelo a la normal de contacto
+                </li>
+                <li>
+                    Calcular el cambio de la velocidad por unidad de impulso
+                </li>
+                <li>
+                    Calcular el impulso para generar ese cualquier cambio en la velocidad
+                </li>
+                <li>
+                    Calcular la velocidad final despues del contacto.
+                </li>
+                <li>
+                    Calcular el impulso para generar ese cambio en la velocidad.
+                </li>
+                <li>
+                    Dividir el impulso en componentes lineares y angulares.
+                </li>
+            </ol>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/24_rigidBody_collision_box_plane.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/25_rigidBody_collision_sphere_plane.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/26_rigidBody_collision_box_box.html">
+            </iframe>
+        </div>
+
+        <div class="step demo" data-next="py">
+            <iframe class="demo-iframe"
+                    data-src="http://localhost:8085/PhysicsEngine/demos/28_rigidBody_collision_box_box_friction.html">
+            </iframe>
+        </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Gracias por su atención</p>
+        </div>
+        <!-- end resolucion de colisiones -->
+
+    </div>
+
+    <script type="text/javascript" src="lib/jquery-2.0.3.js"></script>
+    <script type="text/javascript"
+            src="lib/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <script type="text/javascript">
+        MathJax.Hub.Config({
+            extensions: ["tex2jax.js"],
+            "HTML-CSS": {
+                scale: 50
+            },
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+    <script type="text/javascript" src="lib/slides.js"></script>
+    <script type="text/javascript" src="lib/impress.js"></script>
+    <script> impress().init(); </script>
+    <script type="text/javascript" src="lib/highlight/highlight.pack.js"></script>
+    <script>
+        hljs.tabReplace = '    ';
+        hljs.initHighlightingOnLoad();
+    </script>
+</body>
+</html>

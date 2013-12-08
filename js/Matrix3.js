@@ -1,14 +1,31 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 7/29/13
- * Time: 2:57 PM
- * To change this template use File | Settings | File Templates.
+ * Ape.Matrix3 represents a 9 component structure
+ * useful to represent internal characteristics of a rigid
+ * body such as the `inertiaTensor` and its `inverseInertiaTensor`
+ * @class {Ape.Matrix3}
  */
 Ape.Matrix3 = Class.extend({
+    /**
+     * Ape.Matrix3 constructor (it receives the nine component of the
+     * vector in row order)
+     * 
+     *      var m = new Ape.Matrix3(
+     *          1, 2, 3
+     *          4, 5, 6
+     *          7, 8, 9
+     *      )
+     */
     init: function () {
         /**
-         * Holds 9 real values
+         * Holds 9 real values in row order
+         *
+         *      var m = new Ape.Matrix3(
+         *          1, 2, 3
+         *          4, 5, 6
+         *          7, 8, 9
+         *      );
+         *      // data is [1, 2, 3, 4, 5, 6, 7, 8, 9]
+         *
          * @type {Array}
          */
         this.data = [];
@@ -16,6 +33,31 @@ Ape.Matrix3 = Class.extend({
         this.set.apply(this, Array.prototype.slice.call(arguments));
     },
 
+    /**
+     * Updates the components of this Ape.Matrix3
+     *
+     *       var m = new Ape.Matrix3();
+     *       // the matrix has the form:
+     *       // 1 0 0
+     *       // 0 1 0
+     *       // 0 0 1
+     *       m.set(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *       // the matrix has the form:
+     *       // 1 2 3
+     *       // 4 5 6
+     *       // 7 8 9
+     *
+     * @param {number} m11
+     * @param {number} m12
+     * @param {number} m13
+     * @param {number} m21
+     * @param {number} m22
+     * @param {number} m23
+     * @param {number} m31
+     * @param {number} m32
+     * @param {number} m33
+     * @chainable
+     */
     set: function (m11, m12, m13, m21, m22, m23, m31, m32, m33) {
         var d = this.data,
             special = [
@@ -36,6 +78,14 @@ Ape.Matrix3 = Class.extend({
         return this;
     },
 
+    /**
+     * Creates a new instance of Ape.Matrix3 with the components of `this`
+     *
+     *      var m = new Ape.Matrix3();
+     *      var mClone = m.clone();         // mClone has the same components
+     *
+     * @returns {Ape.Matrix3}
+     */
     clone: function () {
         var d = this.data;
         return new Ape.Matrix3(
@@ -43,6 +93,20 @@ Ape.Matrix3 = Class.extend({
         );
     },
 
+    /**
+     * Adds two Ape.Matrix instances
+     *
+     *      var ma = new Ape.Matrix3(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *      var mb = new Ape.Matrix3(1, 2, 3, 4, 5, 6, 7, 8, 9);
+     *      var mc = ma.add(mb);
+     *       // the matrix mc has the form:
+     *       //  2  4  6
+     *       //  8 10 12
+     *       // 14 16 18
+     *
+     * @param {Ape.Matrix3} m
+     * @returns {Ape.Matrix3}
+     */
     add: function (m) {
         Ape.assert(m instanceof Ape.Matrix3);
         var d1 = this.data;
@@ -55,6 +119,11 @@ Ape.Matrix3 = Class.extend({
         );
     },
 
+    /**
+     * Multiplies two Ape.Matrix3 instances
+     * @param {Ape.Matrix3} m2
+     * @returns {Ape.Matrix3}
+     */
     multiply: function (m2) {
         Ape.assert(m2 instanceof Ape.Matrix3);
         var d1 = this.data;
@@ -77,12 +146,12 @@ Ape.Matrix3 = Class.extend({
 
     /**
      * Transform the given vector by this matrix
-     * @param v
-     * @return THREE.Vector3
+     * @param {Ape.Vector3} v
+     * @return Ape.Vector3
      */
     multiplyVector: function (v) {
         var d = this.data;
-        return new THREE.Vector3(
+        return new Ape.Vector3(
             v.x * d[0] + v.y * d[1] + v.z * d[2],
             v.x * d[3] + v.y * d[4] + v.z * d[5],
             v.x * d[6] + v.y * d[7] + v.z * d[8]
@@ -106,12 +175,23 @@ Ape.Matrix3 = Class.extend({
     /**
      * Transform the given vector by this matrix
      * @param v
-     * @return THREE.Vector3
+     * @return Ape.Vector3
      */
     transform: function (v) {
         return this.multiplyVector(v);
     },
 
+    /**
+     * Inverts the matrix `m` and sets the result of the inversion in
+     * this matrix
+     *
+     *      var m = new Ape.Matrix3();
+     *      var mI = new Ape.Matrix3();
+     *      mI.setInverse(m);       // mI now holds the inverse of m
+     *
+     * @param {Ape.Matrix3} m
+     * @chainable
+     */
     setInverse: function (m) {
         var d = m.data;
 
@@ -147,14 +227,53 @@ Ape.Matrix3 = Class.extend({
         return this;
     },
 
+    /**
+     * Inverts `this` matrix saving the inversion in a
+     * new Ape.Matrix3
+     *
+     *      var m = new Ape.Matrix3();
+     *      var mI = m.inverse();
+     *      // m is not modified in the inversion
+     *
+     * @return Ape.Matrix3
+     */
     inverse: function () {
         return new Ape.Matrix3().setInverse(this);
     },
 
+    /**
+     * Inverts `this` modifying it so that its components
+     * are equal to the inversion
+     *
+     *      var m = new Ape.Matrix3();
+     *      m.invert();
+     *      // m is modified in the inversion
+     *
+     * @chainable
+     */
     invert: function () {
         return this.setInverse(this);
     },
 
+    /**
+     * Transposes the matrix `m` and sets the result of the operation
+     * in `this`
+     *
+     *      var m = new Ape.Matrix3(
+     *          1, 2, 3,
+     *          4, 5, 6,
+     *          7, 8, 9
+     *      );
+     *      var mT = new Ape.Matrix3();
+     *      mT.setTranspose(m);       // mT now holds the transpose of m
+     *      // the matrix has the form:
+     *      // 1 4 7
+     *      // 2 5 8
+     *      // 3 6 9
+     *
+     * @param {Ape.Matrix3} m
+     * @chainable
+     */
     setTranspose: function (m) {
         var d = m.data;
         return this.set(
@@ -164,13 +283,41 @@ Ape.Matrix3 = Class.extend({
         );
     },
 
+    /**
+     * Transposes `this` matrix saving the result in a
+     * new Ape.Matrix3
+     *
+     *      var m = new Ape.Matrix3();
+     *      var mT = m.transpose();
+     *      // m is not modified in the operation
+     *
+     * @return Ape.Matrix3
+     */
     transpose: function () {
         return new Ape.Matrix3().setTranspose(this);
     },
 
+    /**
+     * Creates a new vector transforming `vector` with
+     * the transpose of `this`
+     *
+     *      var m = new Ape.Matrix3(
+     *          1, 2, 3,
+     *          4, 5, 6,
+     *          7, 8, 9
+     *      );
+     *      m.transpose(new Ape.Vector3(-1, -2, -3));
+     *      // the vector's components are:
+     *      // (-1 * 1) + (-2 * 4) + (-3 * 7)
+     *      // (-1 * 2) + (-2 * 5) + (-3 * 8)
+     *      // (-1 * 3) + (-2 * 6) + (-3 * 9)
+     *
+     * @param {Ape.Vector3} vector
+     * @returns {Ape.Vector3}
+     */
     transformTranspose: function (vector) {
         var d = this.data;
-        return new THREE.Vector3(
+        return new Ape.Vector3(
             vector.x * d[0] + vector.y * d[3] + vector.z * d[6],
             vector.x * d[1] + vector.y * d[4] + vector.z * d[7],
             vector.x * d[2] + vector.y * d[5] + vector.z * d[8]
@@ -262,6 +409,17 @@ Ape.Matrix3 = Class.extend({
         );
     },
 
+    /**
+     * @private
+     * Update the component of `this` to be made
+     * out of a proportion of the sum of
+     * matrices `a` and `b`
+     *
+     * @param {Ape.Matrix3} a
+     * @param {Ape.Matrix3} b
+     * @param {number} proportion
+     * @chainable
+     */
     linearInterpolate: function (a, b, proportion) {
         var i;
         for (i = 0; i < 9; i += 1) {
@@ -274,9 +432,9 @@ Ape.Matrix3 = Class.extend({
     /**
      * Sets the vectors passed as a parameter as the columns of
      * this matrix
-     * @param {THREE.Vector3} a
-     * @param {THREE.Vector3} b
-     * @param {THREE.Vector3} c
+     * @param {Ape.Vector3} a
+     * @param {Ape.Vector3} b
+     * @param {Ape.Vector3} c
      */
     setComponents: function (a, b, c) {
         var d = this.data;

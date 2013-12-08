@@ -9,14 +9,18 @@
     <!--<script src="js/Constants.js"></script>-->
     <!--<script src="js/Particle.js"></script>-->
 
+    <link rel="stylesheet" href="css/master.css"/>
     <script src="js/Loader.js"></script>
     <script src="lib/Game.js"></script>
 
 </head>
 <body>
-    <canvas id="app" width="1000" height="350"></canvas>
+    <canvas id="app" width="1400" height="670"></canvas>
     <button onclick="pause()">PAUSE</button>
     <script type="text/javascript">
+        Loader.list = Loader.list
+                .concat(Loader.list.T3)
+                .concat(Loader.list.particle);
         Loader(function () {
             console.log('%c>> APE up and running!', 'color: #6FC3DF');
             var canvas = document.getElementById('app');
@@ -25,16 +29,17 @@
 
             // invert
             context.translate(0, height);
-            context.scale(1, -1);
+            context.scale(2, -2);
 
             // particle
             var particle = new Ape.Particle();
-    //        particle.velocity.set(0, 100, 0);
             particle.acceleration.set(0, -20, 0);       // gravity
-            particle.position.set(100, 300, 0);
-            particle.setMass(1);
-    //        particle.setInverseMass(0);
-
+            particle.position.set(350, 300, 0);
+    
+            var particle2 = new Ape.Particle();
+            particle2.acceleration.set(0, -20, 0);       // gravity
+            particle2.position.set(400, 300, 0);
+            particle2.damping = 0.1;
 
             Game = Game || {};
             Game.setUp({
@@ -44,11 +49,17 @@
                 },
                 update: function (delta) {
                     particle.integrate(delta);
+                    particle2.integrate(delta);
                 },
                 render: function () {
                     this.context.beginPath();
-                    this.context.arc(particle.position.x, particle.position.y, 10, 0, 2 * Math.PI, false);
+                    this.context.arc(particle.position.x, particle.position.y, 5, 0, 2 * Math.PI, false);
                     this.context.fillStyle = 'green';
+                    this.context.fill();
+
+                    this.context.beginPath();
+                    this.context.arc(particle2.position.x, particle2.position.y, 5, 0, 2 * Math.PI, false);
+                    this.context.fillStyle = 'red';
                     this.context.fill();
                 }
             });

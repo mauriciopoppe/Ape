@@ -28,34 +28,34 @@ Ape.World = T3.World.extend({
         );
 
         // force registry
-        this.forceRegistry = new Ape.ForceRegistry();
+        this.forceRegistry = new Ape.force.ForceRegistry();
 
         // wind
         this.windSpeed = new THREE.Vector3(0, 0, 0);
 
         // tensors
-        this.rightWing = new Ape.AeroControl(
+        this.rightWing = new Ape.force.AeroControl(
             new Ape.Matrix3(0, 0, 0, -1.000, -0.5, 0, 0, 0, 0),      // base
             new Ape.Matrix3(0, 0, 0, -0.995, -0.5, 0, 0, 0, 0),      // min
             new Ape.Matrix3(0, 0, 0, -1.005, -0.5, 0, 0, 0, 0),      // max
             new THREE.Vector3(-1, 0, 2),                             // position
             this.windSpeed                                           // windSpeed
         );
-        this.leftWing = new Ape.AeroControl(
+        this.leftWing = new Ape.force.AeroControl(
             new Ape.Matrix3(0, 0, 0, -1.000, -0.5, 0, 0, 0, 0),      // base
             new Ape.Matrix3(0, 0, 0, -0.995, -0.5, 0, 0, 0, 0),      // min
             new Ape.Matrix3(0, 0, 0, -1.005, -0.5, 0, 0, 0, 0),      // max
             new THREE.Vector3(-1, 0, -2),                            // position
             this.windSpeed                                           // windSpeed
         );
-        this.rudder = new Ape.AeroControl(
+        this.rudder = new Ape.force.AeroControl(
             new Ape.Matrix3(0, 0, 0, 0, 0, 0,     0, 0, 0),          // base
             new Ape.Matrix3(0, 0, 0, 0, 0, 0,  0.01, 0, 0),          // min
             new Ape.Matrix3(0, 0, 0, 0, 0, 0, -0.01, 0, 0),          // max
             new THREE.Vector3(2, 0.5, 0),                            // position
             this.windSpeed                                           // windSpeed
         );
-        this.tail = new Ape.Aero(
+        this.tail = new Ape.force.Aero(
             new Ape.Matrix3(
                 0, 0, 0,
                 -1, -0.5, 0,

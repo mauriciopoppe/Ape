@@ -25,7 +25,7 @@ Ape.World = T3.World.extend({
         }
 
         // force registry
-        this.forceRegistry = new Ape.ForceRegistry();
+        this.forceRegistry = new Ape.force.ForceRegistry();
 
         // init dat.gui for some objects
         this.inverse = false;
@@ -59,6 +59,19 @@ Ape.World = T3.World.extend({
                 );
             }
         });
+
+        // rotation
+
+        var rotation = delta;
+        if(T3.Keyboard.get('I')) {
+            body.orientation.addScaledVector(new THREE.Vector3(rotation, 0, 0));
+        }
+        if(T3.Keyboard.get('K')) {
+            body.orientation.addScaledVector(new THREE.Vector3(0, rotation, 0));
+        }
+        if(T3.Keyboard.get('L')) {
+            body.orientation.addScaledVector(new THREE.Vector3(0, 0, rotation));
+        }
 
         this.forceRegistry.update(delta);
         this.bodies.forEach(function (body) {

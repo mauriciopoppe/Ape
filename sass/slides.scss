@@ -5,6 +5,8 @@
 
 @import "compass/reset";
 @import "compass/css3";
+@import "compass/css3/transition";
+@import "compass/css3/box";
 @import "compass/css3/box-shadow";
 @import "compass/css3/shared";
 @import "partials/animate.sass";
@@ -117,14 +119,16 @@ a:focus {
   margin: 0;
   opacity: 0.2;
 
-  -webkit-transition: opacity 1s;
-  -moz-transition:    opacity 1s;
-  -ms-transition:     opacity 1s;
-  -o-transition:      opacity 1s;
-  transition:         opacity 1s;
+  -webkit-transition: all 1s;
+  -moz-transition:    all 1s;
+  -ms-transition:     all 1s;
+  -o-transition:      all 1s;
+  transition:         all 1s;
 }
 
-.impress-enabled .step.active { opacity: 1 }
+.impress-enabled .step.active {
+  opacity: 1;
+}
 
 /*
     These 'slide' step styles were heavily inspired by HTML5 Slides:
@@ -278,26 +282,30 @@ img.center {
 .step {
   display: none;
   img {
-    @include animate(fadeOut, 4s, 0s);
+    @include animate(fadeOut, 0.5s, 0s);
   }
   img.inline {
     margin: 10px;
     display: inline-block;
   }
-  &.past, &.active, &.future {
+  &.active {
+    display: block;
+  }
+  &.sibling {
     display: block;
   }
 }
 .step.active {
   img {
-    @include animate(fadeInUp, 4s, 0s);
+    @include animate(fadeInUp, 0.5s, 0s);
   }
 }
 
 .demo {
   padding: 0;
+  // ratio h/w = .511111111
   height: 750px;
-  width: 1520px;
+  width: 1467px;
 }
 
 .slide {
@@ -306,6 +314,7 @@ img.center {
   border-bottom: 10px solid $orange;
   h1 {
     font-size: 50px;
+    line-height: 50px;
     padding-bottom: 10px;
     border-bottom: 2px solid $orange;
     margin-bottom: 10px;
@@ -313,9 +322,15 @@ img.center {
   p {
     padding: 10px 0;
   }
-  ul {
+  ul{
     list-style: disc;
     padding-left: 30px;
+    margin-left: 30px;
+  }
+  ol {
+    list-style: decimal;
+    padding-left: 30px;
+    margin-left: 30px;
   }
   li {
     padding: 10px 0;
@@ -344,5 +359,53 @@ img.center {
     display: inline-block;
     vertical-align: middle;
     line-height: normal;
+  }
+}
+
+/************ panel 2 ************/
+.latex-container {
+  img {
+    display: block;
+    margin: 0 auto;
+    @include box-shadow(none);
+  }
+}
+
+.impress-enabled {
+  /* inline */
+  .MathJax {
+    background: #eeeeee;
+    padding: 2px 5px;
+    @include border-radius(5px);
+  }
+
+  /* block */
+  .MathJax_Display {
+    margin: 5px !important;
+    .MathJax {
+      background: transparent;
+    }
+  }
+}
+
+.equation {
+  border: 2px dotted $orange;
+}
+
+#impress pre code {
+  @include border-radius(10px);
+  font-size: 18px;
+  padding-left: 25px;
+  line-height: 20px;
+  font-family: "Menlo", "Courier New", "Courier", monospace;
+}
+
+.two-column {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  & > div {
+    @include box-flex(1);
   }
 }

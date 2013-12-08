@@ -1,19 +1,13 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 8/17/13
- * Time: 8:56 PM
- * To change this template use File | Settings | File Templates.
+ * Represents a bounding sphere used in the coarse collision detection
+ * step,
+ * @class Ape.collision.BoundingSphere
  */
-/**
- * Represents a bounding sphere that can be tested for overlap
- * @class Ape.BoundingSphere
- */
-Ape.BoundingSphere = Class.extend({
+Ape.collision.BoundingSphere = Class.extend({
     init: function (center, radius) {
         /**
          * The center of the bounding sphere
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
         this.center = center;
 
@@ -74,7 +68,7 @@ Ape.BoundingSphere = Class.extend({
     /**
      * Checks if this bounding sphere overlaps
      * with the other bounding sphere
-     * @param other
+     * @param {Ape.collision.BoundingSphere} other
      */
     overlaps: function (other) {
         var distance = this.center.distanceTo(other.center);
@@ -93,11 +87,11 @@ Ape.BoundingSphere = Class.extend({
      *      growth = bigSphere - smallSphere
      *      growth = bigSphere.radius^2 - smallSphere.radius^2
      *
-     * @param {Ape.BoundingSphere} other
+     * @param {Ape.collision.BoundingSphere} other
      * @returns {number}
      */
     getGrowth: function (other) {
-        var newSphere = new Ape.BoundingSphere().join(this, other);
+        var newSphere = new Ape.collision.BoundingSphere().join(this, other);
         return newSphere.radius * newSphere.radius - this.radius * this.radius;
     }
 });

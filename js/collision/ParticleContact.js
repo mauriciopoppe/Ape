@@ -34,9 +34,9 @@ Ape.ParticleContact = Class.extend({
         /**
          * Holds the direction of the contact (from the first
          * particle perspective)
-         * @type {THREE.Vector3}
+         * @type {Ape.Vector3}
          */
-        this.contactNormal = config.contactNormal || new THREE.Vector3();
+        this.contactNormal = config.contactNormal || new Ape.Vector3();
 
         /**
          * Holds the depth of penetration at the contact

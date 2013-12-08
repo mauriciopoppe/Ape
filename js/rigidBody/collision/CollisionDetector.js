@@ -1,25 +1,17 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 8/18/13
- * Time: 8:30 PM
- * To change this template use File | Settings | File Templates.
- */
-
-/**
  * A wrapper class that holds the fine collision detection routines
  *
  * Each of the functions has the same format: it takes the details
  * of two objects and a pointer to a contact array to fill, it
  * returns the number of contacts it wrote into the array
- * @class Ape.CollisionDetector
+ * @class Ape.collision.CollisionDetector
  */
-Ape.CollisionDetector = Class.extend({
+Ape.collision.CollisionDetector = Class.extend({
     /**
      * Tries to generate a contact between two spheres
-     * @param {Ape.Sphere} one
-     * @param {Ape.Sphere} two
-     * @param {Ape.CollisionData} data
+     * @param {Ape.primitive.Sphere} one
+     * @param {Ape.primitive.Sphere} two
+     * @param {Ape.collision.CollisionData} data
      */
     sphereAndSphere: function (one, two, data) {
         // only write contacts if there's enough room
@@ -62,9 +54,9 @@ Ape.CollisionDetector = Class.extend({
      * Detects collisions between a sphere and a half space plane,
      * the difference between a plane and a half space plane
      * is that the plane is infinitely big
-     * @param {Ape.Sphere} sphere
-     * @param {Ape.Plane} plane
-     * @param {Ape.CollisionData} data
+     * @param {Ape.primitive.Sphere} sphere
+     * @param {Ape.primitive.Plane} plane
+     * @param {Ape.collision.CollisionData} data
      * @returns {number}
      */
     sphereAndHalfSpace: function (sphere, plane, data) {
@@ -151,7 +143,7 @@ Ape.CollisionDetector = Class.extend({
             contactsWritten = 0;
         // iterate through all the 8 vertices of the box
         for (i = 0; i < 8; i += 1) {
-            var vertexPos = new THREE.Vector3(
+            var vertexPos = new Ape.Vector3(
                 multipliers[i][0] * box.halfSize.x,
                 multipliers[i][1] * box.halfSize.y,
                 multipliers[i][2] * box.halfSize.z
@@ -192,9 +184,9 @@ Ape.CollisionDetector = Class.extend({
      *      sphere face - box point
      *      sphere face - box edge
      *
-     * @param {Ape.Box} box
-     * @param {Ape.Sphere} sphere
-     * @param {Ape.CollisionData} data
+     * @param {Ape.primitive.Box} box
+     * @param {Ape.primitive.Sphere} sphere
+     * @param {Ape.collision.CollisionData} data
      */
     boxAndSphere: function (box, sphere, data) {
         // transform the center of the sphere into box OBJECT coordinates
@@ -208,7 +200,7 @@ Ape.CollisionDetector = Class.extend({
         }
 
         // clamp each coordinate between [-box.halfSize.C, box.halfSize.C]
-        var closestPoint = new THREE.Vector3(
+        var closestPoint = new Ape.Vector3(
             Math.min(Math.max(relativeCenter.x, -box.halfSize.x), box.halfSize.x),
             Math.min(Math.max(relativeCenter.y, -box.halfSize.y), box.halfSize.y),
             Math.min(Math.max(relativeCenter.z, -box.halfSize.z), box.halfSize.z)
@@ -239,9 +231,9 @@ Ape.CollisionDetector = Class.extend({
 
     /**
      * Simulates the contact between any face of a box and a point
-     * @param {Ape.Box} box
-     * @param {THREE.Vector3} point
-     * @param {Ape.CollisionData} data
+     * @param {Ape.primitive.Box} box
+     * @param {Ape.Vector3} point
+     * @param {Ape.collision.CollisionData} data
      * @returns {number}
      */
     boxAndPoint: function (box, point, data) {
@@ -296,9 +288,9 @@ Ape.CollisionDetector = Class.extend({
 
     /**
      * Simulates the contact between two boxes
-     * @param {Ape.Box} one
-     * @param {Ape.Box} two
-     * @param {Ape.CollisionData} data
+     * @param {Ape.primitive.Box} one
+     * @param {Ape.primitive.Box} two
+     * @param {Ape.collision.CollisionData} data
      */
     boxAndBox: function (one, two, data) {
         // lets assume that there's no contact
@@ -446,7 +438,7 @@ Ape.CollisionDetector = Class.extend({
                     pOne, dOne, oneSize,
                     pTwo, dTwo, twoSize,
                     useOne) {
-                // THREE.Vector3
+                // Ape.Vector3
                 var toSt, cOne, cTwo;
 
                 // number
@@ -512,7 +504,7 @@ Ape.CollisionDetector = Class.extend({
     /**
      * Projects a box to an axis, to avoid computing the whole projection of the box
      * we can project only half of the box
-     * Check http://www.jkh.me/files/tutorials/Separating%20Axis%20Theorem%20for%20Oriented%20Bounding%20Boxes.pdf
+     * Check [this paper about Separating Axis Theorem in boxes](http://www.jkh.me/files/tutorials/Separating%20Axis%20Theorem%20for%20Oriented%20Bounding%20Boxes.pdf)
      * @param box
      * @param axis
      * @returns {number}
@@ -524,10 +516,11 @@ Ape.CollisionDetector = Class.extend({
     },
 
     /**
-     * @returns {Ape.Contact}
+     * Creates an instance of Ape.collision.Contact
+     * @returns {Ape.collision.Contact}
      */
     createContact: function () {
-        return new Ape.Contact();
+        return new Ape.collision.Contact();
     },
 
 
@@ -543,6 +536,19 @@ Ape.CollisionDetector = Class.extend({
 	 *          }
 	 *      }
 	 *      // method `sphereAndSphere` will be called
+     *      // this map defaults to:
+     *      detector: {
+     *          sphere: {
+     *              sphere: 'sphereAndSphere',
+     *              plane: 'sphereAndHalfSpace'
+     *          },
+     *          box: {
+     *              box: 'boxAndBox',
+     *              sphere: 'boxAndSphere',
+     *              plane: 'boxAndHalfSpace',
+     *              point: 'boxAndPoint'
+     *          }
+     *      },
 	 *
      * @type {Object}
 	 */
@@ -561,10 +567,11 @@ Ape.CollisionDetector = Class.extend({
 
     /**
      * For any two objects passed, detects which is the method
-     * to call to detect collisions based on the rules described in `this.detector`
-     * @param a
-     * @param b
-     * @param data
+     * to call to detect collisions based on the rules described in the
+     * {@link Ape.collision.CollisionDetector#property-detector}
+     * @param {Ape.primitive.Primitive} a
+     * @param {Ape.primitive.Primitive} b
+     * @param {Ape.collision.CollisionData} data
      */
     detect: function (a, b, data) {
         var i,

@@ -146,7 +146,8 @@ Ape.World = T3.World.extend({
 
             texture = THREE.ImageUtils.loadTexture('demoAssets/demo_10/rope.jpg');
             material = new THREE.MeshBasicMaterial({
-                map: texture
+                color: 0xaaaaff,
+                wireframe: true
             });
             geometry = new THREE.CylinderGeometry(1, 1, distance, 10, 10, false);
             me.mesh[index] = mesh = new THREE.Mesh(geometry, material);

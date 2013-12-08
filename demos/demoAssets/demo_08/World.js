@@ -64,7 +64,9 @@ Ape.World = T3.World.extend({
                 var posI = this.particles[i].position,
                     posJ = this.particles[j].position;
 
-                if (posI.distanceTo(posJ) <= this.particles[i].radius * 2) {
+                if (posI.distanceTo(posJ) <=
+                        this.particles[i].radius +
+                        this.particles[j].radius) {
                     var contact = new Ape.ParticleContact();
                     contact.particles = [
                         this.particles[i], this.particles[j]
@@ -72,7 +74,8 @@ Ape.World = T3.World.extend({
                     contact.restitution = 0;
                     contact.contactNormal = posI.clone()
                         .sub(posJ).normalize();
-                    contact.penetration = this.particles[i].radius * 2 - posI.distanceTo(posJ);
+                    contact.penetration = this.particles[i].radius +
+                        this.particles[j].radius - posI.distanceTo(posJ);
                     contact.resolve(delta);
                 }
             }
@@ -86,7 +89,7 @@ Ape.World = T3.World.extend({
 
         var max = 600;
         var position = new THREE.Vector3(
-            Math.random() * max, 0, 0// Math.random() * max - max * 0.5
+            Math.random() * max, 0, 0 //Math.random() * 0.3// * max - max * 0.5
         );
         var center = new THREE.Vector3(max / 2, 0, 0);
         var velocity = center.clone().sub(position).normalize().multiplyScalar(60);

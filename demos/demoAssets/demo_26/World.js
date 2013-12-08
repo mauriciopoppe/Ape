@@ -27,8 +27,7 @@ Ape.World = Ape.RigidBodyWorld.extend({
         // generate planes
         this.planes = [
             factory.createPlane({
-                direction: new THREE.Vector3(0, 1, 0),
-                createMesh: true
+                direction: new THREE.Vector3(0, 1, 0)
             })
 //            ,
 //            factory.createPlane({
@@ -97,7 +96,7 @@ Ape.World = Ape.RigidBodyWorld.extend({
         // collide the box with the planes
         for (i = 0; i < total; i += 1) {
             for (j = i + 1; j < total; j += 1) {
-                Ape.CollisionDetector.prototype
+                Ape.collision.CollisionDetector.prototype
                     .detect(this.objects[i], this.objects[j], this.collisionData);
             }
         }

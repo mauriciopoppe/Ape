@@ -1,14 +1,4 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 8/1/13
- * Time: 5:10 PM
- * To change this template use File | Settings | File Templates.
- */
-
-/**
- * Rigid body buoyancy, a partial hooke's law application
- *
  * Lets assume that we have a plane parallel to the XZ plane
  * that represents a liquid with some density. When an object
  * falls into this liquids it causes the liquid to apply a force
@@ -29,49 +19,69 @@
  *      // else
  *      //      push with vp * submersion depth percentage
  *
- * @class Ape.ParticleBuoyancy
+ * @class Ape.force.Buoyancy
+ * @extends Ape.force.ForceGenerator
  */
-Ape.Buoyancy = Ape.ForceGenerator.extend({
-    init: function (center, maxDepth, volume, liquidHeight, liquidDensity) {
+Ape.force.Buoyancy = Ape.force.ForceGenerator.extend({
+    /**
+     * Ape.force.Buoyancy constructor
+     * @param {Ape.Vector3} center Center of masses where
+     * the force is applied to
+     * @param {number} maxDepth Depth below liquidHeight
+     * at which the maximum force is applied
+     * @param {number} volume Volume of the rigid body
+     * @param {number} liquidHeight Height of the liquid
+     * from the origin
+     * @param {number} [liquidDensity=1000] Liquid density
+     * (typically it's 1000 kg/m^3)
+     */
+    init: function (center, maxDepth, volume,
+                    liquidHeight, liquidDensity) {
         this._super();
 
         /**
          * The maximum submersion depth of the object before
          * it's pushed with the same force
-         * @type {number}
+         * @property {number}
          */
         this.maxDepth = maxDepth;
 
         /**
-         * Object volume
-         * @type {THREE.Vector3}
+         * Rigid body volume
+         * @property {Ape.Vector3}
          */
         this.volume = volume;
 
         /**
          * Height of the liquid this object will be submerged in
-         * @type {number}
+         * @property {number}
          */
         this.liquidHeight = liquidHeight;
 
         /**
          * Density of the liquid this object will be submerged in
-         * @type {number} [liquidDensity=1000]
+         * @property {number} [liquidDensity=1000]
          */
         this.liquidDensity = liquidDensity || 1000;
 
         /**
          * The center of the buoyancy of the rigid body
          * in OBJECT coordinates
-         * @type {THREE.Vector3}
+         * @property {Ape.Vector3}
          */
-        this.centerOfBuoyancy = center || new THREE.Vector3();
+        this.centerOfBuoyancy = center || new Ape.Vector3();
     },
 
+    /**
+     * Applies a force following the rules described in the
+     * model above
+     * @param {Ape.RigidBody} body
+     * @param {number} duration
+     */
     updateForce: function (body, duration) {
         var pointInWorld = body.getPointInWorldSpace(this.centerOfBuoyancy),
             depth = pointInWorld.y,
-            force = new THREE.Vector3();
+            force = new Ape.Vector3();
 
         if (depth <= this.liquidHeight) {
             if (depth + this.maxDepth <= this.liquidHeight) {

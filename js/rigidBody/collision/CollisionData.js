@@ -1,23 +1,18 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 8/18/13
- * Time: 8:12 PM
- * To change this template use File | Settings | File Templates.
- */
-/**
- * A helper structure that contains information for the detector
- * to use while it's building its contact data
+ * A helper structure that contains the contacts detected by
+ * the collision detector algorithms, besides it contains
+ * the default configuration for each contact such as the
+ * `friction`, the `restitution` and the `tolerance`
  *
- * @class Ape.CollisionData
+ * @class Ape.collision.CollisionData
  */
-Ape.CollisionData = Class.extend({
+Ape.collision.CollisionData = Class.extend({
     init: function (config) {
         config = config || {};
 
         /**
          * Holds the contacts array to write into
-         * @type {Array}
+         * @type {Ape.collision.Contact[]}
          */
         this.contacts = [];
 
@@ -66,7 +61,7 @@ Ape.CollisionData = Class.extend({
 
     /**
      * Notifies the data that `count` number of contacts have been written
-     * @param {Array} contacts
+     * @param {Ape.collision.Contact[]} contacts
      */
     addContact: function (contacts) {
 	    Ape.assert(contacts instanceof Array);

@@ -13,9 +13,9 @@
 <body>
     <div id="webgl-container"></div>
     <script type="text/javascript">
-        Loader.list = Loader.list.concat(
-            Loader.list.rigidBody
-        );
+        Loader.list = Loader.list
+            .concat(Loader.list.T3)
+            .concat(Loader.list.rigidBody);
         Loader.list = Loader.list.concat([
             'demoAssets/demo_22/World.js'
         ]);

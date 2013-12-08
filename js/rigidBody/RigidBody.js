@@ -1,79 +1,104 @@
-/**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 7/29/13
- * Time: 10:07 PM
- * To change this template use File | Settings | File Templates.
- */
-
 (function () {
     var RigidBody;
 
+    /**
+     * Class whose instances represent a RigidBody, an idealization of a solid structure
+     * (which means that it can't be deformed under any force applied)
+     * 
+     * This class holds many characteristics of the rigid bodies such as:
+     * 
+     * - Position
+     * - Orientation
+     * - Linear and angular velocity
+     * - Linear and angular acceleration
+     * - Mass
+     * - Inertia tensor
+     * 
+     * The rigid body has a method called Ape.RigidBody.integrate that integrates the
+     * characteristics of the rigid body transforming its properties with the following
+     * algorithm
+     * 
+     * - Before the integrate method is run, the rigid body accumulates forces and
+     * torque to be integrated later
+     * - When the integrate method is called the force and torque are transformed
+     * in a linear and angular acceleration change
+     * - The linear and angular acceleration change is transformed into a change
+     * of the linear and angular velocities of the rigid body
+     * - These changes cause that the position and orientation of the object change too
+     * - The accumulators (force and torque acummulators) are cleaned
+     * since the force is only applied in a single frame
+     * 
+     * @class Ape.RigidBody
+     */
     RigidBody = function () {
         THREE.Mesh.apply(this, arguments);
         // ************** DATA AND STATE **************
         /**
          * Inverse of the mass:
-         * f = m * a (force equals mass times acceleration)
-         * a = (1 / m) * f (1 / m is the inverse of the mass)
+         *
+         *      f = m * a (force equals mass times acceleration)
+         *      a = (1 / m) * f (1 / m is the inverse of the mass)
          *
          * This means that infinite mass object have a zero inverse mass since 1 / ∞ = 0
          * Objects of zero mass have an undefined inverse mass
-         * @type {number}
+         * @property {number}
          */
         this.inverseMass = 1.0;
         /**
          * Holds the inverse of the body's inertia tensor given in BODY space
-         * @type {Ape.Matrix3}
+         * @property {Ape.Matrix3}
          */
         this.inverseInertiaTensor = new Ape.Matrix3();
         /**
          * Holds the amount of damping applied to linear
          * motion. Damping is required to remove energy added
          * through numerical instability in the integrator.
-         * @type {number}
+         * @property {number}
          */
         this.linearDamping = 0.9;
         /**
          * Holds the amount of damping applied to angular
          * motion. Damping is required to remove energy added
          * through numerical instability in the integrator.
-         * @type {number}
+         * @property {number}
          */
         this.angularDamping = 0.9;
         /**
          * Holds the linear position of the rigid body in
          * world space.
+         * @property {Ape.Vector3}
          */
-        this.position = this.position || new THREE.Vector3();
+        this.position = this.position || new Ape.Vector3();
         /**
          * Holds the angular orientation of the rigid body in WORLD space
-         * @type {Ape.Quaternion}
+         * @property {Ape.Quaternion}
          */
         this.orientation = new Ape.Quaternion();
         /**
          * Holds the linear velocity of the rigid body in
          * world space.
+         * @property {Ape.Vector3}
          */
-        this.linearVelocity = new THREE.Vector3();
+        this.linearVelocity = new Ape.Vector3();
         /**
          * Holds the angular velocity or rotation of the rigid body in world space
-         * @type {THREE.Vector3}
+         * @property {Ape.Vector3}
          */
-        this.angularVelocity = new THREE.Vector3();
+        this.angularVelocity = new Ape.Vector3();
 
         // ************** DERIVED DATA **************
         // information that's derived from the other data in the class
         /**
          * Holds the inverse of the body's inertia tensor in WORLD coordinates
          * (it's calculated each frame in `calculateDerivedData`
-         * @type {Ape.Matrix3}
+         * @property {Ape.Matrix3}
          */
         this.inverseInertiaTensorWorld = new Ape.Matrix3();
         /**
          * Holds a transform matrix for converting body space
          * into world space and vice versa. This can be achieved by calling the
          * getPointInSpace functions.
+         * @property {Ape.Matrix4}
          */
         this.transformMatrix = new Ape.Matrix4(
             1, 0, 0, 0,
@@ -86,42 +111,56 @@
         /**
          * Holds the accumulated force to be applied at the next
          * simulation iteration only. This value is zeroed at each integration step.
+         * @property {Ape.Vector3}
          */
-        this.accumulatedForce = new THREE.Vector3();
+        this.accumulatedForce = new Ape.Vector3();
         /**
          * Holds the accumulated torque to be applied at the next
          * simulation iteration only. This value is zeroed at each integration step.
+         * @property {Ape.Vector3}
          */
-        this.accumulatedTorque = new THREE.Vector3();
+        this.accumulatedTorque = new Ape.Vector3();
         /**
          * Holds the acceleration of the rigid body, can be used to set
          * acceleration due to gravity or any other CONSTANT acceleration
-         * @type {THREE.Vector3}
+         * @property {Ape.Vector3}
          */
-        this.acceleration = new THREE.Vector3();
+        this.acceleration = new Ape.Vector3();
 
 
         // ************** STABILIZATION **************
         /**
          * To remove any velocity that has been built up from
          * acceleration we need to create a new data member which is this
-         * @type {THREE.Vector3}
+         * @property {Ape.Vector3}
          */
-        this.lastFrameAcceleration = new THREE.Vector3();
+        this.lastFrameAcceleration = new Ape.Vector3();
     };
 
     RigidBody.prototype = new THREE.Mesh();
 
-    $.extend(RigidBody.prototype, {
+    Ape.extend(RigidBody.prototype, {
+        /**
+         * Setter for the mass (it updates the `inverseMass` property)
+         * @param {number} m
+         */
         setMass: function (m) {
             Ape.assert(m !== 0);
             this.inverseMass = 1 / m;
         },
 
+        /**
+         * Setter for the inverse mass
+         * @param {number} m
+         */
         setInverseMass: function (m) {
             this.inverseMass = m;
         },
 
+        /**
+         * Gets the mass (transformed from the `inverseMass`)
+         * @returns {number}
+         */
         getMass: function () {
             if (this.inverseMass < 1e-9) {
                 return Infinity;
@@ -129,13 +168,35 @@
             return 1 / this.inverseMass;
         },
 
+        /**
+         * Gets the inverse mass
+         * @returns {number}
+         */
         getInverseMass: function () {
             return this.inverseMass;
         },
 
         /**
-         * Integrates the rigid body forward in time by `delta` ms
-         * @param {number} delta
+         * Integrates the rigid body forward in time by `delta` ms with the
+         * following algorithm:
+         * 
+         * - The force accumulated is turned into linear acceleration and added
+         * to the constant `acceleration` property
+         * - The torque accumulated is turned into angular acceleration
+         * - The linear acceleration is turned into linear velocity 
+         * - The angular acceleration is turned into angular velocity
+         * - THE linear and angular velocities suffer from damping (reducing
+         * their value to simulate a damping force)
+         * - The position is updated using the linear velocity calculated above
+         * - The orientation is updated using the angular velocity calculated above
+         * - The derived properties of the body are calculated again (since
+         * the rigid body has changed its properties)
+         * - The accumulators are cleaned
+         *
+         * This method should be called once per frame in the game loop to assure
+         * the rigid body is correctly transformed.
+         *
+         * @param {number} delta Time elapsed since the last frame
          */
         integrate: function (delta) {
             Ape.assert(delta > 0);
@@ -156,11 +217,11 @@
 
             // calculate angular acceleration from force inputs
             // let:
-            //      O be the angular acceleration
+            //      a be the angular acceleration
             //      I be the moment of inertia
             //      r be the torque vector
-            // r = I * O
-            // O = I^(-1) * r
+            // r = I * a
+            // a = I^(-1) * r
             var angularAcceleration =
                 this.inverseInertiaTensorWorld.transform(
                     this.accumulatedTorque
@@ -270,7 +331,7 @@
         /**
          * Adds the given force to the center of mass of the rigid body,
          * the force is expressed in world coordinates
-         * @param f
+         * @param {Ape.Vector3} f
          */
         addForce: function (f) {
             this.accumulatedForce
@@ -280,7 +341,7 @@
         /**
          * Adds the given torque to the center of mass of the rigid body,
          * the force is expressed in world coordinates
-         * @param r
+         * @param {Ape.Vector3} r
          */
         addTorque: function (r) {
             this.accumulatedTorque
@@ -290,8 +351,8 @@
         /**
          * Adds a `force` in a specific `point`, the point is specified in
          * WORLD coordinates
-         * @param {THREE.Vector3} f
-         * @param {THREE.Vector3} point
+         * @param {Ape.Vector3} f
+         * @param {Ape.Vector3} point
          */
         addForceAtPoint: function (f, point) {
             // vector from the center of mass to the point
@@ -306,8 +367,8 @@
          * Adds the given force to the given point on the rigid body, the direction
          * of the point is given in world space coordinates but the application point
          * is given in object space coordinates
-         * @param {THREE.Vector3} force
-         * @param {THREE.Vector3} point
+         * @param {Ape.Vector3} force
+         * @param {Ape.Vector3} point
          */
         addForceAtBodyPoint: function (force, point) {
             var pt = this.getPointInWorldSpace(point);
@@ -330,7 +391,7 @@
          * it's updated using a vector3 which represents the position
          * and a quaternion which represents the orientation
          * @param {Ape.Matrix4} transformMatrix
-         * @param {THREE.Vector3} position
+         * @param {Ape.Vector3} position
          * @param {Ape.Quaternion} q
          */
         calculateTransformMatrix: function (transformMatrix, position, q) {
@@ -435,8 +496,8 @@
          * WORLD coordinates (NOTE: make sure to understand
          * that the normal basis of this object might have changed
          * and may not be aligned with the world's normal basis)
-         * @param {THREE.Vector3} point
-         * @returns {THREE.Vector3}
+         * @param {Ape.Vector3} point
+         * @returns {Ape.Vector3}
          */
         getPointInWorldSpace: function (point) {
             return this.transformMatrix.transform(point);
@@ -447,8 +508,8 @@
          * OBJECT coordinates (NOTE: make sure to understand
          * that the normal basis of this object might have changed
          * and may not be aligned with the world's normal basis)
-         * @param {THREE.Vector3} point
-         * @returns {THREE.Vector3}
+         * @param {Ape.Vector3} point
+         * @returns {Ape.Vector3}
          */
         getPointInLocalSpace: function (point) {
             return this.transformMatrix.transformInverse(point);
@@ -465,16 +526,18 @@
         },
 
         /**
-         * Adds the linear velocity `v` to this
-         * @param {THREE.Vector3} v
+         * Adds the linear velocity `v` to the linear
+         * velocity of this object
+         * @param {Ape.Vector3} v
          */
         addVelocity: function (v) {
             this.linearVelocity.add(v);
         },
 
         /**
-         * Adds the angular velocity `v` to this
-         * @param {THREE.Vector3} v
+         * Adds the angular velocity `v` to the angular
+         * velocity of this object
+         * @param {Ape.Vector3} v
          */
         addRotation: function (v) {
             this.angularVelocity.add(v);

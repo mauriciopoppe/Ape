@@ -7,9 +7,13 @@
     <link rel="stylesheet" href="css/master.css"/>
 </head>
 <body>
-    <canvas id="app" width="1000" height="600"></canvas> <br />
+    <canvas id="app" width="1400" height="670"></canvas>
     <button onclick="pause()">PAUSE</button>
     <script type="text/javascript">
+        Loader.list = Loader.list
+                .concat(Loader.list.T3)
+                .concat(Loader.list.particle);
+
         Loader(function () {
             console.log('%c>> APE up and running!', 'color: #6FC3DF');
             var canvas = document.getElementById('app');
@@ -17,7 +21,7 @@
             var width = canvas.width, height = canvas.height;
 
             // invert
-            var k = 1;
+            var k = 2;
             context.translate(0, height);
             context.scale(k, -k);
 
@@ -41,9 +45,7 @@
             // adding gravity to the artillery particle
             particleRegistry.add(
                 particles[1],
-                new Ape.ParticleGravity(
-                    Ape.GRAVITY
-                )
+                new Ape.ParticleGravity()
             );
 
             // adding drag to the laser particle

@@ -1,16 +1,22 @@
 /**
- * Created with JetBrains WebStorm.
- * User: mauricio
- * Date: 7/29/13
- * Time: 2:57 PM
- * To change this template use File | Settings | File Templates.
- */
-/**
- * Holds a transform matrix consisting of a rotation matrix and
- * a position
+ * Ape.Matrix4 represents a 12 component structure (a 4x4 matrix is represented
+ * by a 16 component structure however since the last row is always `[0 0 0 1]`
+ * so inside the physics engine a 4x4 matrix is represented as a 3x4 matrix)
+ * Typically this instances of this class hold a transform matrix
+ * consisting of a rotation matrix and a position
  * @class Ape.Matrix4
  */
 Ape.Matrix4 = Class.extend({
+    /**
+     * Ape.Matrix4 constructor (it receives the nine component of the
+     * vector in row order)
+     *
+     *      var m = new Ape.Matrix3(
+     *          1,  2,  3,  4
+     *          5,  6,  7,  8
+     *          9, 10, 11, 12
+     *      )
+     */
     init: function () {
         /**
          * Holds 12 real values
@@ -22,7 +28,14 @@ Ape.Matrix4 = Class.extend({
 
         this.set.apply(this, Array.prototype.slice.call(arguments));
     },
-
+    /**
+     * Creates a new instance of Ape.Matrix4 with the components of `this`
+     *
+     *      var m = new Ape.Matrix4();
+     *      var mClone = m.clone();         // mClone has the same components
+     *
+     * @returns {Ape.Matrix4}
+     */
     clone: function () {
         var d = this.data;
         return new Ape.Matrix4(
@@ -32,6 +45,34 @@ Ape.Matrix4 = Class.extend({
         );
     },
 
+    /**
+     * Updates the components of this Ape.Matrix4
+     *
+     *       var m = new Ape.Matrix4();
+     *       // the matrix has the form:
+     *       // 1 0 0 0
+     *       // 0 1 0 0
+     *       // 0 0 1 0
+     *       m.set(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+     *       // the matrix has the form:
+     *       // 1  2  3  4
+     *       // 5  6  7  8
+     *       // 9 10 11 12
+     *
+     * @param {number} m11
+     * @param {number} m12
+     * @param {number} m13
+     * @param {number} m14
+     * @param {number} m21
+     * @param {number} m22
+     * @param {number} m23
+     * @param {number} m24
+     * @param {number} m31
+     * @param {number} m32
+     * @param {number} m33
+     * @param {number} m34
+     * @chainable
+     */
     set: function (m11, m12, m13, m14, m21, m22, m23, m24,
            m31, m32, m33, m34) {
         var d = this.data,
@@ -53,6 +94,11 @@ Ape.Matrix4 = Class.extend({
         return this;
     },
 
+    /**
+     * Multiplies two Ape.Matrix4 instances
+     * @param {Ape.Matrix4} m2
+     * @returns {Ape.Matrix4}
+     */
     multiply: function (m2) {
         Ape.assert(m2 instanceof Ape.Matrix4);
         var d1 = this.data;
@@ -82,7 +128,7 @@ Ape.Matrix4 = Class.extend({
      */
     multiplyVector: function (v) {
         var data = this.data;
-        return new THREE.Vector3(
+        return new Ape.Vector3(
             v.x * data[0] + v.y * data[1] + v.z * data[2] + data[3],
             v.x * data[4] + v.y * data[5] + v.z * data[6] + data[7],
             v.x * data[8] + v.y * data[9] + v.z * data[10] + data[11]
@@ -92,7 +138,7 @@ Ape.Matrix4 = Class.extend({
     /**
      * Transforms the given vector by this matrix
      * @param v
-     * @returns {THREE.Vector3}
+     * @returns {Ape.Vector3}
      */
     transform: function (v) {
         return this.multiplyVector(v);
@@ -103,7 +149,7 @@ Ape.Matrix4 = Class.extend({
      * of this matrix
      *
      * @param v
-     * @returns {THREE.Vector3}
+     * @returns {Ape.Vector3}
      */
     transformInverse: function (v) {
         var t = v.clone(),
@@ -111,7 +157,7 @@ Ape.Matrix4 = Class.extend({
         t.x -= d[3];
         t.y -= d[7];
         t.z -= d[11];
-        return new THREE.Vector3(
+        return new Ape.Vector3(
             t.x * d[0] + t.y * d[4] + t.z * d[8],
             t.x * d[1] + t.y * d[5] + t.z * d[9],
             t.x * d[2] + t.y * d[6] + t.z * d[10]
@@ -121,16 +167,21 @@ Ape.Matrix4 = Class.extend({
     /**
      * Returns a vector representing one axis (a column) in the matrix
      * @param {number} j The column to return
-     * @returns {THREE.Vector3}
+     * @returns {Ape.Vector3}
      */
     getAxisVector: function (j) {
-        return new THREE.Vector3(
+        return new Ape.Vector3(
             this.data[j],
             this.data[j + 4],
             this.data[j + 8]
         );
     },
 
+    /**
+     * Calculates the determinant of this matrix4, even if it's not
+     * a squared matrix we can
+     * @returns {number}
+     */
     getDeterminant: function () {
         var d = this.data;
         return d[8] * d[5] * d[2] +
@@ -140,7 +191,17 @@ Ape.Matrix4 = Class.extend({
             d[4] * d[1] * d[10] +
             d[0] * d[5] * d[10];
     },
-
+    /**
+     * Inverts the matrix `m` and sets the result of the inversion in
+     * this matrix
+     *
+     *      var m = new Ape.Matrix4();
+     *      var mI = new Ape.Matrix4();
+     *      mI.setInverse(m);       // mI now holds the inverse of m
+     *
+     * @param {Ape.Matrix4} m
+     * @chainable
+     */
     setInverse: function (m) {
         var det = m.getDeterminant(),
             d = m.data;
@@ -183,16 +244,28 @@ Ape.Matrix4 = Class.extend({
     },
 
     /**
-     * Returns a new matrix with the inverse of this matrix
-     * @returns {Ape.Matrix4}
+     * Inverts `this` matrix saving the inversion in a
+     * new Ape.Matrix4
+     *
+     *      var m = new Ape.Matrix4();
+     *      var mI = m.inverse();
+     *      // m is not modified in the inversion
+     *
+     * @return Ape.Matrix4
      */
     inverse: function () {
         return new Ape.Matrix4().setInverse(this);
     },
 
     /**
-     * Inverts this matrix
-     * @returns {Ape.Matrix4}
+     * Inverts `this` modifying it so that its components
+     * are equal to the inversion
+     *
+     *      var m = new Ape.Matrix4();
+     *      m.invert();
+     *      // m is modified in the inversion
+     *
+     * @chainable
      */
     invert: function () {
         return this.setInverse(this);
@@ -232,11 +305,11 @@ Ape.Matrix4 = Class.extend({
      * there is no translation required
      *
      * @param v
-     * @returns {THREE.Vector3}
+     * @returns {Ape.Vector3}
      */
     transformDirection: function (v) {
         var d = this.data;
-        return new THREE.Vector3(
+        return new Ape.Vector3(
             v.x * d[0] + v.y * d[1] + v.z * d[2],
             v.x * d[4] + v.y * d[5] + v.z * d[6],
             v.x * d[8] + v.y * d[9] + v.z * d[10]
@@ -248,11 +321,11 @@ Ape.Matrix4 = Class.extend({
      * inverse of this matrix
      *
      * @param v
-     * @returns {THREE.Vector3}
+     * @returns {Ape.Vector3}
      */
     transformInverseDirection: function (v) {
         var d = this.data;
-        return new THREE.Vector3(
+        return new Ape.Vector3(
             v.x * d[0] + v.y * d[4] + v.z * d[8],
             v.x * d[1] + v.y * d[5] + v.z * d[9],
             v.x * d[2] + v.y * d[6] + v.z * d[10]
