@@ -1,0 +1,33 @@
+# Planing
+Understanding why an information system should be built
+
+1. During project initiation, the system’s business value to the organization is identified: how will it lower costs or increase revenues?
+
+Feasibility analysis:
+    - Technical feasibility
+    - Economic feasibility
+    - Organizational feasibility
+
+2. Once the project is approved it enters the project management, the project manager creates a *work plan*, staffs the project, etc. The deliverable item is the *project plan*
+
+# Analysis
+The analysis phase answers the questions of who will use the system, what the sys- tem will do, and where and when it will be used.
+
+1. Anaylsis strategy developed to guide the team's efforts
+2. Requirements gathering
+3. Present a document called the system proposal
+
+# Design
+The design phase decides how the system will operate in terms of the hardware, software, and network infrastructure that will be in place
+
+1. Develop the design strategy (wether the system will be developed by the company's own programmers, outsourcing)
+2. Development of the basic architecture design and the interface design
+3. Database and file specifications
+4. The analyst team develops the program design (define the programs that need to be written and exactly what they need to do)
+
+# Implementation
+The final phase in the SDLC is the implementation phase, during which the system is actually built (or purchased, in the case of a packaged software design and installed)
+
+1. Systems construction (the system is built and tested to ensure that it performs as designed)
+2. The system is installed
+3. The analyst team establishes a support plan for the system

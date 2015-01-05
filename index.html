@@ -3,35 +3,40 @@
 <head>
     <title>APE Presentation</title>
     <link rel="stylesheet" href="lib/impress.css"/>
+    <link rel="stylesheet" href="css/slides.css"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
 </head>
 <body>
 
     <div id="impress">
 
-        <div class="slide step" data-z="-3000">
-            <h1>Archimedes Physics Engine</h1>
-            <p>
-                Sample equation: <img src="http://latex.codecogs.com/svg.latex?1+sin(x)" />
+        <div class="step intro" data-next="px">
+            <p class="title">
+                DISEÑO DE UN MOTOR DE SIMULACIÓN DE LA DINÁMICA ENTRE
+                CUERPOS RÍGIDOS ORIENTADO AL DESARROLLO DE JUEGOS
+                <br/>
+            </p>
+
+            <br/>
+
+            <p class="subtitle">
+                <ul>
+                    <li><a target="_blank" href="panel1.html">Panel 1</a></li>
+                    <li><a target="_blank" href="panel2.html">Panel 2</a></li>
+                    <li><a target="_blank" href="panel3.html">Panel 3</a></li>
+                    <li><a target="_blank" href="./demos/">Ejemplos</a></li>
+                </ul>
+            </p>
+
+            <p class="right subtitle">
+                Presentado por: <b>Mauricio Poppe</b>
+            </p>
+            <p class="right subtitle">
+                Tutor: <b>Ing. Orlando Rivera</b>
             </p>
         </div>
 
-        <div class="demo step" data-x="0" data-y="0">
-            <iframe class="demo-iframe"
-                    data-url="demos/05_particleSpring.html">
-            </iframe>
-        </div>
-
-        <div class="demo step" data-x="1000" data-y="0">
-            <iframe class="demo-iframe"
-                    data-url="demos/08_particleContact.html">
-            </iframe>
-        </div>
-
-        <div class="demo step" data-x="2000">
-            <iframe class="demo-iframe"
-                    data-url="demos/10_particleCable.html">
-            </iframe>
-        </div>
     </div>
 
     <script type="text/javascript" src="lib/impress.js"></script>

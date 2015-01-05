@@ -1,0 +1,62 @@
+{
+  "name": "ape",
+  "version": "0.0.1",
+  "description": "A 3d physics engine written in JavaScript",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maurizzzio/Ape.git"
+  },
+  "keywords": [
+    "physics-engine",
+    "JavaScript",
+    "3d"
+  ],
+  "author": "Mauricio Poppe",
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/maurizzzio/Ape/issues"
+  },
+  "list": [
+    "lib/Extend.js",
+    "demos/js/Core.js",
+    "demos/js/Vector3.js",
+    "demos/js/Constants.js",
+    "demos/js/Quaternion.js",
+    "demos/js/Matrix3.js",
+    "demos/js/Matrix4.js",
+    "demos/js/rigidBody/force/ForceRegistry.js",
+    "demos/js/rigidBody/force/ForceGenerator.js",
+    "demos/js/rigidBody/force/Gravity.js",
+    "demos/js/rigidBody/force/Spring.js",
+    "demos/js/rigidBody/force/Buoyancy.js",
+    "demos/js/rigidBody/force/Aero.js",
+    "demos/js/rigidBody/force/AeroControl.js",
+    "demos/js/rigidBody/RigidBody.js",
+    "demos/js/rigidBody/RigidBodyFactory.js",
+    "demos/js/rigidBody/CollisionShapeFactory.js",
+    "demos/js/rigidBody/primitive/Primitive.js",
+    "demos/js/rigidBody/primitive/Box.js",
+    "demos/js/rigidBody/primitive/Plane.js",
+    "demos/js/rigidBody/primitive/Sphere.js",
+    "demos/js/rigidBody/collision/BoundingSphere.js",
+    "demos/js/rigidBody/collision/CollisionData.js",
+    "demos/js/rigidBody/collision/CollisionDetector.js",
+    "demos/js/rigidBody/collision/Contact.js",
+    "demos/js/rigidBody/collision/ContactResolver.js"
+  ],
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-jsduck": "~1.0.1"
+  }
+}

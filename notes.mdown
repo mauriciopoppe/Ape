@@ -1,0 +1,228 @@
+PHYSICS ENGINES:
+- Comercial packages come at a high price
+- justification: http://stackoverflow.com/questions/1987043/game-engine-development
+- Simulation of real life situations
+- a common piece of code that knows about physics in general but isn’t programmed with the speciﬁcs of each game’s scenario
+
+ADVANTAGES
+- Reuse in multiple project
+- Quality (adding more features to the engine will be easier if the engine is well designed)
+
+DISADVANTAGES
+- Speed (the engine is processor intensive)
+- Scope (the engine will not be suitable for simple simulations like waving a flag)
+
+
+THE ENGINE:
+type of objects: rigid body (objects are treated as a whole)
+contact identification: iterative (handle contacts one by one)
+contact resolution: impulse based (forces acting over a small period of time)
+
+Archimides physics engine
+Ape
+
+********************************
+ToDo:
+- Understand how angular velocity can be represented geometrically
+- How does an inertia tensor work?
+The torque is the rotational equivalent of force
+The *moment of inercia* is the rotational equivalent of the mass (it measures how difficult it is to change that object's rotation speed)
+For any axis on which the object is rotated, it may have a different moement of inertia:
+        // for each particle i
+        I_{axis} = sum(mass of i * distance from i to the axis of rotation)
+
+This means that there's not a single value for the moment of inercia but infinite of them (considering the axis of rotation)
+An *inertia tensor* is a matrix representing all the moments of inertia of an object through the *center of mass*:
+
+        Ix  #  # 
+         # Iy  #
+         #  # Iz
+
+Ix, Iy, Iz = Moment of inertia about its X/Y/Z axis through its center of mass
+'#' = Products of inertia
+
+It's difficult to visualize the meaning in either geometrical or mathematical terms, it represents the tendency of an object to rotate in a direction different from the direction in which the torque is being applied.
+
+Euler gave the rotational version of Newton's second law of motion in terms of the *inertia tensor*:
+    
+        torque = inertia_tensor * angular_acceleration
+        angular_acceleration = inertia_tensor_inverse * torque
+
+
+# CHAPTER 14 - Collision resolution
+## Momentum
+A ball of bowling is harder to stop than a ping pong ball moving at the same speed, the fact is that the bowling ball has more momentum.
+
+Newton's second law used another quantity other than acceleration in his original statement of the second law, Newton called this quantity *momentum* which represents a *quantity of motion*.
+
+Momentum is the ability of a body to mantain its state of motion and it's defined as:
+
+        // momentum definition
+        momentum = mass * velocity
+
+We can observe that an object has high momentum if its mass is high (like a truck) or/and its velocity is high (like a bullet).
+
+Using Newton's second equation we can define the impulse:
+
+        force = mass * acceleration
+        acceleration = (velocity_final - velocity_initial) / time
+        // replacing the second equation in the first
+        force = mass * (velocity_final - velocity_initial) / time
+        force * time = mass * velocity_final - mass * velocity_initial
+        impulse = force * time = momentum_final - momentum_initial
+
+This means that **a force applied over some time causes a change in the momentum of the object which is called impulse**
+
+## Momentum conservation
+The force applied to an object is a sum of the internal forces applied on the object and the external forces:
+
+        force = force_interior + force_exterior
+
+From Newton's third law we know that for every force there's an equal and opposite force (if this isn't true then the body would be deforming which is not the case), so each force is cancelled:
+
+        force_interior = 0
+
+This tell us that external forces are required to change the momentum of the object, a clear example is this: a person sitting in the front seat of the car can't move it by pushing the dashboard, so:
+
+        force = force_exterior = momentum_final - momentum_initial
+        // if the object is not moving (no change in momentum) then
+        force = 0
+        // so:
+        momentum_final = momentum_initial
+
+## Impulses
+In an impact two objects will bounce apart at a velocity that's a fixed multiple of their closing velocity: `v_s = -c * v_s` where as we know `c` is the mixed coeficient of restitution of both objects, to simulate this we instantly change the velocity of each object in the collision, that change is called *impulse*.
+
+## Impusive torque
+The equation above only considers linear motion, if an object that's spinning bounces the ground, the object will not only move back upward but its angular velocity will change too.
+
+        // linear acceleration component
+        force = mass * linear_acceleration
+        linear_acceleration = 1 / mass * force = inverse_of_mass * force
+        // the angular equivalent of force is the torque
+        torque = vector_of_application (cross) force
+        // Newton also found an equation based on the inertia tensor of the object
+        torque = inertia_tensor * angular_acceleration
+        // multiplying the equation above with I^-1, and assuming that I is the inertia tensor
+        torque = I * angular_acceleration
+        I^-1 * torque = I^-1 * I * angular_acceleration
+        I^-1 * torque = angular_acceleration        
+        angular_acceleration = inertia_tensor_inverse * torque
+
+An instantaneus angular change in velocity is called an *impulsive torque*, in the same way as we have:
+
+        torque = inertia_tensor * angular_acceleration
+
+The impulsive torque is:
+
+        impulsive_torque = inertia_tensor * angular_velocity
+        // so the change of angular velocity is
+        delta_angular_velocity = inertia_tensor_inverse * impulsive_torque
+        // the remaining part is to calculate the impulsive torque
+        // we can use the same equation to calculate the torque
+        // to calculate the impulsive torque
+        impulsive_torque = vector_of_application (cross) g
+
+## Velocity change by impulse
+
+### Linear component
+
+The linear change in velocity for a unit impulse will be in the direction of the impulse with a magnitude given by the inverse mass:
+
+        // if there's one object
+        delta_linear_velocity = inverse_mass
+        // if there're two objects (a and b)
+        delta_linear_velocity = inverse_mass_a + inverse_mass_b
+
+### Angular component
+
+The angular component involves 3 equations, for convenience let's use `relativeContactPosition = q - p` where `q` is the contact position relative to the origin of the object and `p` the origin of the object
+    
+        // impulsive torque generated from a unit of impulse
+        torquePerUnitImpulse = relativeContactPosition (cross) contactNormal;
+        // change in the rotation of the object in world coordinates for a unit of impulse
+        rotationPerUnitImpulse = inverseInertiaTensor.transform(torquePerUnitImpulse);
+        // change in the velocity of a point (relativeContactPosition) given the rotation of the object
+        velocityPerUnitImpulse = rotationPerUnitImpulse (cross) relativeContactPosition;
+
+After these equations we have a vector which is the velocity caused by rotation per unit impulse, this vector is in world coordinates but we need only its component through the contact normal, so:
+
+        // transform the velocity from world coordinates to contact coordinates
+        velocityPerUnitImpulseContact = contactToWorld.transformTranspose(velocityPerUnitImpulse)
+        // since we need only its component through the normal:
+        deltaVelocity = velocityPerUnitImpulseContact.x
+        
+        // alternative way:
+        deltaVelocity = velocityPerUnitImpulse (dot) contactNormal
+
+## Impulse change by velocity
+
+If we have a single value for the velocity change by impulse `d`, then the impulse needed to achive a change in the velocity is:
+
+        // impulse
+        // desiredDeltaVelocity: is the desired change in velocity
+        // deltaVelocity: is the velocity change by a unit of impulse (calculated before)
+        // g is the impulse needed
+        g = desiredDeltaVelocity / deltaVelocity
+
+### Desired velocity change
+
+We can calculate the closing velocity by considering the velocity that a point has given the rotation of an object and its linear velocity:
+
+        // the angular velocity is given by 
+        angularVelocity = bodyRotation (cross) relativeContactPosition
+        linearVelocity = bodyVelocity
+        // the total closing velocity is:
+        velocity = angularVelocity + linearVelocity
+
+This velocity is in world coordinates, we need a value in contact coordinates because we need to understand how much of this velocity is in the direction of the contact normal
+
+        contactVelocity = contactToWorld.transform(velocity)
+
+The velocity change is the same as the one used in particles:
+
+        separatingVelocity' = -c * separatingVelocity
+        deltaVelocity = -separatingVelocity' - c * separatingVelocity
+        deltaVelocity = -separatingVelocity * (1 + c)
+
+The final impulse is:
+
+        impulseContact.x = desiredDeltaVelocity / deltaVelocity
+        impulseContact.y = 0
+        impulseContact.z = 0
+        
+        // transforming this to world coordinates
+        impulse = contactToWorld.transform(impulseContact)
+
+## Applying the impulse
+
+### Applying linear impulse
+Just as we have: `a = 1/m * f` we can do the same for velocity: `v = 1/m * g` where `g` is the impulse to be applied
+
+        velocityChange = impulse * bodyInverseMass
+
+### Applying angular impulse
+The rotation change is given by:
+    
+        // impulsive torque generated from a unit of impulse
+        impulsiveTorque = impulse (cross) relativeContactPosition;
+        // change in the rotation of the object in world coordinates for a unit of impulse
+        rotationChange = inverseInertiaTensor.transform(impulsiveTorque);        
+
+### Applying the impulse to two objects
+
+If there're two objects involved then we have to apply the impulse in the opposite direction for the second object:
+
+        // Calculate velocity and rotation change for object one
+        // ...
+        impulse *= -1;
+        // Calculate velocity and rotation change for object two
+        // ...
+
+Finally the velocity and rotation changes can be applied to the linear velocity and angular velocity of the rigid body:
+
+        body.velocity += velocityChange
+        body.rotation += rotationChange
+
+        // definition of angularInertia:
+        angularInertia = velocity caused by rotation per unit of impulse

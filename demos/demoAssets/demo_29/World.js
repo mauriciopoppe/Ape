@@ -166,10 +166,10 @@ Ape.World = Ape.RigidBodyWorld.extend({
             }
         }
 
-        // white ball :D
+        // ~white ball :D
         var geometry = new THREE.SphereGeometry(radius, 32, 32);
         var material = new THREE.MeshBasicMaterial({
-            color: 0xffffff
+            color: 0x555555
         });
 
         // rigid body

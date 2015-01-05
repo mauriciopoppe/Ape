@@ -1,0 +1,46 @@
+thesis structure
+
+UML process for OOP
+- Define de use case models
+- Draw activity diagrams based on the use case models
+- Draw sequence diagrams for each use case
+- Develop class diagrams
+
+## Chapter 3 - Project management
+Define the problem (looking for: work done slowly, incompletely, not done at all)
+Define the objectives
+Define the requirements to fulfill the objectives
+Define the constraints
+Determining feasibility
+    - Technical feasibility (find out if it's possible to develop the system given the current techincal resources)
+        - Add on to present system
+        - Technology available to meet users’ needs
+    - Economic feasibility (time and cost)
+        - Systems analysts’ time
+        - Cost of systems study
+        - Cost of employees’ time for study
+        - Estimated cost of hardware
+        - Cost of packaged software or software development
+    - Operational feasibility
+        - Whether the system will operate when installed
+        - Whether the system will be used 
+Inventoring requirements for computer hardware (kendall 65)
+Evaluating computer hardware (time to process an operation, volume capacity, acquisition, evaluation of vendor support) (kendall 66)
+Evaluate needed computer software
+Estimation of trends
+Identifying benefits and costs
+    - Tangible and intangible benefits
+    - Tangible and intangible costs
+Comparing costs and benefits (kendall 74)
+
+## Chapter 6 - Agile modeling and prototyping
+type of prototyping: selected features prototype (kendall 157)
+guidelines: work in modules, build it rapidly, modify it in iterations, stress the UI
+RAD: object-oriented approach to systems development that includes a method of development as well as software tools
+phases of rad:
+    - Requirement planning phase
+    - rad design workshop
+    - implementation phase
+
+## Chapter 10 - Object oriented analysis using UML
+Two types of diagrams: structural diagrams and behavioral diagrams

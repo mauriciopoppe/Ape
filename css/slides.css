@@ -2,7 +2,7 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-/* line 17, ../../../../../.rvm/gems/ruby-1.9.3-p385/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 17, ../../../../../.rvm/gems/ruby-1.9.3-p545/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -24,45 +24,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../.rvm/gems/ruby-1.9.3-p385/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../.rvm/gems/ruby-1.9.3-p545/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../.rvm/gems/ruby-1.9.3-p385/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../.rvm/gems/ruby-1.9.3-p545/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../.rvm/gems/ruby-1.9.3-p385/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../.rvm/gems/ruby-1.9.3-p545/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../.rvm/gems/ruby-1.9.3-p385/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../.rvm/gems/ruby-1.9.3-p545/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../.rvm/gems/ruby-1.9.3-p385/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../.rvm/gems/ruby-1.9.3-p545/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../.rvm/gems/ruby-1.9.3-p385/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../.rvm/gems/ruby-1.9.3-p545/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../.rvm/gems/ruby-1.9.3-p385/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../.rvm/gems/ruby-1.9.3-p545/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../.rvm/gems/ruby-1.9.3-p385/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../.rvm/gems/ruby-1.9.3-p545/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
@@ -3458,19 +3458,19 @@ a:focus {
 
 /********* SLIDES ********/
 /* background */
-/* line 203, ../sass/slides.scss */
+/* line 204, ../sass/slides.scss */
 body {
   background: url("../images/bg6.png") repeat;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  /* line 209, ../sass/slides.scss */
+  /* line 210, ../sass/slides.scss */
   body {
     background: url("../images/bg6.png") repeat top left;
     background-size: 200px 200px;
   }
 }
-/* line 215, ../sass/slides.scss */
+/* line 216, ../sass/slides.scss */
 img {
   padding: 10px;
   -webkit-box-shadow: #333333 2px 2px 10px;
@@ -3484,83 +3484,83 @@ img {
 }
 
 /* slides */
-/* line 222, ../sass/slides.scss */
+/* line 223, ../sass/slides.scss */
 .demo-iframe {
   padding: 0;
   width: 100%;
   height: 100%;
 }
 
-/* line 227, ../sass/slides.scss */
+/* line 228, ../sass/slides.scss */
 .demo-inline {
   overflow: hidden;
   width: 780px;
   height: 80%;
 }
 
-/* line 233, ../sass/slides.scss */
+/* line 234, ../sass/slides.scss */
 .left {
   text-align: left;
 }
 
-/* line 237, ../sass/slides.scss */
+/* line 238, ../sass/slides.scss */
 .right {
   text-align: right;
 }
 
-/* line 241, ../sass/slides.scss */
+/* line 242, ../sass/slides.scss */
 .center {
   text-align: center;
   margin: 0 auto;
 }
 
-/* line 246, ../sass/slides.scss */
+/* line 247, ../sass/slides.scss */
 .title {
   text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
   font-size: 40px;
   color: white;
 }
 
-/* line 252, ../sass/slides.scss */
+/* line 253, ../sass/slides.scss */
 .subtitle {
   font-size: 30px;
   color: white;
 }
 
-/* line 257, ../sass/slides.scss */
+/* line 258, ../sass/slides.scss */
 .highlight {
   text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25);
 }
 
-/* line 261, ../sass/slides.scss */
+/* line 262, ../sass/slides.scss */
 .active {
   z-index: 1;
 }
 
-/* line 265, ../sass/slides.scss */
+/* line 266, ../sass/slides.scss */
 img.center {
   display: block;
   margin: 20px auto;
 }
 
-/* line 270, ../sass/slides.scss */
+/* line 271, ../sass/slides.scss */
 #nav {
   z-index: 2;
   position: absolute;
   top: 5px;
   left: 5px;
 }
-/* line 276, ../sass/slides.scss */
+/* line 277, ../sass/slides.scss */
 #nav button {
-  color: #e27619;
+  color: #50879b;
 }
 
 /* type of slides */
-/* line 282, ../sass/slides.scss */
+/* line 283, ../sass/slides.scss */
 .step {
   display: none;
 }
-/* line 284, ../sass/slides.scss */
+/* line 285, ../sass/slides.scss */
 .step img {
   -webkit-animation: fadeOut 0.5s 0s ease both;
   -moz-animation: fadeOut 0.5s 0s ease both;
@@ -3568,21 +3568,21 @@ img.center {
   -o-animation: fadeOut 0.5s 0s ease both;
   animation: fadeOut 0.5s 0s ease both;
 }
-/* line 287, ../sass/slides.scss */
+/* line 288, ../sass/slides.scss */
 .step img.inline {
   margin: 10px;
   display: inline-block;
 }
-/* line 291, ../sass/slides.scss */
+/* line 292, ../sass/slides.scss */
 .step.active {
   display: block;
 }
-/* line 294, ../sass/slides.scss */
+/* line 295, ../sass/slides.scss */
 .step.sibling {
   display: block;
 }
 
-/* line 299, ../sass/slides.scss */
+/* line 300, ../sass/slides.scss */
 .step.active img {
   -webkit-animation: fadeInUp 0.5s 0s ease both;
   -moz-animation: fadeInUp 0.5s 0s ease both;
@@ -3591,51 +3591,51 @@ img.center {
   animation: fadeInUp 0.5s 0s ease both;
 }
 
-/* line 304, ../sass/slides.scss */
+/* line 305, ../sass/slides.scss */
 .demo {
   padding: 0;
   height: 750px;
   width: 1467px;
 }
 
-/* line 311, ../sass/slides.scss */
+/* line 312, ../sass/slides.scss */
 .slide {
   -webkit-box-shadow: #333333 2px 2px 10px;
   -moz-box-shadow: #333333 2px 2px 10px;
   box-shadow: #333333 2px 2px 10px;
-  border-top: 10px solid #e27619;
-  border-bottom: 10px solid #e27619;
+  border-top: 10px solid #50879b;
+  border-bottom: 10px solid #50879b;
 }
-/* line 315, ../sass/slides.scss */
+/* line 316, ../sass/slides.scss */
 .slide h1 {
   font-size: 50px;
   line-height: 50px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #e27619;
+  border-bottom: 2px solid #50879b;
   margin-bottom: 10px;
 }
-/* line 322, ../sass/slides.scss */
+/* line 323, ../sass/slides.scss */
 .slide p {
   padding: 10px 0;
 }
-/* line 325, ../sass/slides.scss */
+/* line 326, ../sass/slides.scss */
 .slide ul {
   list-style: disc;
   padding-left: 30px;
   margin-left: 30px;
 }
-/* line 330, ../sass/slides.scss */
+/* line 331, ../sass/slides.scss */
 .slide ol {
   list-style: decimal;
   padding-left: 30px;
   margin-left: 30px;
 }
-/* line 335, ../sass/slides.scss */
+/* line 336, ../sass/slides.scss */
 .slide li {
   padding: 10px 0;
 }
 
-/* line 340, ../sass/slides.scss */
+/* line 341, ../sass/slides.scss */
 .intro {
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
@@ -3645,10 +3645,10 @@ img.center {
   -webkit-box-shadow: #333333 2px 2px 10px;
   -moz-box-shadow: #333333 2px 2px 10px;
   box-shadow: #333333 2px 2px 10px;
-  background-color: #e27619;
+  background-color: #50879b;
 }
 
-/* line 346, ../sass/slides.scss */
+/* line 347, ../sass/slides.scss */
 .chapter {
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
@@ -3658,7 +3658,7 @@ img.center {
   -webkit-box-shadow: #333333 2px 2px 10px;
   -moz-box-shadow: #333333 2px 2px 10px;
   box-shadow: #333333 2px 2px 10px;
-  background-color: #e27619;
+  background-color: #50879b;
   width: 900px;
   height: 700px;
   line-height: 620px;
@@ -3666,7 +3666,7 @@ img.center {
   margin: 20px auto;
   text-align: center;
 }
-/* line 356, ../sass/slides.scss */
+/* line 357, ../sass/slides.scss */
 .chapter p {
   color: white;
   font-size: 100px;
@@ -3676,7 +3676,7 @@ img.center {
 }
 
 /************ panel 2 ************/
-/* line 367, ../sass/slides.scss */
+/* line 368, ../sass/slides.scss */
 .latex-container img {
   display: block;
   margin: 0 auto;
@@ -3685,12 +3685,12 @@ img.center {
   box-shadow: none;
 }
 
-/* line 374, ../sass/slides.scss */
+/* line 375, ../sass/slides.scss */
 .impress-enabled {
   /* inline */
   /* block */
 }
-/* line 376, ../sass/slides.scss */
+/* line 377, ../sass/slides.scss */
 .impress-enabled .MathJax {
   background: #eeeeee;
   padding: 2px 5px;
@@ -3700,21 +3700,21 @@ img.center {
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 383, ../sass/slides.scss */
+/* line 384, ../sass/slides.scss */
 .impress-enabled .MathJax_Display {
   margin: 5px !important;
 }
-/* line 385, ../sass/slides.scss */
+/* line 386, ../sass/slides.scss */
 .impress-enabled .MathJax_Display .MathJax {
   background: transparent;
 }
 
-/* line 391, ../sass/slides.scss */
+/* line 392, ../sass/slides.scss */
 .equation {
-  border: 2px dotted #e27619;
+  border: 2px dotted #50879b;
 }
 
-/* line 395, ../sass/slides.scss */
+/* line 396, ../sass/slides.scss */
 #impress pre code {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -3727,17 +3727,32 @@ img.center {
   font-family: "Menlo", "Courier New", "Courier", monospace;
 }
 
-/* line 403, ../sass/slides.scss */
+/* line 404, ../sass/slides.scss */
 .two-column {
   width: 100%;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
 }
-/* line 408, ../sass/slides.scss */
+/* line 409, ../sass/slides.scss */
 .two-column > div {
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
   -ms-box-flex: 1;
   box-flex: 1;
+}
+
+/************ panel 3 ************/
+/* line 416, ../sass/slides.scss */
+.box * {
+  padding: 20px;
+  margin: 20px;
+}
+
+/* line 422, ../sass/slides.scss */
+.black-box {
+  width: 300px;
+  color: white;
+  text-align: center;
+  background: black;
 }

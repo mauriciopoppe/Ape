@@ -22,7 +22,12 @@
             'demoAssets/demo_29/World.js'
         ]);
         Loader(function () {
-            T3.Application.launch(Ape.World);
+            T3.Application.launch(Ape.World, {
+                coordinates: {
+                    axes: false,
+                    ground: true
+                }
+            });
         });
     </script>
 </body>

@@ -172,7 +172,8 @@ a:focus {
 }
 
 /********* SLIDES ********/
-$orange: rgb(226, 118, 25);
+//$mainColor: rgb(226, 118, 25);
+$mainColor: rgb(80, 135, 155);
 
 @mixin shadow() {
   text-shadow: 0 1px 0 #ccc,
@@ -274,7 +275,7 @@ img.center {
   left: 5px;
 
   button {
-    color: $orange;
+    color: $mainColor;
   }
 }
 
@@ -310,13 +311,13 @@ img.center {
 
 .slide {
   @include box-shadow(#333 2px 2px 10px);
-  border-top: 10px solid $orange;
-  border-bottom: 10px solid $orange;
+  border-top: 10px solid $mainColor;
+  border-bottom: 10px solid $mainColor;
   h1 {
     font-size: 50px;
     line-height: 50px;
     padding-bottom: 10px;
-    border-bottom: 2px solid $orange;
+    border-bottom: 2px solid $mainColor;
     margin-bottom: 10px;
   }
   p {
@@ -340,13 +341,13 @@ img.center {
 .intro {
   @include border-radius(25px);
   @include box-shadow(#333 2px 2px 10px);
-  background-color: $orange;
+  background-color: $mainColor;
 }
 
 .chapter {
   @include border-radius(25px);
   @include box-shadow(#333 2px 2px 10px);
-  background-color: $orange;
+  background-color: $mainColor;
   width: 900px;
   height: 700px;
   line-height: 620px;
@@ -389,7 +390,7 @@ img.center {
 }
 
 .equation {
-  border: 2px dotted $orange;
+  border: 2px dotted $mainColor;
 }
 
 #impress pre code {
@@ -408,4 +409,19 @@ img.center {
   & > div {
     @include box-flex(1);
   }
+}
+
+/************ panel 3 ************/
+.box {
+  * {
+    padding: 20px;
+    margin: 20px;
+  }
+}
+
+.black-box {
+  width: 300px;
+  color: white;
+  text-align: center;
+  background: black;
 }
