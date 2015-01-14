@@ -51,3 +51,7 @@ dist: source code concatenated and minified
 images: images used in the presentations
 lib: libraries used during the development of the framework
 ```
+
+## TODO
+Make sure that Three.js is no longer a dependency
+Fix some glitches when the bodies are not sleeping
