@@ -53,6 +53,12 @@ describe('Vector3', function () {
     expect(v.x).equal(3);
     expect(v.y).equal(3);
     expect(v.z).equal(3);
+
+    v = new Vector3();
+    v = v.addScaledVector(new Vector3(1, 2, 3), 2);
+    expect(v.x).equal(2);
+    expect(v.y).equal(4);
+    expect(v.z).equal(6);
   });
 
   it('should not allow division by zero', function () {

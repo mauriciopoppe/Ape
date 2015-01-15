@@ -18,7 +18,7 @@ bundler(pkg.folders);
 // tasks:
 // - build
 // - minify
-require('./gulp/build')();
+//require('./gulp/build')();
 
 // tasks:
 // - server
@@ -35,7 +35,5 @@ require('./gulp/test')(pkg.folders);
 require('./gulp/release')();
 
 // main tasks
-gulp.task('watch', ['watch:test']);
-gulp.task('default', ['bundle', 'watch'], function () {
-    gulp.start('server');
-});
+gulp.task('watch', ['watch:test', 'bundle']);
+gulp.task('default', ['bundle', 'watch', 'server']);
