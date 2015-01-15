@@ -24,39 +24,30 @@
   "bugs": {
     "url": "https://github.com/maurizzzio/Ape/issues"
   },
-  "list": [
-    "lib/Extend.js",
-    "demos/js/Core.js",
-    "demos/js/Vector3.js",
-    "demos/js/Constants.js",
-    "demos/js/Quaternion.js",
-    "demos/js/Matrix3.js",
-    "demos/js/Matrix4.js",
-    "demos/js/rigidBody/force/ForceRegistry.js",
-    "demos/js/rigidBody/force/ForceGenerator.js",
-    "demos/js/rigidBody/force/Gravity.js",
-    "demos/js/rigidBody/force/Spring.js",
-    "demos/js/rigidBody/force/Buoyancy.js",
-    "demos/js/rigidBody/force/Aero.js",
-    "demos/js/rigidBody/force/AeroControl.js",
-    "demos/js/rigidBody/RigidBody.js",
-    "demos/js/rigidBody/RigidBodyFactory.js",
-    "demos/js/rigidBody/CollisionShapeFactory.js",
-    "demos/js/rigidBody/primitive/Primitive.js",
-    "demos/js/rigidBody/primitive/Box.js",
-    "demos/js/rigidBody/primitive/Plane.js",
-    "demos/js/rigidBody/primitive/Sphere.js",
-    "demos/js/rigidBody/collision/BoundingSphere.js",
-    "demos/js/rigidBody/collision/CollisionData.js",
-    "demos/js/rigidBody/collision/CollisionDetector.js",
-    "demos/js/rigidBody/collision/Contact.js",
-    "demos/js/rigidBody/collision/ContactResolver.js"
-  ],
+  "folders": {
+    "src": "src/",
+    "test": "test/",
+    "build": "build/"
+  },
   "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-jsduck": "~1.0.1"
+    "gulp": "~3.8.6",
+    "gulp-concat": "~2.3.4",
+    "gulp-git": "~0.4.3",
+    "gulp-bump": "~0.1.10",
+    "gulp-filter": "~0.5.0",
+    "gulp-if": "~1.2.5",
+    "gulp-tag-version": "~1.0.2",
+    "browser-sync": "~1.3.0",
+    "minifyify": "~3.0.12",
+    "lodash": "~2.4.1",
+    "gulp-mocha": "~2.0.0",
+    "gulp-uglify": "~1.0.2",
+    "gulp-rename": "~1.2.0",
+    "mocha": "~2.1.0",
+    "chai": "~1.10.0",
+    "browserify": "~8.1.0",
+    "vinyl-source-stream": "~1.0.0",
+    "watchify": "~2.2.1",
+    "gulp-watch": "~3.0.0"
   }
 }

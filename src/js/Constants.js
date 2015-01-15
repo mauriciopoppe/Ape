@@ -14,8 +14,6 @@ Ape = Ape || {};
  *
  * <hr>
  *
- *
- *
  * @type {Ape.Vector3}
  */
 Ape.GRAVITY = new Ape.Vector3(0, -15, 0);

@@ -1,60 +1,68 @@
 /**
- * Ape.Quaternion represents a 4 component vector a.k.a
+ * Quaternion represents a 4 component vector a.k.a
  * Quaternion useful to determine the orientation of a rigid body
  *
  * <hr>
  *
- * Ape.Quaternion representa un vector de 4 componentes, tambien
+ * Quaternion representa un vector de 4 componentes, tambien
  * conocido como quaternion que es util para determinar la
  * orientacion de un cuerpo rígido
  *
- * @class Ape.Quaternion
+ * @class Quaternion
  */
-Ape.Quaternion = Class.extend({
+
+var constants = require('./Constants');
+var assert = require('assert');
+
+/**
+ * Quaternion constructor
+ * @param {number} w
+ * @param {number} x
+ * @param {number} y
+ * @param {number} z
+ */
+function Quaternion(w, x, y, z) {
+
     /**
-     * Ape.Quaternion constructor
-     * @param {number} w
-     * @param {number} x
-     * @param {number} y
-     * @param {number} z
+     * Real component of the quaternion
+     * @property {number} [w=1]
      */
-    init: function (w, x, y, z) {
-        /**
-         * Real component of the quaternion
-         * @property {number} [w=1]
-         */
-        this.w = w !== undefined ? w : 1;
+    this.w = w !== undefined ? w : 1;
 
-        /**
-         * First complex component of the quaternion
-         * @property {number} [x=0]
-         */
-        this.x = x !== undefined ? x : 0;
-
-        /**
-         * Second complex component of the quaternion
-         * @property {number} [y=0]
-         */
-        this.y = y !== undefined ? y : 0;
-
-        /**
-         * Third complex component of the quaternion
-         * @property {number} [z=0]
-         */
-        this.z = z !== undefined ? z : 0;
-    },
     /**
-     * Updates the components of an Ape.Quaternion
+     * First complex component of the quaternion
+     * @property {number} [x=0]
+     */
+    this.x = x !== undefined ? x : 0;
+
+    /**
+     * Second complex component of the quaternion
+     * @property {number} [y=0]
+     */
+    this.y = y !== undefined ? y : 0;
+
+    /**
+     * Third complex component of the quaternion
+     * @property {number} [z=0]
+     */
+    this.z = z !== undefined ? z : 0;
+}
+
+Quaternion.prototype = {
+    constructor: Quaternion,
+
+    /**
+     * Updates the components of an Quaternion
      *
-     *      var q = new Ape.Quaternion();
+     *      var q = new Quaternion();
      *      q.set(5, 1, 2, 3);
      *      // its components are [5, 1, 2, 3]
      *      // but the vector is immediately normalized
      *      // so
-     *      Ape.assert(q.w === 0.8);
-     *      Ape.assert(q.x === 0.16);
-     *      Ape.assert(q.y === 0.3);
-     *      Ape.assert(q.z === 0.48);
+     *      assert(q.w === 0.8);
+     *      assert(q.x === 0.16);
+     *      assert(q.y === 0.3);
+     *      assert(q.z === 0.48);
      *
      * @param {number} x
      * @param {number} y
@@ -77,38 +85,38 @@ Ape.Quaternion = Class.extend({
         return [this.w, this.x, this.y, this.z];
     },
     /**
-     * Creates a new instance of Ape.Quaternion with the components of `this`
+     * Creates a new instance of Quaternion with the components of `this`
      *
-     *      var q = new Ape.Quaternion(5, 1, 2, 3);
+     *      var q = new Quaternion(5, 1, 2, 3);
      *      var qClone = q.clone();         // qClone has the same components
      *      // the following assertions are always true
-     *      Ape.assert(q.x === qClone.x);
-     *      Ape.assert(q.y === qClone.y);
-     *      Ape.assert(q.z === qClone.z);
-     *      Ape.assert(q !== qClone);
+     *      assert(q.x === qClone.x);
+     *      assert(q.y === qClone.y);
+     *      assert(q.z === qClone.z);
+     *      assert(q !== qClone);
      *
-     * @returns {Ape.Quaternion}
+     * @returns {Quaternion}
      */
     clone: function () {
-        return new Ape.Quaternion(this.w, this.x, this.y, this.z);
+        return new Quaternion(this.w, this.x, this.y, this.z);
     },
     /**
      * Normalizes this quaternion by dividing each component
      * of the quaternion by the length of `this`
      *
-     *      var q = new Ape.Quaternion(5, 1, 2, 3);
+     *      var q = new Quaternion(5, 1, 2, 3);
      *      q.normalize();
-     *      Ape.assert(q.w === 0.8);
-     *      Ape.assert(q.x === 0.16);
-     *      Ape.assert(q.y === 0.3);
-     *      Ape.assert(q.z === 0.48);
+     *      assert(q.w === 0.8);
+     *      assert(q.x === 0.16);
+     *      assert(q.y === 0.3);
+     *      assert(q.z === 0.48);
      *
      * @chainable
      */
     normalize: function () {
         var length = this.w * this.w + this.x * this.x +
-                     this.y * this.y + this.z * this.z;
-        if (length < Ape.EPS) {
+            this.y * this.y + this.z * this.z;
+        if (length < constants.EPS) {
             this.w = 1;
             return this;
         }
@@ -120,9 +128,9 @@ Ape.Quaternion = Class.extend({
         return this;
     },
     /**
-     * Multiplies two Ape.Quaternions (see [an explanation about
+     * Multiplies two Quaternions (see [an explanation about
      * the multiplication of quaternions](http://3dgep.com/?p=1815))
-     * @param {Ape.Quaternion} q2
+     * @param {Quaternion} q2
      * @chainable
      */
     multiply: function (q2) {
@@ -132,7 +140,7 @@ Ape.Quaternion = Class.extend({
         this.x = q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y;
         this.y = q1.w * q2.y + q1.y * q2.w + q1.z * q2.x - q1.x * q2.z;
         this.z = q1.w * q2.z + q1.z * q2.w + q1.x * q2.y - q1.y * q2.x;
-        
+
         return this;
     },
 
@@ -140,16 +148,16 @@ Ape.Quaternion = Class.extend({
      * Adds the given vector scaled with `scale` to this
      * This is used to update the orientation quaternion by a rotation
      * and time.
-     * @param {Ape.Vector3} v
+     * @param {Vector3} v
      * @param {number} scale
      */
     addScaledVector: function (v, scale) {
         scale = typeof scale === 'number' ? scale : 1;
-        var q = new Ape.Quaternion(
+        var q = new Quaternion(
             0,
-            v.x * scale,
-            v.y * scale,
-            v.z * scale
+                v.x * scale,
+                v.y * scale,
+                v.z * scale
         );
         q.multiply(this);
         this.w += q.w * 0.5;
@@ -159,12 +167,14 @@ Ape.Quaternion = Class.extend({
     },
 
     /**
-     * Rotates a quaternion by an Ape.Vector3
-     * @param {Ape.Vector3} v
+     * Rotates a quaternion by an Vector3
+     * @param {Vector3} v
      * @chainable
      */
     rotateByVector: function (v) {
-        var q = new Ape.Quaternion(0, v.x, v.y, v.z);
+        var q = new Quaternion(0, v.x, v.y, v.z);
         return this.multiply(q);
     }
-});
+};
+
+module.exports = Quaternion;

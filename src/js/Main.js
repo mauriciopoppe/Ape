@@ -8,8 +8,6 @@
  *
  * <hr>
  *
- * Un objeto global sobre el cual se declaran todas las
- * clases del motor de simulación física
  */
 var Ape = Ape || {};
 
@@ -37,9 +35,9 @@ Ape.primitive = {};
  * this property.
  * If this property is set to `false` then no THREE meshes will
  * be created.
- * @property {boolean} [debug=true]
+ * @property {boolean} [debug=false]
  */
-Ape.debug = true;
+Ape.debug = false;
 
 /**
  * Asserts the value of an expression and halts the application if it's
@@ -90,3 +88,5 @@ Ape.extend = function (obj, config) {
         }
     }
 };
+
+module.exports = Ape;
