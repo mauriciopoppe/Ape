@@ -4,7 +4,7 @@
   "description": "A 3d physics engine written in JavaScript",
   "main": "Gruntfile.js",
   "scripts": {
-    "test": "test"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
