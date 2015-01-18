@@ -1,7 +1,6 @@
 /**
  * Created by mauricio on 1/14/15.
  */
-var Ape = {};
 var expect = require('chai').expect,
   Vector3 = require('../../src/js/Vector3');
 
