@@ -118,6 +118,15 @@ describe('Matrix3', function () {
     expect(function () {
       gen_special().inverse();
     }).throw('determinant is zero');
+
+    function detNonZero() {
+      return new Matrix3(
+        4, 5, 6,
+        6, 5, 4,
+        4, 6, 5
+      );
+    }
+
     expect(
       new Matrix3(
         4, 5, 6,
@@ -130,6 +139,14 @@ describe('Matrix3', function () {
           8/15, -2/15, -1/3
         ))
     ).be.true();
+
+    expect(
+      detNonZero()
+        .inverse()
+        .multiply(detNonZero())
+        .equals(new Matrix3())
+    ).be.true();
+
   });
 
   it('should have a transpose method', function () {

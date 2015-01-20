@@ -1,6 +1,7 @@
 var assert = require('assert');
 var Vector3 = require('./Vector3');
 var _ = require('lodash');
+var Constants = require('./Constants');
 /**
  * Matrix3 represents a 9 component structure
  * useful to represent internal characteristics of a rigid
@@ -44,7 +45,8 @@ function Matrix3() {
   this.set.apply(this, Array.prototype.slice.call(arguments));
 }
 
-_.merge(Matrix3.prototype, {
+Matrix3.prototype = {
+  constructor: Matrix3,
   /**
    * Updates the components of this Matrix3
    *
@@ -85,6 +87,7 @@ _.merge(Matrix3.prototype, {
     // fix undefined values
     for (i = -1; ++i < 9;) {
       d[i] = d[i] !== undefined ? d[i] : special[i];
+      assert(!isNaN(d[i]));
     }
 
     return this;
@@ -100,7 +103,7 @@ _.merge(Matrix3.prototype, {
       ok = true,
       i;
     for (i = -1; ok && ++i < 9;) {
-      ok = ok && (me.data[i] === m.data[i]);
+      ok = ok && Math.abs(me.data[i] - m.data[i]) < Constants.EPS;
     }
     return ok;
   },
@@ -445,7 +448,7 @@ _.merge(Matrix3.prototype, {
     d[7] = v.x;
     return this;
   }
-});
+};
 
 // inertia tensor primitives
 _.merge(Matrix3.prototype, require('./inertiaTensors/Primitive'));

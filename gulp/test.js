@@ -10,7 +10,7 @@ module.exports = function (options) {
   assert(options.test);
 
   gulp.task('test', function () {
-    return gulp.src([path.resolve(options.test, '**/*.js')], { read: false })
+    return gulp.src([path.resolve(options.test, 'index.js')], { read: false })
       .pipe(mocha({ reporter: 'spec' }))
       .on('error', function (err) {
         console.log(err);

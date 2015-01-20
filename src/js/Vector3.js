@@ -57,6 +57,7 @@ Vector3.prototype = {
     this.x = x;
     this.y = y;
     this.z = z;
+    assert(!isNaN(x) && !isNaN(y) && !isNaN(z));
     return this;
   },
 
