@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>APE Presentation</title>
+    <link rel="stylesheet" href="../css/slides.css"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+</head>
+<body>
+
+    <div id="nav">
+        <button class="slideButton" data-action="prev"> << </button>
+        <button class="slideButton" data-action="next"> >> </button>
+        <!--<div id="time"></div>-->
+    </div>
+
+    <div id="impress">
+
+        <div class="step intro" data-next="px">
+            <p class="title">
+                DISEÑO DE UN MOTOR DE SIMULACIÓN DE LA DINAÁMICA ENTRE
+                CUERPOS RIÍGIDOS ORIENTADO AL DESARROLLO DE JUEGOS
+                <br/>
+            </p>
+            <p class="right subtitle">
+                Presentado por: <b>Mauricio Poppe</b>
+            </p>
+            <p class="right subtitle">
+                Tutor: <b>Ing. Orlando Rivera</b>
+            </p>
+            <br>
+            <p class="center subtitle">
+                Septiembre 2013
+            </p>
+        </div>
+
+        <div class="step slide" data-next="px">
+            <q>
+                <i>Pure mathematics is, in its way, the poetry of logical ideas.</i>
+            </q>
+            <br>
+            <br>
+            <div class="right">Albert Einstein</div>
+        </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Introducción</p>
+        </div>
+            <div class="step slide" data-next="px ry">
+                <h1>Introducción</h1>
+                <video controls autoplay loop style="width: 100%; height: 90%;">
+                    <source src="videos/intro.webmhd.webm" type='video/webm; codecs="vp8, vorbis"' />
+                </video>
+            </div>
+
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Antecedentes</p>
+        </div>
+            <div class="step demo" data-next="py">
+                <iframe class="demo-iframe"
+                    data-src="http://threejs.org/examples/#webgl_animation_cloth">
+                </iframe>
+            </div>
+            <div class="step demo" data-next="py">
+                <iframe class="demo-iframe"
+                        data-src="http://alteredqualia.com/xg/examples/animation_physics_ammo.html">
+                </iframe>
+            </div>
+            <div class="step demo" data-next="px ry">
+                <iframe class="demo-iframe"
+                        data-src="http://alteredqualia.com/xg/examples/animation_physics_level.html">
+                </iframe>
+            </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Motor de simulación física</p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Simulación física (fluidos)</h1>
+            <iframe class="demo-iframe demo-inline"
+                    data-src="http://madebyevan.com/webgl-water/" frameborder="0">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Simulación física (cuerpos blandos)</h1>
+
+            <iframe class="demo-iframe demo-inline"
+                    data-src="http://egraether.com/demos/soft/index.html" frameborder="0">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Simulación física (cuerpos rígidos)</h1>
+            <br>
+            <img class="center"
+                 style="width: 750px"
+                 src="../images/panel1/rigidBody.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Simulación física (Alta precisión)</h1>
+            <video controls style="width: 100%; height: 90%;">
+                <source src="videos/brave.webm" type='video/webm; codecs="vp8, vorbis"' />
+            </video>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Simulación física (Tiempo real)</h1>
+            <video controls style="width: 100%; height: 90%;">
+                <source src="videos/portal.webm" type='video/webm; codecs="vp8, vorbis"' />
+            </video>
+        </div>
+
+        <div class="step slide" data-next="px ry">
+            <h1>Simulación física en Juegos</h1>
+            <p>
+                Física en general (independiente del juego)
+            </p>
+            <img class="center" src="https://www.ibm.com/developerworks/library/os-physicsengines/figure1.gif" alt=""/>
+            <p>Ventajas</p>
+            <ul>
+                <li>Reusable</li>
+                <li>Calidad de código</li>
+            </ul>
+            <p>Desventajas</p>
+            <ul>
+                <li>Uso intensivo de recursos</li>
+            </ul>
+        </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="title">Perfil del proyecto de investigación</p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Planteamiento del problema</h1>
+            <ul>
+                <li>
+                    Evolución de <span class="highlight">JavaScript</span>
+                </li>
+                <li>HTML5 Canvas</li>
+                <iframe class="demo-iframe demo-inline"
+                        style="height: 700px"
+                        data-src="http://29a.ch/sandbox/2010/box2d2/test.html" frameborder="0">
+                </iframe>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Planteamiento del problema</h1>
+            <br> <br>
+            <ul>
+                <li>
+                    Motores de simulación física 3D Comerciales:
+                    <div class="center">
+                        <span class="highlight">Havok, PhysX, CarX (AAA Racing Games), True Axis, Chrono</span>
+                    </div>
+                </li>
+                <li>
+                    Motores de simulación física 3D Open Source:
+                    <div class="center">
+                        <span class="highlight">Bullet, JigLib, Tokamak, Newton Game Dynamics,
+                            Open Dynamics Engine</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Planteamiento del problema</h1>
+            <p style="position: relative">
+                Motores de simulación física 3D existentes para la web:
+            </p>
+            <div class="center highlight" style="
+                position: relative">Cannon.js</div>
+            <iframe class="demo-iframe demo-inline"
+                    style="height: 450px"
+                    data-src="http://schteppe.github.io/cannon.js/examples/threejs_fps.html" frameborder="0">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Objetivos</h1>
+            <ul>
+                <li>General</li>
+                <li>Específicos</li>
+                <img class="inline" style="width: 300px;" src="../images/panel1/registro_fuerzas.jpg" alt=""/>
+                <img class="inline" style="width: 300px;" src="../images/panel1/integration.png" alt=""/>
+                <br>
+            </ul>
+            <img class="center" style="width: 150px; margin: 0 auto;" src="../images/panel1/collision.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Objetivos Específicos</h1>
+            <br>
+            <iframe class="demo-iframe demo-inline"
+                data-src="http://localhost:8085/PhysicsEngine/demos/08_particleContact.html" frameborder="0">
+            </iframe>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Justificación Práctica</h1>
+            <br>
+            <img class="center" style="width: 700px" src="../images/panel1/reusability.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Justificación Tecnológica</h1>
+            <img class="center" style="width: 700px" src="../images/panel1/html5.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Límites</h1>
+            <br><br><br>
+            <img style="width: 300px;" src="../images/panel1/polygon.png" alt=""/>
+            <img style="width: 400px;" src="../images/panel1/fluidDynamics.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Límites</h1>
+            <img class="center" style="width: 500px;" src="../images/panel1/softBody.jpg" alt=""/>
+            <img class="center" style="width: 200px;" src="../images/panel1/heat.jpg" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="px ry">
+            <h1>Alcances</h1>
+            Fuerzas implementadas
+            <img class="center" style="width: 200px;" src="../images/panel1/spring.jpg" alt=""/>
+            Rotación en 3D
+            <img class="center" style="width: 350px;" src="../images/panel1/plane.gif" alt=""/>
+        </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="highlight">
+                Marco Teórico
+            </p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Marco Teórico</h1>
+            <ul>
+                <li>JavaScript, Canvas y WebGL</li>
+                <li>Estructuras de datos:</li>
+                <ul>
+                    <li>Bounding Volume Hierarchies</li>
+                    <img class="center" src="../images/panel1/boundingVolume.png" alt=""/>
+                </ul>
+                <li>Patrones de Diseño</li>
+                <ul>
+                    <li>Factory, Singleton, Strategy, Template</li>
+                </ul>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="px ry">
+            <h1>Marco Teórico</h1>
+            <ul>
+                <li>Matemáticas</li>
+                <ul>
+                    <li>Puntos, Vectores, Matrices, Quaternions</li>
+                </ul>
+                <li>Física Newtoniana</li>
+                <img class="center" src="../images/panel1/issacNewton.webp" alt=""/>
+            </ul>
+        </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="highlight">
+                Propuesta de Solución
+            </p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Modelos matemáticos</h1>
+            <ul>
+                <li>Cálculo diferencial</li>
+                <div class="center">
+                    <img src="http://latex.codecogs.com/svg.latex?v=\frac{\Delta x}{\Delta t}" alt=""/>
+                    <img src="http://latex.codecogs.com/svg.latex?a=\frac{\Delta v}{\Delta t}=\frac{\Delta^2{x}}{\Delta t^2}" alt=""/>
+                </div>
+                <li>Cálculo integral</li>
+                <div class="center">
+                    <img src="http://latex.codecogs.com/svg.latex?\int{a(t)dt}=v_t-v_0" alt=""/>
+                    <img src="http://latex.codecogs.com/svg.latex?\int{v(t)dt}=x_t-x_0" alt=""/>
+                </div>
+                <li>Mecánica de cuerpo rígido</li>
+                <ul>
+                    <li>Física Newtoniana</li>
+                    <li>Principio de D'alembert</li>
+                    <li>Velocidad y aceleración lineal</li>
+                    <li>Velocidad y aceleración angular</li>
+                    <li>Momentum, Torque, Tensores de inercia</li>
+                </ul>
+            </ul>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagramas BPwin</h1>
+            <img class="center" style="width: 650px" src="../images/panel1/bpwin1.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagramas BPwin</h1>
+            <img class="center" style="width: 650px" src="../images/panel1/bpwin2.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagramas BPwin</h1>
+            <img class="center" style="width: 650px" src="../images/panel1/bpwin3.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagrama de Clases (partículas)</h1>
+            <img class="center" style="height: 550px" src="../images/panel1/classDiagram.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagrama de Componentes</h1>
+            <img class="center" style="width: 700px" src="../images/panel1/componentDiagram.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Diagramas de Casos de Uso</h1>
+            <br>
+            <img class="center" style="width: 700px" src="../images/panel1/useCaseDiagram.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="px ry">
+            <h1>Diagramas Tecnológico</h1>
+            <br><br>
+            <img class="center" style="width: 700px" src="../images/panel1/techDiagram.png" alt=""/>
+        </div>
+
+        <div class="step chapter" data-next="py">
+            <p class="highlight">
+                Definición de los criterios para el desarrollo del proyecto
+            </p>
+        </div>
+
+        <div class="step slide" data-next="py">
+            <h1>Metodología de Desarrollo</h1>
+            <img class="center" style="width: 700px" src="../images/panel1/developmentMethodology.png" alt=""/>
+        </div>
+
+        <div class="step slide" data-next="px ry">
+            <h1>Cronograma de Desarrollo</h1>
+            <br><br>
+            <img class="center" style="width: 750px" src="../images/panel1/gantt.png" alt=""/>
+        </div>
+
+        <div class="step chapter">
+            <p class="highlight">
+                Gracias por su atención!
+            </p>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../lib/jquery-2.0.3.js"></script>
+    <script src="../lib/latexit.js"></script>
+    <script type="text/javascript" src="../lib/slides.js"></script>
+    <script type="text/javascript" src="../lib/impress.js"></script>
+    <script> impress().init(); </script>
+</body>
+</html>

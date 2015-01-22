@@ -1,6 +1,8 @@
 Ape
 ===
 
+STILL IN DEVELOPMENT!!!
+
 Archimedes Physics Engine written in JavaScript
 
 ## Installation
@@ -24,22 +26,6 @@ Install the required node modules with:
 npm install
 ```
 
-From the command line run:
-
-```bash
-grunt
-```
-
-To generate a standalone file which is then included on the projects that want to use the engine
-
-Also run:
-
-```bash
-grunt docs
-```
-
-To generate the documentation for the engine (powered by jsduck)
-
 ## Folder description
 
 ```
@@ -53,5 +39,6 @@ lib: libraries used during the development of the framework
 ```
 
 ## TODO
+Use browserify
 Make sure that Three.js is no longer a dependency
-Fix some glitches when the bodies are not sleeping
+Fix some glitches with the sleeping bodies
