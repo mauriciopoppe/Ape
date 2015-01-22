@@ -11,8 +11,9 @@
  * @class Quaternion
  */
 
-var constants = require('./Constants');
+var Constants = require('./Constants');
 var assert = require('assert');
+var Vector3 = require('./Vector3');
 
 /**
  * Quaternion constructor
@@ -27,26 +28,40 @@ function Quaternion(w, x, y, z) {
    * Real component of the quaternion
    * @property {number} [w=1]
    */
-  this.w = w !== undefined ? w : 1;
-
   /**
    * First complex component of the quaternion
    * @property {number} [x=0]
    */
-  this.x = x !== undefined ? x : 0;
-
   /**
    * Second complex component of the quaternion
    * @property {number} [y=0]
    */
-  this.y = y !== undefined ? y : 0;
-
   /**
    * Third complex component of the quaternion
    * @property {number} [z=0]
    */
-  this.z = z !== undefined ? z : 0;
+  this.set.apply(this, Array.prototype.slice.call(arguments));
 }
+
+/**
+ * Creates a new Quaternion from a rotation axis and and angle
+ * @param {Vector3} v
+ * @param {Number} angle
+ * @returns {Quaternion}
+ */
+Quaternion.fromVectorAndAngle = function (v, angle) {
+  assert(!isNaN(angle));
+  var halfAngle = angle * 0.5;
+  var cosHalfAngle = Math.cos(halfAngle);
+  var sinHalfAngle = Math.sin(halfAngle);
+  v.normalize();
+  return new Quaternion(
+    cosHalfAngle,
+    v.x * sinHalfAngle,
+    v.y * sinHalfAngle,
+    v.z * sinHalfAngle
+  );
+};
 
 Quaternion.prototype = {
   constructor: Quaternion,
@@ -71,12 +86,39 @@ Quaternion.prototype = {
    * @chainable
    */
   set: function (w, x, y, z) {
-    this.w = w;
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this.w = isNaN(w) ? 1 : w;
+    this.x = isNaN(x) ? 0 : x;
+    this.y = isNaN(y) ? 0 : y;
+    this.z = isNaN(z) ? 0 : z;
+    // TODO: normalization should be done on demand
+    // http://stackoverflow.com/questions/11667783/quaternion-and-normalization
     return this.normalize();
   },
+
+  /**
+   * Creates a new quaternion which is the conjugate of this vector
+   *
+   *      q  = (s, v)
+   * conj(q) = (s, -v)
+   *
+   * @returns {Quaternion}
+   */
+  conjugate: function () {
+    return new Quaternion(this.w, -this.x, -this.y, -this.z);
+  },
+
+  /**
+   * Checks if the Quaternion `q` is equal to this quaternion
+   * @param {Quaternion} q
+   * @returns {boolean}
+   */
+  equals: function (q) {
+    return Math.abs(q.w - this.w) < Constants.EPS &&
+      Math.abs(q.x - this.x) < Constants.EPS &&
+      Math.abs(q.y - this.y) < Constants.EPS &&
+      Math.abs(q.z - this.z) < Constants.EPS;
+  },
+
   /**
    * Creates a new array of 4 components made out of
    * the components of `this` quaternion
@@ -85,6 +127,7 @@ Quaternion.prototype = {
   asArray: function () {
     return [this.w, this.x, this.y, this.z];
   },
+
   /**
    * Creates a new instance of Quaternion with the components of `this`
    *
@@ -101,6 +144,33 @@ Quaternion.prototype = {
   clone: function () {
     return new Quaternion(this.w, this.x, this.y, this.z);
   },
+
+  /**
+   * Calculates the length squared of this vector
+   * @returns {number}
+   */
+  lengthSq: function () {
+    return this.w * this.w + this.x * this.x +
+      this.y * this.y + this.z * this.z;
+  },
+
+  /**
+   * Calculates the length of this vector
+   *
+   *      var q = new Quaternion(1, 2, 3, 4);
+   *      // the length is sqrt(v.w * v.w + v.x * v.x + v.y * v.y + v.z * v.z)
+   *      var length = v.length();
+   *      // so the following assertion is true
+   *      assert(lengthSq === sqrt(1 * 1 + 2 * 2 + 3 * 3 + 4 * 4));
+   *
+   * @returns {number}
+   */
+  length: function () {
+    var lengthSq = this.lengthSq();
+    assert(lengthSq >= 0.1);
+    return Math.sqrt(lengthSq);
+  },
+
   /**
    * Normalizes this quaternion by dividing each component
    * of the quaternion by the length of `this`
@@ -115,34 +185,32 @@ Quaternion.prototype = {
    * @chainable
    */
   normalize: function () {
-    var length = this.w * this.w + this.x * this.x +
-      this.y * this.y + this.z * this.z;
-    if (length < constants.EPS) {
-      this.w = 1;
-      return this;
-    }
-    length = 1 / Math.sqrt(length);
-    this.w *= length;
-    this.x *= length;
-    this.y *= length;
-    this.z *= length;
+    var me = this;
+    var length = me.length();
+    this.w /= length;
+    this.x /= length;
+    this.y /= length;
+    this.z /= length;
     return this;
   },
+
   /**
    * Multiplies two Quaternions (see [an explanation about
    * the multiplication of quaternions](http://3dgep.com/?p=1815))
+   *
+   * p q = ( p0q0 - dot(q, p), p0 q + q0 p + p x q)
+   *
    * @param {Quaternion} q2
    * @chainable
    */
   multiply: function (q2) {
-    var q1 = this.clone();
-
-    this.w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
-    this.x = q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y;
-    this.y = q1.w * q2.y + q1.y * q2.w + q1.z * q2.x - q1.x * q2.z;
-    this.z = q1.w * q2.z + q1.z * q2.w + q1.x * q2.y - q1.y * q2.x;
-
-    return this;
+    var q1 = this;
+    return this.set(
+      q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
+      q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
+      q1.w * q2.y + q1.y * q2.w + q1.z * q2.x - q1.x * q2.z,
+      q1.w * q2.z + q1.z * q2.w + q1.x * q2.y - q1.y * q2.x
+    );
   },
 
   /**
@@ -153,7 +221,7 @@ Quaternion.prototype = {
    * @param {number} scale
    */
   addScaledVector: function (v, scale) {
-    scale = typeof scale === 'number' ? scale : 1;
+    scale = isNaN(scale) ? 1 : scale;
     var q = new Quaternion(
       0,
       v.x * scale,
@@ -161,20 +229,37 @@ Quaternion.prototype = {
       v.z * scale
     );
     q.multiply(this);
-    this.w += q.w * 0.5;
-    this.x += q.x * 0.5;
-    this.y += q.y * 0.5;
-    this.z += q.z * 0.5;
+    return this.set(
+      this.w + q.w * 0.5,
+      this.x + q.x * 0.5,
+      this.y + q.y * 0.5,
+      this.z + q.z * 0.5
+    );
   },
 
   /**
-   * Rotates a quaternion by an Vector3
+   * Rotates a quaternion by a Vector3
    * @param {Vector3} v
    * @chainable
    */
   rotateByVector: function (v) {
     var q = new Quaternion(0, v.x, v.y, v.z);
     return this.multiply(q);
+  },
+
+  /**
+   * Rotates a vector `v`, actually it's a bad idea according to this article:
+   * http://physicsforgames.blogspot.com/2010/02/quaternions.html, it's cheaper to convert
+   * the quaternion to a matrix and multiply it with the vector to apply the rotation
+   * @param {Vector3} v
+   * @returns {Vector3}
+   */
+  rotateVector: function (v) {
+    var me = this;
+    var product = me.clone()
+      .multiply(new Quaternion(0, v.x, v.y, v.z))
+      .multiply(me.conjugate());
+    return new Vector3(product.x, product.y, product.z);
   }
 };
 

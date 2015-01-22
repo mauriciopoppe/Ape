@@ -2,6 +2,13 @@ var assert = require('assert');
 var Vector3 = require('./Vector3');
 var _ = require('lodash');
 var Constants = require('./Constants');
+
+var Identity = [
+  1, 0, 0, 0,
+  0, 1, 0, 0,
+  0, 0, 1, 0
+];
+
 /**
  * Matrix4 represents a 12 component structure (a 4x4 matrix is represented
  * by a 16 component structure however since the last row is always `[0 0 0 1]`,
@@ -98,11 +105,6 @@ Matrix4.prototype = {
   set: function (m11, m12, m13, m14, m21, m22, m23, m24,
                  m31, m32, m33, m34) {
     var d = this.data,
-      special = [
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0
-      ],
       i;
     d[0] = m11; d[1] = m12; d[2] = m13; d[3] = m14;
     d[4] = m21; d[5] = m22; d[6] = m23; d[7] = m24;
@@ -110,8 +112,7 @@ Matrix4.prototype = {
 
     // fix undefined values
     for (i = -1; ++i < 12;) {
-      d[i] = d[i] !== undefined ? d[i] : special[i];
-      assert(!isNaN(d[i]));
+      d[i] = isNaN(d[i]) ? Identity[i] : d[i];
     }
 
     return this;
@@ -362,40 +363,50 @@ Matrix4.prototype = {
 
   /**
    * Sets this matrix to be the rotation matrix corresponding to
-   * the given quaternion + a translation given by `pos`
-   *
-   * TODO: unit test
+   * the given quaternion + a translation given by `pos`, the transformation
+   * results in a rotation matrix using the right hand rule
    *
    * @param {Quaternion} q
    * @param {Vector3} pos
    * @chainable
    */
   setOrientationAndPos: function (q, pos) {
+    var xSq = q.x * q.x;
+    var ySq = q.y * q.y;
+    var zSq = q.z * q.z;
+    var xy = q.x * q.y;
+    var xz = q.x * q.z;
+    var yz = q.y * q.z;
+    var wx = q.w * q.x;
+    var wy = q.w * q.y;
+    var wz = q.w * q.z;
     return this.set(
-      1 - 2 * (q.y * q.y + q.z * q.z),
-      2 * (q.x * q.y - q.z * q.w),
-      2 * (q.x * q.z + q.y * q.w),
+      1 - 2 * (ySq + zSq),
+      2 * (xy - wz),
+      2 * (xz + wy),
       pos.x,
 
-      2 * (q.x * q.y + q.z * q.w),
-      1 - 2 * (q.x * q.x + q.z * q.z),
-      2 * (q.y * q.z - q.x * q.w),
+      2 * (xy + wz),
+      1 - 2 * (xSq + zSq),
+      2 * (yz - wx),
       pos.y,
 
-      2 * (q.x * q.z - q.y * q.w),
-      2 * (q.y * q.z + q.x * q.w),
-      1 - 2 * (q.x * q.x - q.y * q.y),
+      2 * (xz - wy),
+      2 * (yz + wx),
+      1 - 2 * (xSq + ySq),
       pos.z
     );
   },
 
   /**
-   * Transforms the given direction by this matrix
+   * Transforms the direction of a given vector with the info stored on this matrix
    *
    * When a direction is converted between frames of reference,
    * there is no translation required
    *
-   * TODO: unit test
+   * [0 1 2 3  [x  = [0x + 1y + 2z
+   *  4 5 6 7   y     4x + 5y + 6z
+   *  8 91011]  z]    8x + 9y + 10z]
    *
    * @param v
    * @returns {Vector3}
@@ -413,8 +424,6 @@ Matrix4.prototype = {
    * Transforms the given direction vector by the transformational
    * inverse of this matrix (the inverse of the matrix is equal to its
    * transpose when the matrix is a rotation matrix only)
-   *
-   * TODO: unit test
    *
    * @param v
    * @returns {Vector3}

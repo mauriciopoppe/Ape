@@ -2,6 +2,7 @@
  * Created by mauricio on 1/17/15.
  */
 var Matrix3 = require('../../src/js/Matrix3');
+var Quaternion = require('../../src/js/Quaternion');
 var Vector3 = require('../../src/js/Vector3');
 var expect = require('chai').expect;
 describe('Matrix3', function () {
@@ -196,6 +197,62 @@ describe('Matrix3', function () {
     ).be.true();
   });
 
+  it('should have a method to transform it to a rotation matrix from a quaternion', function () {
+    // matrix3 representation uses the right hand rule
+    var q;
+    var cosAngle = Math.cos(Math.PI * 0.5);
+    var sinAngle = Math.sin(Math.PI * 0.5);
+    q = Quaternion.fromVectorAndAngle(new Vector3(0, 1, 0), Math.PI * 0.5);
+    expect(
+      new Matrix3().setOrientation(q)
+        .equals(new Matrix3(
+          cosAngle, 0, sinAngle,
+          0, 1, 0,
+          -sinAngle, 0, cosAngle
+        ))
+    ).be.true();
+
+    q = new Quaternion(0, 2, -1, -3);
+    expect(
+      new Matrix3().setOrientation(q)
+        .equals(new Matrix3(
+          -3/7, -2/7, -6/7,
+          -2/7, -6/7, 3/7,
+          -6/7, 3/7, 2/7
+        ))
+    ).be.true();
+
+    q = new Quaternion(11, -2, 0, -2);
+    expect(
+      new Matrix3().setOrientation(q)
+        .equals(new Matrix3(
+          121/129, 44/129, 8/129,
+          -44/129, 113/129, 44/129,
+          8/129, -44/129, 121/129
+        ))
+    ).be.true();
+
+    q = new Quaternion(5, -3, 1, -7);
+    expect(
+      new Matrix3().setOrientation(q)
+        .equals(new Matrix3(
+          -4/21, 16/21, 13/21,
+          -19/21, -8/21, 4/21,
+          8/21, -11/21, 16/21
+        ))
+    ).be.true();
+
+    q = new Quaternion(1, -2, 3, -4);
+    expect(
+      new Matrix3().setOrientation(q)
+        .equals(new Matrix3(
+          -2/3, -2/15, 11/15,
+          -2/3, -1/3, -2/3,
+          1/3, -14/15, 2/15
+        ))
+    ).be.true();
+  });
+
   it('should have methods to set primitive inertia tensors', function () {
     expect(
       gen().setInertialTensorCoefficients(1, 2, 3, 4, 5, 6)
@@ -222,6 +279,25 @@ describe('Matrix3', function () {
           0, 50, 0,
           0, 0, 50
         ))
+    ).be.true();
+  });
+
+  it('should set its values from a vector to form a skew symmetric matrix', function () {
+    var a = new Vector3(-1, 2, -3);
+    var b = new Vector3(37, -21, 7);
+    var m = new Matrix3();
+    expect(
+      m.setSkewSymmetric(a)
+        .equals(new Matrix3(
+          0, 3, 2,
+          -3, 0, 1,
+          -2, -1, 0
+        ))
+    ).be.true();
+
+    expect(
+      m.transform(b)
+        .equals(a.cross(b))
     ).be.true();
   });
 });

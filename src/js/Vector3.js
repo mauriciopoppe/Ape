@@ -1,4 +1,5 @@
 var assert = require('assert');
+var Constants = require('./Constants');
 
 /**
  * Vector3 utility class which represents either a 3DPoint or a displacement
@@ -26,17 +27,15 @@ function Vector3(x, y, z) {
    * Vector's X component
    * @property {number}
    */
-  this.x = x || 0;
   /**
    * Vector's Y component
    * @property {number}
    */
-  this.y = y || 0;
   /**
    * Vector's Z component
    * @property {number}
    */
-  this.z = z || 0;
+  this.set.apply(this, Array.prototype.slice.call(arguments));
 }
 
 Vector3.prototype = {
@@ -54,10 +53,9 @@ Vector3.prototype = {
    * @chainable
    */
   set: function (x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    assert(!isNaN(x) && !isNaN(y) && !isNaN(z));
+    this.x = isNaN(x) ? 0 : x;
+    this.y = isNaN(y) ? 0 : y;
+    this.z = isNaN(z) ? 0 : z;
     return this;
   },
 
@@ -67,7 +65,9 @@ Vector3.prototype = {
    * @returns {boolean}
    */
   equals: function (v) {
-    return v.x === this.x && v.y === this.y && v.z === this.z;
+    return Math.abs(v.x - this.x) < Constants.EPS &&
+      Math.abs(v.y - this.y) < Constants.EPS &&
+      Math.abs(v.z - this.z) < Constants.EPS;
   },
 
   /**

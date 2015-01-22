@@ -2,6 +2,13 @@ var assert = require('assert');
 var Vector3 = require('./Vector3');
 var _ = require('lodash');
 var Constants = require('./Constants');
+
+var Identity = [
+  1, 0, 0,
+  0, 1, 0,
+  0, 0, 1
+];
+
 /**
  * Matrix3 represents a 9 component structure
  * useful to represent internal characteristics of a rigid
@@ -74,11 +81,6 @@ Matrix3.prototype = {
    */
   set: function (m11, m12, m13, m21, m22, m23, m31, m32, m33) {
     var d = this.data,
-      special = [
-        1, 0, 0,
-        0, 1, 0,
-        0, 0, 1
-      ],
       i;
     d[0] = m11; d[1] = m12; d[2] = m13;
     d[3] = m21; d[4] = m22; d[5] = m23;
@@ -86,8 +88,7 @@ Matrix3.prototype = {
 
     // fix undefined values
     for (i = -1; ++i < 9;) {
-      d[i] = d[i] !== undefined ? d[i] : special[i];
-      assert(!isNaN(d[i]));
+      d[i] = isNaN(d[i]) ? Identity[i] : d[i];
     }
 
     return this;
@@ -354,23 +355,33 @@ Matrix3.prototype = {
   },
 
   /**
-   * Sets this matrix to be the rotation matrix corresponding to
-   * the given quaternion.
+   * Sets this matrix to be a rotation matrix corresponding to
+   * the given quaternion, the transformation creates rotation matrix
+   * using the right hand rule
    *
-   * @param q
+   * @param {Quaternion} q
    * @chainable
    */
   setOrientation: function (q) {
+    var xSq = q.x * q.x;
+    var ySq = q.y * q.y;
+    var zSq = q.z * q.z;
+    var xy = q.x * q.y;
+    var xz = q.x * q.z;
+    var yz = q.y * q.z;
+    var wx = q.w * q.x;
+    var wy = q.w * q.y;
+    var wz = q.w * q.z;
     return this.set(
-        1 - 2 * (q.y * q.y + q.z * q.z),
-        2 * (q.x * q.y + q.z * q.w),
-        2 * (q.x * q.z - q.y * q.w),
-        2 * (q.x * q.y - q.z * q.w),
-        1 - 2 * (q.x * q.x + q.z * q.z),
-        2 * (q.y * q.z + q.x * q.w),
-        2 * (q.x * q.z + q.y * q.w),
-        2 * (q.y * q.z - q.x * q.w),
-        1 - 2 * (q.x * q.x + q.y * q.y)
+      1 - 2 * (ySq + zSq),
+      2 * (xy - wz),
+      2 * (xz + wy),
+      2 * (xy + wz),
+      1 - 2 * (xSq + zSq),
+      2 * (yz - wx),
+      2 * (xz - wy),
+      2 * (yz + wx),
+      1 - 2 * (xSq + ySq)
     );
   },
 
@@ -433,7 +444,12 @@ Matrix3.prototype = {
    *
    *      // let a, b be Vector3
    *      a (cross) b = skewSymmetric(a) * b
-   * @param v
+   *
+   * Notable properties:
+   * - its transpose yields its negative -A = A^T
+   * - det(A) = det(-A) = det(A^T)
+   *
+   * @param {Vector3} v
    * @chainable
    */
   setSkewSymmetric: function (v) {
