@@ -40,5 +40,6 @@ lib: libraries used during the development of the framework
 
 ## TODO
 Use browserify
+Remove dist/
 Make sure that Three.js is no longer a dependency
 Fix some glitches with the sleeping bodies
