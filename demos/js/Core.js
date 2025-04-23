@@ -1,5 +1,4 @@
 /**
- * @author Mauricio Poppe <mauricio.poppe@gmail.com>
  * @class Ape
  * @singleton
  *
